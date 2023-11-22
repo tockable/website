@@ -242,13 +242,17 @@ function MintHandler({ role, prepareMint, session }) {
         Number(role.id),
         traits,
       ];
-      const value = parseEther(
-        (
-          (Number(role.price) + project.chainData.base_fee) *
-          blobs.length
-        ).toString(),
-        "wei"
-      );
+      const fee =
+        project.slug === "tock"
+          ? parseEther(("0", "wei"))
+          : parseEther(
+              (
+                (Number(role.price) + project.chainData.base_fee) *
+                blobs.length
+              ).toString(),
+              "wei"
+            );
+      const value = fee;
       setApiError(false);
       setwriteArgs({ args, value });
     } else {
