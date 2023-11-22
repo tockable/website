@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import getChainData from "@/utils/chain-utils";
 import { LaunchpadContext } from "@/contexts/project-context";
-// import verify from "@/actions/contract/verify";
+import verify from "@/actions/contract/verify";
 import Button from "../design/button/button";
 import Loading from "../loading/loading";
 
@@ -104,11 +104,11 @@ export default function DeployedContractView() {
                     verify contract (soon)
                   </Button>
                 )}
-                {/* {verificationError && (
+                {verificationError && (
                   <p className="text-tock-red text-sm mt-2">
                     an error occured during verification, please try again.
                   </p>
-                )} */}
+                )}
               </div>
             )}
           </section>
