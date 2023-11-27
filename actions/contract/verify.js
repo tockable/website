@@ -1,4 +1,5 @@
 "use server";
+
 import fs from "fs";
 import path from "path";
 import { camelize } from "@/utils/string-utils";
@@ -29,7 +30,6 @@ const constructorAbi = {
 export default async function verify(_project) {
   try {
     const chainData = await getVerifyChainData(Number(_project.chainId));
-    console.log(chainData);
     const contractName = camelize(_project.name, true);
 
     const cargs = encodeAbiParameters(constructorAbi.inputs, [
@@ -66,7 +66,8 @@ export default async function verify(_project) {
       licenseType: 3,
     };
 
-    // for json-input
+    /// for json-input
+
     // const json = {
     //   language: "Solidity",
     //   sources: {},
@@ -102,40 +103,37 @@ export default async function verify(_project) {
     // };
 
     let formBody = [];
+
     for (let property in request) {
       let encodedKey = encodeURIComponent(property);
       let encodedValue = encodeURIComponent(request[property]);
       formBody.push(encodedKey + "=" + encodedValue);
     }
+
     formBody = formBody.join("&");
 
-    // const res1 = await fetch(chainData.endpoint, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/x-www-form-urlencoded",
-    //   },
-    //   body: formBody,
-    // });
+    const res1 = await fetch(chainData.endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: formBody,
+    });
 
-    // const data1 = await res1.json();
-    // console.log(data1);
-    const data1 = {
-      status: "1",
-      result: "mdtgarmzyipaxvajyxxdlqpqjsn5vxxraycijelvsxi8q2m7rq",
-    };
+    const data1 = await res1.json();
+
     if (data1) {
       if (data1.status == 1 || data1.status == "1") {
         const checkGuid = `${chainData.endpoint}?apikey=${chainData.apikey}&guid=${data1.result}&module=contract&action=checkverifystatus`;
 
         const res2 = await fetch(checkGuid);
         const data2 = await res2.json();
-        console.log("data2", data2);
+
         if (
           data2.status == 1 ||
           data2.status == "1" ||
           data2.result == "Pending in queue"
         ) {
-          console.log(data2);
           const res3 = await updateIsVerified(_project.creator, _project.uuid);
           if (res3.success) {
             return { success: true, payload: res3.payload };
@@ -156,7 +154,6 @@ export default async function verify(_project) {
       );
     }
   } catch (err) {
-    console.log(err);
     return { success: false, payload: null, message: err.message };
   }
 }
