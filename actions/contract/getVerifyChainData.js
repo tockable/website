@@ -40,7 +40,7 @@ const VERIFY_CHAIN_DATA = [
 
 export default async function getVerifyChainData(_chainId) {
   const chaindata = VERIFY_CHAIN_DATA.find(
-    (chain) => (chain.id = Number(_chainId))
+    (chain) => chain.chainId === _chainId
   );
   return chaindata;
 }

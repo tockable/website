@@ -19,6 +19,7 @@ import {
   polygonMumbai,
 } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
+import { alchemyProvider } from "wagmi/providers/alchemy";
 import AuthContext from "@/contexts/auth-context";
 import CreatorDashboard from "@/components/dashboard/creator-dashboard";
 
@@ -34,7 +35,10 @@ const { chains, publicClient } = configureChains(
     baseGoerli,
     optimismGoerli,
   ],
-  [publicProvider()]
+  [
+    alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY }),
+    publicProvider(),
+  ]
 );
 
 const { connectors } = getDefaultWallets({

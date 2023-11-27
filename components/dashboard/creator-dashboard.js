@@ -1,11 +1,3 @@
-// const { data, isError, isLoading, isSuccess, signMessage } = useSignMessage({
-//   message:
-//     "By signing this message from tockable.xyz, we make sure that no one is using your dashboard instead of you.",
-//   onSuccess(data) {
-//     setVerifiedAddress(address);
-//   },
-// });
-
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -30,6 +22,7 @@ export default function CreatorDashboard() {
   const [projects, setProjects] = useState([]);
   const [newPojectModalShow, setNewProjectModelShow] = useState(false);
   const [sessionStatus, setSessionStatus] = useState(null);
+
   useEffect(() => {
     if (!address) return;
     if (!sessionStatus) return;
@@ -86,7 +79,6 @@ export default function CreatorDashboard() {
   return (
     <div className="relative top-24">
       <NavbarLaunchpad />
-
       <div className="flex justify-center items-center">
         <div className="basis-11/12 md:basis-3/4 lg:basis-5/6">
           <nav className="flex justify-center items-center px-2 py-8 mb-4 rounded-xl xxs:h-20 xs:h-12 bg-tock-semiblack border border-tock-black">

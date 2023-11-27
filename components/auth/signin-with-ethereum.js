@@ -9,10 +9,11 @@ import Loading from "../loading/loading";
 import { useNetwork } from "wagmi";
 
 export default function Auth() {
+  const [hasSigned, setHasSigned] = useState(false);
   const [mounted, setMounted] = useState(false);
+  
   const { address, isConnected } = useAccount();
   const { signMessageAsync } = useSignMessage();
-  const [hasSigned, setHasSigned] = useState(false);
   const { chains, chain } = useNetwork();
 
   useEffect(() => setMounted(true), []);
@@ -59,40 +60,44 @@ export default function Auth() {
 
   return (
     <main className="flex min-h-screen items-center justify-center">
-      {!isConnected && (
-        <div className="bg-tock-semiblack rounded-xl p-4 flex flex-col items-center justify-center basis-11/12 lg:basis-1/2 ">
-          <h1 className="text-xl font-bold text-tock-green mb-4">
-            Sign in to Tockable
-          </h1>
-          <p className="text-sm font-normal text-gray-400 mb-4">
-            please connect your wallet
-          </p>
-          <div className="my-4">
-            <ConnectButton />
-          </div>
-        </div>
-      )}
-      {isConnected && !hasSigned && (
-        <div className="bg-tock-semiblack rounded-xl p-4 flex flex-col items-center justify-center basis-11/12 lg:basis-1/2 ">
-          <p className="text-2xl font-bold text-tock-green">welcome!</p>
-          <p className="text-lg text-tock-blue font-bold rounded-xl p-2 mb-4">
-            {address.slice(0, -30)}...
-          </p>
-          <p className="text-sm font-normal text-zinc-400 my-4">
-            you can securely sign in with Ethereum
-          </p>
+      {mounted && (
+        <div>
+          {!isConnected && (
+            <div className="bg-tock-semiblack rounded-xl p-4 flex flex-col items-center justify-center basis-11/12 lg:basis-1/2 ">
+              <h1 className="text-xl font-bold text-tock-green mb-4">
+                Sign in to Tockable
+              </h1>
+              <p className="text-sm font-normal text-gray-400 mb-4">
+                please connect your wallet
+              </p>
+              <div className="my-4">
+                <ConnectButton />
+              </div>
+            </div>
+          )}
+          {isConnected && !hasSigned && (
+            <div className="bg-tock-semiblack rounded-xl p-4 flex flex-col items-center justify-center basis-11/12 lg:basis-1/2 ">
+              <p className="text-2xl font-bold text-tock-green">welcome!</p>
+              <p className="text-lg text-tock-blue font-bold rounded-xl p-2 mb-4">
+                {address.slice(0, -30)}...
+              </p>
+              <p className="text-sm font-normal text-zinc-400 my-4">
+                you can securely sign in with Ethereum
+              </p>
 
-          <Button onClick={handleSign} variant="secondary">
-            Sign in wtih Ethereum
-          </Button>
+              <Button onClick={handleSign} variant="secondary">
+                Sign in wtih Ethereum
+              </Button>
+            </div>
+          )}
+          {isConnected && hasSigned && (
+            <Loading
+              isLoading={isConnected && hasSigned}
+              variant="page"
+              size={20}
+            />
+          )}
         </div>
-      )}
-      {isConnected && hasSigned && (
-        <Loading
-          isLoading={isConnected && hasSigned}
-          variant="page"
-          size={20}
-        />
       )}
     </main>
   );

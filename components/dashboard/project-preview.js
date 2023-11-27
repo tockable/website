@@ -4,9 +4,16 @@ import { IPFS_GATEWAY } from "@/tock.config";
 import Button from "../design/button/button";
 import getChainData from "@/utils/chain-utils";
 import ImagePlaceHolder from "@/svgs/image_placeholder";
+import Loading from "../loading/loading";
 
 export default function ProjectPreview({ project }) {
-  const [chainName, setChainName] = useState();
+  const [chainName, setChainName] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  function handleLoading() {
+    setLoading(true);
+  }
+
   useEffect(() => {
     const _chainData = getChainData(Number(project.chainId));
     setChainName(_chainData.name);
@@ -27,12 +34,28 @@ export default function ProjectPreview({ project }) {
         </div>
       )}
 
-      <p className="mt-4 text-sm text-zinc-300 font-bold">{project.name}</p>
-      <p className="my-4 text-xs text-zinc-400">{chainName}</p>
-
+      <p className="mt-4 text-md text-zinc-300 font-bold">{project.name}</p>
+      <p className="mt-1 text-xs text-zinc-400">{chainName}</p>
+      <div className="my-4 text-center">
+        <p className="my-1 text-xs">
+          {project.isDeployed ? (
+            <span className="text-tock-green">Deployed</span>
+          ) : (
+            <span className="text-tock-orange">Not deployed</span>
+          )}
+        </p>
+        <p className="my-1 text-xs">
+          {project.isPublished ? (
+            <span className="text-tock-green">Published</span>
+          ) : (
+            <span className="text-tock-orange">Not published</span>
+          )}
+        </p>
+      </div>
       <Link href={`/launchpad/${project.uuid}`}>
-        <Button className="ml-4" variant="secondary" type="button">
-          Go to project{" "}
+        <Button className="ml-4" variant="secondary" onClick={handleLoading}>
+          {!loading && <span> Go to project</span>}
+          {loading && <Loading isLoading={loading} size={10} />}
         </Button>
       </Link>
     </div>

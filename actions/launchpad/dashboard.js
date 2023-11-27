@@ -9,11 +9,11 @@ const DATABASE = process.env.DATABASE;
 
 /**
  *
- * @param {*} creator
- * @param {*} name
- * @param {*} chain
- * @param {*} chainId
- * @param {*} dropType
+ * @param {string} creator
+ * @param {string} name
+ * @param {string} chain
+ * @param {number | string} chainId
+ * @param {"tockable"} dropType
  * @returns
  */
 function initProject(creator, name, chain, chainId, dropType) {
@@ -76,6 +76,8 @@ export async function fetchAllProjectsByWallet(_creator) {
         name: project.name,
         image: project.image,
         chainId: project.chainId,
+        isDeployed: project.isDeployed,
+        isPublished: project.isPublished,
       };
       payload.push(p);
     });

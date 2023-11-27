@@ -4,7 +4,6 @@ import MintpadSocialbar from "../design/mintpad-socialbar/mintpad-socialbar";
 export default function MintpadProjectDetails({ project }) {
   return (
     <div>
-      {" "}
       <h1 className="mt-4 text-tock-blue font-bold text-4xl mb-8 text-center lg:text-start">
         {project.name}
       </h1>
@@ -59,12 +58,14 @@ export default function MintpadProjectDetails({ project }) {
             </p>
             <p className="text-zinc-400 text-xs my-2">
               see contract on:{" "}
-              <Link
-                href={`https://${project.chainData.scan}/address/${project.contractAddress}`}
+              <a
                 className="text-blue-400 transition duration-300 ease-in-out hover:text-blue-300"
+                href={`https://${project.chainData.scan}/address/${project.contractAddress}`}
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 {project.chainData.scan}
-              </Link>
+              </a>
             </p>
           </article>
         </section>

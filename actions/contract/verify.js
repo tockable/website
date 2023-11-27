@@ -29,13 +29,16 @@ const constructorAbi = {
 export default async function verify(_project) {
   try {
     const chainData = await getVerifyChainData(Number(_project.chainId));
+    console.log(chainData);
     const contractName = camelize(_project.name, true);
 
     const cargs = encodeAbiParameters(constructorAbi.inputs, [
       TOCKABLE_ADDRESS,
       _project.signer,
     ]);
+
     const editedcargs = cargs.slice(2);
+
     const sourcepath = path.resolve(
       ".",
       DATABASE,
@@ -46,23 +49,57 @@ export default async function verify(_project) {
     );
 
     const source = fs.readFileSync(sourcepath, { encoding: "utf8" });
-    const editedsource = source.slice(0, -1);
 
     const request = {
       apikey: chainData.apikey,
       module: "contract",
       action: "verifysourcecode",
-      sourceCode: editedsource,
+      sourceCode: source,
       contractaddress: _project.contractAddress,
       codeformat: "solidity-single-file",
       contractname: contractName,
       compilerversion: "v0.8.21+commit.d9974bed",
-      optimizationused: 1,
+      optimizationUsed: 1,
       runs: 200,
-      evmversiom: "paris",
+      evmVersion: "paris",
       constructorArguements: editedcargs,
       licenseType: 3,
     };
+
+    // for json-input
+    // const json = {
+    //   language: "Solidity",
+    //   sources: {},
+    //   settings: {
+    //     optimizer: {
+    //       enabled: true,
+    //       runs: 200,
+    //     },
+    //     evmVersion: "paris",
+    //     outputSelection: {
+    //       "*": {
+    //         "*": ["*"],
+    //       },
+    //     },
+    //   },
+    // };
+
+    // json.sources[`${contractName}.sol`] = {
+    //   content: source,
+    // };
+
+    // const request = {
+    //   apikey: chainData.apikey,
+    //   module: "contract",
+    //   action: "verifysourcecode",
+    //   sourceCode: JSON.stringify(json),
+    //   contractaddress: _project.contractAddress,
+    //   codeformat: "solidity-standard-json-input",
+    //   contractname: `${contractName}.sol:${contractName}`,
+    //   compilerversion: "v0.8.21+commit.d9974bed",
+    //   constructorArguements: editedcargs,
+    //   licenseType: 3,
+    // };
 
     let formBody = [];
     for (let property in request) {
@@ -72,32 +109,54 @@ export default async function verify(_project) {
     }
     formBody = formBody.join("&");
 
-    const res = await fetch(chainData.endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-      },
-      body: formBody,
-    });
-    const data = await res.json();
-    if (data.ok) {
-      if (data.status === 1) {
-        // console.log(data.result);
-        const res = await updateIsVerified(_project._creator, _project.uuid);
-        if (res.success === true) {
-          // fs.unlinkSync(sourcepath);
-          return { success: true, payload: res.payload };
+    // const res1 = await fetch(chainData.endpoint, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/x-www-form-urlencoded",
+    //   },
+    //   body: formBody,
+    // });
+
+    // const data1 = await res1.json();
+    // console.log(data1);
+    const data1 = {
+      status: "1",
+      result: "mdtgarmzyipaxvajyxxdlqpqjsn5vxxraycijelvsxi8q2m7rq",
+    };
+    if (data1) {
+      if (data1.status == 1 || data1.status == "1") {
+        const checkGuid = `${chainData.endpoint}?apikey=${chainData.apikey}&guid=${data1.result}&module=contract&action=checkverifystatus`;
+
+        const res2 = await fetch(checkGuid);
+        const data2 = await res2.json();
+        console.log("data2", data2);
+        if (
+          data2.status == 1 ||
+          data2.status == "1" ||
+          data2.result == "Pending in queue"
+        ) {
+          console.log(data2);
+          const res3 = await updateIsVerified(_project.creator, _project.uuid);
+          if (res3.success) {
+            return { success: true, payload: res3.payload };
+          } else {
+            throw new Error(
+              "contract verified but you may see unverified on your dashboard which is not a big problem"
+            );
+          }
         } else {
-          throw new Error("not updated");
+          throw new Error("not verified:", data2);
         }
       } else {
-        throw new Error("not verified");
+        throw new Error("not verified:", data1);
       }
     } else {
-      throw new Error("not fetched");
+      throw new Error(
+        "chain explorer end-point not respond, please try again later."
+      );
     }
   } catch (err) {
-    // console.log(err);
+    console.log(err);
     return { success: false, payload: null, message: err.message };
   }
 }

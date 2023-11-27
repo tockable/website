@@ -39,7 +39,7 @@ export default function DeployRolesModal({
       setSuccess(false);
       return;
     }
-    setUpdating(true);
+
     updateProjectRoles(address, {
       uuid: project.uuid,
       roles,
@@ -72,8 +72,11 @@ export default function DeployRolesModal({
                   <Button
                     variant="primary"
                     type="button"
-                    disabled={isLoading || uwt.isLoading || updating}
-                    onClick={() => write?.()}
+                    disabled={isLoading || uwt.isLoading || updating || !write}
+                    onClick={() => {
+                      setUpdating(true);
+                      write?.();
+                    }}
                   >
                     {(isLoading || uwt.isLoading || updating) && (
                       <Loading
@@ -81,7 +84,7 @@ export default function DeployRolesModal({
                         size={10}
                       />
                     )}
-                    {!isLoading && !uwt.isLoading && !updating && (
+                    {!isLoading && !uwt.isLoading && !updating && !success && (
                       <p>sign to deploy roles</p>
                     )}
                   </Button>

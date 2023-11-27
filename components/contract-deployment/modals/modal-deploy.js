@@ -67,18 +67,6 @@ export default function DeployContractModal({ onClose, bytecode }) {
         gas: 6_000_000n,
       });
 
-      // alterrnative 2
-      // const { account, chain, transport } = client;
-      // const network = {
-      //   chainId: chain.id,
-      //   name: chain.name,
-      //   ensAddress: chain.contracts?.ensRegistry?.address,
-      // };
-      // const provider = new BrowserProvider(transport, network);
-      // const ethsigner = new JsonRpcSigner(provider, account.address);
-      // const contract = new ContractFactory(abi, bytecode, ethsigner);
-      // await contract.deploy(TOCKABLE_ADDRESS, signer);
-
       if (hash) {
         txhash.current = hash;
       } else {

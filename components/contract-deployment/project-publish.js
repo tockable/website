@@ -88,6 +88,8 @@ export default function ProjectPublish() {
                   <Link
                     className="font-bold text-sm text-blue-400 hover:text-blue-300 hover:cursor-pointer"
                     href={`/c/${project.slug}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
                     {`https://tockable.xyz/c/${project.slug}`}
                   </Link>

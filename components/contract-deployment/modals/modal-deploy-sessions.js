@@ -39,7 +39,7 @@ export default function DeploySessionsModal({
       setSuccess(false);
       return;
     }
-    setUpdating(true);
+
     updateProjectSessions(address, {
       uuid: project.uuid,
       sessions,
@@ -73,8 +73,11 @@ export default function DeploySessionsModal({
                   <Button
                     variant="primary"
                     type="button"
-                    disabled={isLoading || uwt.isLoading || updating}
-                    onClick={() => write?.()}
+                    disabled={isLoading || uwt.isLoading || updating || !write}
+                    onClick={() => {
+                      setUpdating(true);
+                      write?.();
+                    }}
                   >
                     {(isLoading || uwt.isLoading || updating) && (
                       <Loading
@@ -82,7 +85,7 @@ export default function DeploySessionsModal({
                         size={10}
                       />
                     )}
-                    {!isLoading && !uwt.isLoading && updating && (
+                    {!isLoading && !uwt.isLoading && !updating && !success && (
                       <p>sign to deploy sessions</p>
                     )}
                   </Button>

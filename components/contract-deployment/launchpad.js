@@ -25,14 +25,6 @@ const pages = [
   "Actions",
 ];
 
-function NotDeployedYet() {
-  return (
-    <div className="flex justify-center items-center h-24 text-tock-orange">
-      you need to deploy your contract first
-    </div>
-  );
-}
-
 export default function Launchpad() {
   const [activePage, setActivePage] = useState(pages[0]);
   const { project } = useContext(LaunchpadContext);
@@ -118,7 +110,6 @@ export default function Launchpad() {
                   {activePage === "Metadata" && !project.isDeployed && (
                     <NotDeployedYet />
                   )}
-
                   {activePage === "Roles" && project.isDeployed && (
                     <ProjectRolesForm />
                   )}
@@ -149,6 +140,14 @@ export default function Launchpad() {
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+function NotDeployedYet() {
+  return (
+    <div className="flex justify-center items-center h-24 text-tock-orange">
+      you need to deploy your contract first
     </div>
   );
 }

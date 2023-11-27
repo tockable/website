@@ -32,6 +32,7 @@ export default function ProjectContractActions() {
       });
     }
   }, [project]);
+  
   return (
     <>
       <h1 className="text-tock-green font-bold text-xl mt-4 mb-6 ">

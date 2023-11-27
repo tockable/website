@@ -73,10 +73,10 @@ export default function AppBuilderModal({ onClose, layersFiles, layers }) {
                   to deploy traits on contract.
                 </p>
 
-                <div>
+                <div className="px-8">
                   <button
                     onClick={handleShowImporter}
-                    className="my-4 rounded-2xl p-4 w-full border-2 duration-200 ease-in-out border-zinc-600 hover:bg-zinc-700 hover:border-zinc-400"
+                    className="my-4 rounded-2xl p-4 w-full border-2 duration-200 ease-in-out border-zinc-600 bg-zinc-800 hover:bg-zinc-700 hover:border-zinc-400"
                   >
                     <h1 className="text-tock-blue text-start mb-2">
                       I've uploaded my files and have my cids{" "}
@@ -93,12 +93,12 @@ export default function AppBuilderModal({ onClose, layersFiles, layers }) {
                   </button>
                   <button
                     onClick={handleShowUploader}
-                    className="mb-4 rounded-2xl p-4 w-full border-2 duration-200 ease-in-out border-zinc-600 hover:bg-zinc-700 hover:border-zinc-400"
+                    className="mb-4 rounded-2xl p-4 w-full border-2 duration-200 ease-in-out border-zinc-600 bg-zinc-800 hover:bg-zinc-700 hover:border-zinc-400"
                   >
                     <h1 className="text-tock-blue text-start mb-2">
                       I want to upload using tockable{" "}
                       <span className="text-tock-orange text-xs">
-                        (not recommended)
+                        (BETA)
                       </span>
                     </h1>
                     <p className="text-xs text-start text-zinc-400">
