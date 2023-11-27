@@ -13,7 +13,6 @@ export default function DeployedContractView() {
   const [verificationError, setVerificationError] = useState(false);
 
   async function callVerfify() {
-    // if (project.slug.toLowerCase() !== "tock") return;
     setVerifying(true);
     setVerificationError(false);
     const res = await verify(project);
