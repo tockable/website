@@ -3,17 +3,29 @@ import Link from "next/link";
 import { useDisconnect, useAccount } from "wagmi";
 import { signOut } from "next-auth/react";
 import { LaunchpadContext } from "@/contexts/project-context";
-import ProjectDetailsForm from "./project-details-form";
-import ProjectContractForm from "./project-contract-form";
-import ProjectMetadataForm from "./project-metadata-from";
-import ProjectRolesForm from "./project-roles-form";
-import ProjectSessionsForm from "./project-sessions-form";
-import DeployedContractView from "./deployed-contract-view";
-import ProjectPublish from "./project-publish";
-import ProjectContractActions from "./project-contarct-actions";
+// import ProjectDetailsForm from "./project-details-form";
+// import ProjectContractForm from "./project-contract-form";
+// import ProjectMetadataForm from "./project-metadata-from";
+// import ProjectRolesForm from "./project-roles-form";
+// import ProjectSessionsForm from "./project-sessions-form";
+// import DeployedContractView from "./deployed-contract-view";
+// import ProjectPublish from "./project-publish";
+// import ProjectContractActions from "./project-contarct-actions";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import NavbarLaunchpad from "../design/navbar/navvar-launchpad";
 import Loading from "../loading/loading";
+import dynamic from "next/dynamic";
+
+const ProjectDetailsForm = dynamic(() => import("./project-details-form"));
+const ProjectContractForm = dynamic(() => import("./project-contract-form"));
+const ProjectMetadataForm = dynamic(() => import("./project-metadata-from"));
+const ProjectRolesForm = dynamic(() => import("./project-roles-form"));
+const ProjectSessionsForm = dynamic(() => import("./project-sessions-form"));
+const DeployedContractView = dynamic(() => import("./deployed-contract-view"));
+const ProjectPublish = dynamic(() => import("./project-publish"));
+const ProjectContractActions = dynamic(() =>
+  import("./project-contarct-actions")
+);
 
 const pages = [
   "Details",
