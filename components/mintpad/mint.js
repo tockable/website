@@ -244,7 +244,7 @@ function MintHandler({ role, prepareMint, session }) {
       ];
       const fee =
         project.slug === "tock"
-          ? parseEther(("0.0000001", "wei"))
+          ? 1
           : parseEther(
               (
                 (Number(role.price) + project.chainData.base_fee) *
