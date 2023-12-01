@@ -6,68 +6,56 @@ import { fetchProjectByUUID } from "@/actions/launchpad/projects";
 import { getContractAbi } from "@/actions/contract/metadata";
 import { LaunchpadContext } from "@/contexts/project-context";
 import Launchpad from "./launchpad";
+import Loading from "../loading/loading";
 
 export default function LaunchpadLanding({ params }) {
   const session = useSession();
   const router = useRouter();
-
   const { address, isConnected } = useAccount();
 
   const [project, setProject] = useState(null);
   const [abi, setAbi] = useState(null);
-  const [sessionStatus, setSessionStatus] = useState(null);
+  const [loading, setLoading] = useState(null);
 
   useEffect(() => {
     if (!isConnected) {
+      localStorage.setItem("tock", "/dashboard");
+      router.push("/auth");
+    }
+  }, [isConnected]);
+
+  useEffect(() => {
+    if (session.status === "loading") return;
+    if (session.status === "unauthenticated") {
+      localStorage.setItem("tock", "/dashboard");
       router.push("/auth");
     }
 
-    fetchProjectByUUID(address, params.projectId).then((res) => {
-      if (res.success === true) {
-        if (res.payload.creator.toLowerCase() !== address.toLowerCase()) {
-          router.push("/dashboard");
-        } else {
-          setProject(res.payload);
-        }
-      } else {
-        router.push("/dashboard");
-      }
-    });
-  }, []);
+    if (
+      isConnected &&
+      session.status === "authenticated" &&
+      session.data?.user.address.toLowerCase() === address.toLowerCase()
+    ) {
+      fetchProjectByUUID(address, params.projectId)
+        .then((res) => {
+          if (res.success === true) setProject(res.payload);
+          if (res.success === false) router.push("/dashboard");
+        })
+        .catch(router.refresh());
+    }
+  }, [session.status]);
 
   useEffect(() => {
-    if (!address) return;
-    if (!sessionStatus) return;
     if (
-      sessionStatus.data?.user?.address?.toLowerCase() !=
-      address.toLocaleLowerCase()
+      isConnected &&
+      session.data &&
+      session.data?.user.address.toLowerCase() !== address.toLowerCase()
     ) {
+      setLoading(true);
       localStorage.setItem("tock", `/dashboard`);
       router.push("/auth");
     }
   }, [address]);
-
-  useEffect(() => {
-    if (session.status === "loading") return;
-    setSessionStatus(session);
-  }, [session.status]);
-
-  useEffect(() => {
-    if (!sessionStatus) return;
-    if (!sessionStatus.data)
-      if (
-        sessionStatus.data?.user?.address?.toLowerCase() !=
-        address.toLowerCase()
-      ) {
-        localStorage.setItem("tock", `launchpad/${params.projectId}`);
-        router.push("/auth");
-      }
-
-    if (!session.data || !isConnected) {
-      localStorage.setItem("tock", `launchpad/${params.projectId}`);
-      router.push("/auth");
-    }
-  }, [sessionStatus]);
 
   async function callGetContractAbi() {
     if (!project) return { success: false };
@@ -80,13 +68,16 @@ export default function LaunchpadLanding({ params }) {
   if (project) {
     return (
       <main>
-        <LaunchpadContext.Provider
-          value={{ project, setProject, abi, setAbi, callGetContractAbi }}
-        >
-          <div className="mt-2">
-            <Launchpad />
-          </div>
-        </LaunchpadContext.Provider>
+        {loading && <Loading isLoading={loading} size={30} variant="page" />}
+        {!loading && (
+          <LaunchpadContext.Provider
+            value={{ project, setProject, abi, setAbi, callGetContractAbi }}
+          >
+            <div className="mt-2">
+              <Launchpad />
+            </div>
+          </LaunchpadContext.Provider>
+        )}
       </main>
     );
   }

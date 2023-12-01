@@ -80,10 +80,10 @@ export default function Mint({
 }
 
 function MintHandler({ role, prepareMint, session }) {
+  const { address } = useAccount();
   const { abi, project, blobs, setDuplicatedIndexes, setSuccessFullyMinted } =
     useContext(MintContext);
-  const success = useRef("");
-  const { address } = useAccount();
+
   const [preparing, setPreparing] = useState(false);
   const [readyToMint, setReadyToMint] = useState(false);
   const [apiError, setApiError] = useState(false);
@@ -150,7 +150,6 @@ function MintHandler({ role, prepareMint, session }) {
         setWarning("");
         setPrintedError("Unknown error occured.");
       }
-      // success.current = "";
       setSuccessFullyMinted(false);
       resetMint();
     },
@@ -162,7 +161,6 @@ function MintHandler({ role, prepareMint, session }) {
   useEffect(() => {
     if (invalidArgs(writeArgs)) {
       setPreparing(false);
-      // success.current = "";
       setSuccessFullyMinted(false);
       return;
     }
@@ -180,7 +178,6 @@ function MintHandler({ role, prepareMint, session }) {
   useEffect(() => {
     if (!uwt.isSuccess) return;
     setSuccessFullyMinted(true);
-    // success.current = "all tokens in basket has been successfully minted!";
     refetch?.();
     resetMint();
     setWarning("");
@@ -189,7 +186,6 @@ function MintHandler({ role, prepareMint, session }) {
 
   useEffect(() => {
     if (!uwt.isError) return;
-    // success.current = "";
     setSuccessFullyMinted(false);
     setWarning("");
     setPrintedError("Transaction failed.");
@@ -198,7 +194,6 @@ function MintHandler({ role, prepareMint, session }) {
 
   useEffect(() => {
     if (!wc.isError) return;
-    // success.current = "";
     setSuccessFullyMinted(false);
     setWarning("");
     resetMint();
@@ -217,7 +212,6 @@ function MintHandler({ role, prepareMint, session }) {
   }, [wc.isError]);
 
   async function mint() {
-    // success.current = "";
     setSuccessFullyMinted(false);
     if (blobs.length === 0) return;
 

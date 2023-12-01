@@ -5,12 +5,15 @@ import { MintContext } from "@/contexts/mint-context";
 export default function MintBasket() {
   const { blobs, project, removeFromBasket, duplicatedIndexes } =
     useContext(MintContext);
+
   const maxMint = project.maxMint ? project.maxMint : MAX_MINT_PER_TX;
+
   const maxMintArray = (() => {
     const _maxMintArray = [];
     for (let i = 0; i < maxMint; i++) _maxMintArray.push(0);
     return _maxMintArray;
   })();
+  
   return (
     <div>
       <div className="mx-4 mt-6">

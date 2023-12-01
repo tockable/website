@@ -115,12 +115,12 @@ export default function NewProjectModal({ isOpen, onClose }) {
               onChange={onChangeChain}
               required
             >
-              {/* <option value="1">Ethereum</option>*/}
+              <option value="1">Ethereum</option>
               <option value="10">Optimism</option>
               <option value="420">Optimism goerli</option>
               <option value="137">Polygon</option>
               <option value="80001">Polygon mumbai</option>
-              {/* <option value="8453">Base</option> */}
+              <option value="8453">Base</option>
               {/* <option value="7777777">Zora</option> */}
               <option value="84531">Base goerli</option>
               {/* <option value="42161">Arbitrum One</option> */}
