@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useContext } from "react";
+import { CID } from "multiformats/cid";
 import { IPFS_GATEWAY, NFT_STORAGE_GATEWAY } from "@/tock.config";
 import { imageUrlFromBlob } from "@/utils/image-utils";
 import { hexEncode } from "@/utils/crypto-utils";
@@ -40,6 +41,7 @@ export default function MintpadDapp({ layers, fileNames, cids }) {
       const layerFileNames = fileNames[i];
       for (let j = 0; j < layerFileNames.length; j++) {
         let img = new Image();
+        img.crossOrigin = "anonymous";
         img.onload = () => {
           imageLoaded();
           if (canvasHeight === 0 || canvasWidth === 0) {
@@ -47,11 +49,21 @@ export default function MintpadDapp({ layers, fileNames, cids }) {
             setCanvasHeight(img.naturalHeight);
           }
         };
+
+        let _cid = "";
+
+        if (cids[i].match(/^Qm/)) {
+          const v0 = CID.parse(cids[i]);
+          v0.toString();
+          _cid = v0.toV1().toString();
+        } else {
+          _cid = cids[i];
+        }
+        
         img.error = (e) =>
-          (e.target.src = `https://${cids[i]}.${NFT_STORAGE_GATEWAY}/${layerFileNames[j]}`);
+          (e.target.src = `https://${_cid}.${NFT_STORAGE_GATEWAY}/${layerFileNames[j]}`);
         // img.src = `${IPFS_GATEWAY}/${cids[i]}/${layerFileNames[j]}`;
-        img.src = `https://${cids[i]}.${NFT_STORAGE_GATEWAY}/${layerFileNames[j]}`;
-        img.crossOrigin = "Anonymous";
+        img.src = `https://${_cid}.${NFT_STORAGE_GATEWAY}/${layerFileNames[j]}`;
 
         images.push({ img, name: layerFileNames[j] });
       }

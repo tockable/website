@@ -2,11 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { imageUrlFromBlob } from "@/utils/image-utils";
 
-export function TestApp({
-  layers,
-  layersFiles,
-  setLayersFilesNames,
-}) {
+export function TestApp({ layers, layersFiles, setLayersFilesNames }) {
   const [built, setBuilt] = useState(false);
   const [builtLayers, setBuiltLayers] = useState({});
   const [assets, setAssets] = useState([]);
@@ -97,6 +93,7 @@ export function TestApp({
       for (let j = 0; j < filesArray.length; j++) {
         let img = new Image();
         img.onload = imageLoaded;
+        // img.crossOrigin = "anonymous";
         img.src = filesArray[j].url;
         images.push({ img, name: filesArray[j].name });
       }
