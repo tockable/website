@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect, useRef } from "react";
+import { useState, useContext, useEffect } from "react";
 import { parseEther, BaseError, ContractFunctionRevertedError } from "viem";
 import {
   usePrepareContractWrite,
