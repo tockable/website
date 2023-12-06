@@ -35,12 +35,16 @@ export default function MintpadDapp({ layers, fileNames, cids }) {
 
   useEffect(() => {
     if (totalCount == 0) return;
+
     const _assets = [];
+
     for (let i = 0; i < cids.length; i++) {
       const images = [];
       const layerFileNames = fileNames[i];
+
       for (let j = 0; j < layerFileNames.length; j++) {
         let img = new Image();
+
         img.crossOrigin = "anonymous";
         img.onload = () => {
           imageLoaded();
@@ -59,16 +63,21 @@ export default function MintpadDapp({ layers, fileNames, cids }) {
         } else {
           _cid = cids[i];
         }
-        
-        img.error = (e) =>
-          (e.target.src = `https://${_cid}.${NFT_STORAGE_GATEWAY}/${layerFileNames[j]}`);
-        // img.src = `${IPFS_GATEWAY}/${cids[i]}/${layerFileNames[j]}`;
-        img.src = `https://${_cid}.${NFT_STORAGE_GATEWAY}/${layerFileNames[j]}`;
+
+        img.onerror = (e) => {
+          e.target.onerror = null;
+          e.currentTarget.onerror = null;
+          e.currentTarget.src = `https://nftstorage.link/ipfs/${_cid}/${layerFileNames[j]}`;
+        };
+
+        img.src = `https://${_cid}.${NFT_STORAGE_GATEWAY}/${layerFileNames[j]}?with-cors-no-cache`;
 
         images.push({ img, name: layerFileNames[j] });
       }
+
       _assets[i] = images;
     }
+
     setAssets(_assets);
   }, [totalCount]);
 

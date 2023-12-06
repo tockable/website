@@ -115,7 +115,10 @@ export async function updateProjectDetails(_creator, _projectDetails, _files) {
         return { success: false, message: "Something wrong with ipfs" };
       }
     }
-    await fs.promises.writeFile(projectsPath, JSON.stringify(projects));
+    await fs.promises.writeFile(
+      projectsPath,
+      JSON.stringify(projects, null, 2)
+    );
 
     const slugPath = path.resolve(".", `${DATABASE}/slugs.json`);
     const slugsJSon = fs.readFileSync(slugPath, { encoding: "utf8" });
@@ -125,7 +128,10 @@ export async function updateProjectDetails(_creator, _projectDetails, _files) {
     );
 
     if (!writedBefore) {
-      await fs.promises.writeFile(slugPath, JSON.stringify([...slugs, slug]));
+      await fs.promises.writeFile(
+        slugPath,
+        JSON.stringify([...slugs, slug], null, 2)
+      );
     }
 
     return {
@@ -168,7 +174,10 @@ export async function updateProjectContract(_creator, _projectContract) {
     projects[ind].firstTokenId = firstTokenId;
     projects[ind].duplicateVerification = duplicateVerification;
 
-    await fs.promises.writeFile(projectsPath, JSON.stringify(projects));
+    await fs.promises.writeFile(
+      projectsPath,
+      JSON.stringify(projects, null, 2)
+    );
     return {
       success: true,
       payload: projects[ind],
@@ -196,7 +205,10 @@ export async function updateProjectRoles(_creator, _projectRoles) {
   try {
     projects[ind].roles = _projectRoles.roles;
     projects[ind].roleDeployed = true;
-    await fs.promises.writeFile(projectsPath, JSON.stringify(projects));
+    await fs.promises.writeFile(
+      projectsPath,
+      JSON.stringify(projects, null, 2)
+    );
     return {
       success: true,
       payload: projects[ind],
@@ -223,7 +235,10 @@ export async function updateProjectSessions(_creator, _projectSessions) {
   }
   try {
     projects[ind].sessions = _projectSessions.sessions;
-    await fs.promises.writeFile(projectsPath, JSON.stringify(projects));
+    await fs.promises.writeFile(
+      projectsPath,
+      JSON.stringify(projects, null, 2)
+    );
     return {
       success: true,
       payload: projects[ind],
@@ -250,7 +265,10 @@ export async function publishProject(_uuid, _creator) {
   }
   try {
     projects[ind].isPublished = true;
-    await fs.promises.writeFile(projectsPath, JSON.stringify(projects));
+    await fs.promises.writeFile(
+      projectsPath,
+      JSON.stringify(projects, null, 2)
+    );
 
     const publishedProjectPath = getPublishedProjectPath();
 
@@ -267,7 +285,7 @@ export async function publishProject(_uuid, _creator) {
     const editedPublishedProjects = [...publishedProjects, newPublishedProject];
     await fs.promises.writeFile(
       publishedProjectPath,
-      JSON.stringify(editedPublishedProjects)
+      JSON.stringify(editedPublishedProjects, null, 2)
     );
 
     return {
@@ -299,7 +317,10 @@ export async function unPublishProject(_uuid, _creator) {
 
   try {
     projects[ind].isPublished = false;
-    await fs.promises.writeFile(projectsPath, JSON.stringify(projects));
+    await fs.promises.writeFile(
+      projectsPath,
+      JSON.stringify(projects, null, 2)
+    );
 
     const publishedProjectPath = getPublishedProjectPath();
 
@@ -313,7 +334,7 @@ export async function unPublishProject(_uuid, _creator) {
 
     await fs.promises.writeFile(
       publishedProjectPath,
-      JSON.stringify(publishedProjects)
+      JSON.stringify(publishedProjects, null, 2)
     );
 
     return {
@@ -345,7 +366,10 @@ export async function updateDeployStatus(_uuid, _creator, _contractAddress) {
   try {
     projects[ind].isDeployed = true;
     projects[ind].contractAddress = getAddress(_contractAddress);
-    await fs.promises.writeFile(projectsPath, JSON.stringify(projects));
+    await fs.promises.writeFile(
+      projectsPath,
+      JSON.stringify(projects, null, 2)
+    );
 
     return {
       success: true,
@@ -374,7 +398,10 @@ export async function upddateProjectSigner(_uuid, _creator, _signer) {
   }
   try {
     projects[ind].signer = _signer;
-    await fs.promises.writeFile(projectsPath, JSON.stringify(projects));
+    await fs.promises.writeFile(
+      projectsPath,
+      JSON.stringify(projects, null, 2)
+    );
 
     return {
       success: true,
@@ -413,7 +440,7 @@ export async function updateProjectMetadata(
     projects[ind].layers = _layers;
     projects[ind].fileNames = _layerFilesNames;
     projects[ind].cids = _cids;
-    fs.writeFileSync(projectsPath, JSON.stringify(projects));
+    fs.writeFileSync(projectsPath, JSON.stringify(projects, null, 2));
 
     return {
       success: true,
@@ -443,7 +470,10 @@ export async function updateActiveSession(_creator, _uuid, _activeSession) {
   try {
     projects[ind].activeSession = Number(_activeSession);
     projects[ind].paused = false;
-    await fs.promises.writeFile(projectsPath, JSON.stringify(projects));
+    await fs.promises.writeFile(
+      projectsPath,
+      JSON.stringify(projects, null, 2)
+    );
 
     return {
       success: true,
@@ -471,7 +501,10 @@ export async function setMintPaused(_creator, _uuid) {
   }
   try {
     projects[ind].paused = true;
-    await fs.promises.writeFile(projectsPath, JSON.stringify(projects));
+    await fs.promises.writeFile(
+      projectsPath,
+      JSON.stringify(projects, null, 2)
+    );
 
     return {
       success: true,
@@ -499,7 +532,10 @@ export async function updateIsVerified(_creator, _uuid) {
   }
   try {
     projects[ind].isVerified = true;
-    await fs.promises.writeFile(projectsPath, JSON.stringify(projects));
+    await fs.promises.writeFile(
+      projectsPath,
+      JSON.stringify(projects, null, 2)
+    );
 
     return {
       success: true,

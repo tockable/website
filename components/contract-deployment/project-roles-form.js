@@ -313,7 +313,7 @@ function roleReducer(roles, action) {
     case "delete": {
       const remain = roles.filter((role) => role.id !== action.id);
       remain.forEach((role, i) => {
-        role.id = i + 1;
+        role.id = i;
       });
       return remain;
     }

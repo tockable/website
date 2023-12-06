@@ -312,12 +312,12 @@ export default function Mintpad({ project, prepareMint, abiAction }) {
                           (!paused || data[0]?.result) && (
                             <div>
                               {!isConnected && (
-                                <p className="text-blue-400 text-xs text-center p-2 mt-8 border rounded-xl border-blue-400">
+                                <p className="text-blue-400 text-xs text-center p-2 mt-8 mx-4 border rounded-xl border-blue-400">
                                   connect wallet to see mint options
                                 </p>
                               )}
                               {errorGettingElligibility && isConnected && (
-                                <p className="text-tock-orange text-xs p-2 border rounded-xl mt-8 border-tock-orange text-center">
+                                <p className="text-tock-orange text-xs p-2 border rounded-xl mt-8 mx-4 border-tock-orange text-center">
                                   Something went wrong, please refresh the page.
                                 </p>
                               )}

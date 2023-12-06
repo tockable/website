@@ -120,7 +120,7 @@ export async function createNewProject(_creator, _project) {
 
   await fs.promises.writeFile(
     projectsPath,
-    JSON.stringify([...projects, newProject])
+    JSON.stringify([...projects, newProject], null, 2)
   );
 
   return {

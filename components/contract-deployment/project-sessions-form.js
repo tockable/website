@@ -339,7 +339,7 @@ function sessionReducer(sessions, action) {
     case "delete": {
       const remain = sessions.filter((session) => session.id !== action.id);
       remain.forEach((session, i) => {
-        session.id = i + 1;
+        session.id = i;
       });
       return remain;
     }
