@@ -9,6 +9,7 @@ import {
 } from "@rainbow-me/rainbowkit";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import {
+  linea,
   baseGoerli,
   mainnet,
   polygon,
@@ -25,6 +26,7 @@ import AuthContext from "@/contexts/auth-context";
 
 const { chains, publicClient } = configureChains(
   [
+    linea,
     mainnet,
     polygon,
     optimism,

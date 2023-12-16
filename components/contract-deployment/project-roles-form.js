@@ -186,7 +186,7 @@ export default function ProjectRolesForm() {
           type="button"
           onClick={() => dispatch({ type: "add" })}
         >
-          + add role
+          + add new role
         </Button>
       </div>
       <div className="text-tock-orange text-xs my-4">
@@ -317,6 +317,7 @@ function roleReducer(roles, action) {
       });
       return remain;
     }
+    
     case "edit": {
       return roles.map((role) => {
         if (role.id === action.role.id) {

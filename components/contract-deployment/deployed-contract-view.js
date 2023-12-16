@@ -86,7 +86,7 @@ export default function DeployedContractView() {
                   variant="secondary"
                   className="mt-2"
                   onClick={() => callVerfify()}
-                  disabled={verifying}
+                  disabled={verifying || Number(project.chainId) == 59144}
                 >
                   {verifying && <Loading isLoading={verifying} size={10} />}
                   {!verifying && <p>verify contract</p>}
@@ -94,6 +94,11 @@ export default function DeployedContractView() {
                 {verificationError && (
                   <p className="text-tock-red text-sm mt-2">
                     an error occured during verification, please try again.
+                  </p>
+                )}
+                {Number(project.chainId) == 59144 && (
+                  <p className="text-tock-red text-sm mt-2">
+                    currently Linea contract verification is not supported.
                   </p>
                 )}
               </div>

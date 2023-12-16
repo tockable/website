@@ -8,6 +8,7 @@ import {
 } from "@rainbow-me/rainbowkit";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import {
+  linea,
   baseGoerli,
   mainnet,
   polygon,
@@ -25,6 +26,7 @@ import CreatorDashboard from "@/components/dashboard/creator-dashboard";
 
 const { chains, publicClient } = configureChains(
   [
+    linea,
     mainnet,
     polygon,
     optimism,

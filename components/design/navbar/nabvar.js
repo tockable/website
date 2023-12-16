@@ -23,9 +23,10 @@ export default function Navbar() {
 
           <Link
             className="p-8 mx-1 text-center transition ease-in-out hover:bg-tock-black duration-300 text-gray-300 font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline active:text-white flex-auto"
-            href="#"
+            href="https://mirror.xyz/tockable.eth"
           >
-            doc <span className="text-gray-500"> soon!</span>
+            doc
+            {/* <span className="text-gray-500"> soon!</span> */}
           </Link>
 
           <Link href={`${BASEURL}/?ref=12345`}>

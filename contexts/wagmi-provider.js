@@ -9,6 +9,7 @@ import {
 } from "@rainbow-me/rainbowkit";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import {
+  linea,
   baseGoerli,
   mainnet,
   polygon,
@@ -33,6 +34,7 @@ const { chains, publicClient } = configureChains(
     baseGoerli,
     optimismGoerli,
     arbitrum,
+    linea,
   ],
   [
     alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY }),

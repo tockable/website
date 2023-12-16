@@ -203,7 +203,7 @@ export default function ProjectSessionsForm() {
           type="button"
           onClick={() => dispatch({ type: "add" })}
         >
-          + add session
+          + add new session
         </Button>
       </div>
       <div className="text-tock-orange text-xs my-4">
