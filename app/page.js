@@ -36,9 +36,9 @@ export default function page() {
       </div>
 
       <div className="flex flex-col items-center gap-10 md:p-4 justify-center md:flex-row mt-10 mb-44">
-      <div className="border-2 border-tock-orange rounded-xl p-4 w-11/12 md:w-1/2 h-44">
+        <div className="border-2 border-tock-orange rounded-xl p-4 w-11/12 md:w-1/2 h-44">
           <h1 className="text-tock-green font-bold text-2xl mb-2">
-          <span className="text-tock-red">zero-code</span> for creators
+            <span className="text-tock-red">zero-code</span> for creators
           </h1>
           <p className="text-zinc-200">
             Tockable is a zero-code platform to let creators create and publish
@@ -50,9 +50,16 @@ export default function page() {
             learn about tockable
           </h1>
           <p className="text-zinc-200">
-            learn about what tockable can do with our docs! soon!
+            learn about what tockable can do with our docs!
           </p>
-          <p className="text-zinc-200">...</p>
+          <a
+            href=""
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-400 hover:text-blue-200"
+          >
+            read docs
+          </a>
         </div>
       </div>
 
