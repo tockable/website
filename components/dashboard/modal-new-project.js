@@ -123,6 +123,7 @@ export default function NewProjectModal({ isOpen, onClose }) {
               <option value="8453">Base</option>
               {/* <option value="7777777">Zora</option> */}
               <option value="84531">Base goerli</option>
+              <option value="59144">Base goerli</option>
               {/* <option value="42161">Arbitrum One</option> */}
             </select>
             <Button
