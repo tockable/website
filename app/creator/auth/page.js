@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Auth from "@/app/creator/auth/signin-with-ethereum";
+import Auth from "./components/signin-with-ethereum";
 import Loading from "@/components/loading/loading";
 
 export default function Page() {
