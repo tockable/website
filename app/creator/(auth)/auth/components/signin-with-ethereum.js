@@ -11,7 +11,7 @@ import { useNetwork } from "wagmi";
 import TockableLogo from "@/svgs/logo";
 import Fade from "@/components/design/fade/fade";
 
-export default function Auth() {
+export default function SignInWithEthereum() {
   const [hasSigned, setHasSigned] = useState(false);
 
   const [showSwe, setShowSwe] = useState(false);
