@@ -1,18 +1,26 @@
 export const TOCKABLE_METADATA = {
   title: "Tockable.xyz",
   description:
-    "Unlocking new possibilites of web3 and NFT eco system; a new generation launchpad for creators, builders and minters. ",
-  applicationNAme: "tockable.xyz",
-  keywords: ["nft", "launchpad", "optimism"],
+    "Unlocking new possibilites of web3 and NFT eco system; a new generation dynamic nft launchpad for creators, builders and minters. ",
+  applicationName: "tockable.xyz",
+  keywords: [
+    "nft",
+    "launchpad",
+    "optimism",
+    "blast",
+    "mode",
+    "blockchain",
+    "ethereum",
+  ],
   authors: [{ name: "tockable.xyz" }],
-  colorSchemte: "dark",
+  colorScheme: "dark",
   creator: "tockableteam",
   themeColor: "#231f20",
   twitter: {
     card: "summary_large_image",
     title: "Tockable.xyz",
     description:
-      "Unlocking new possibilites of web3 and NFT eco system; a new generation launchpad for creators, builders and minters. ",
+      "Unlocking new possibilites of web3 and NFT eco system; a new generation dynamic nft launchpad for creators, builders and minters. ",
 
     creator: "@tockablexyz",
     images: [
@@ -23,7 +31,7 @@ export const TOCKABLE_METADATA = {
   openGraph: {
     title: "Tockable.xyz",
     description:
-      "Unlocking new possibilites of web3 and NFT eco system; a new generation launchpad for creators, builders and minters. ",
+      "Unlocking new possibilites of web3 and NFT eco system; a new generation dynamic nft launchpad for creators, builders and minters. ",
     url: "https://tockable.xyz",
     siteName: "Tockable.xyz",
     images: [

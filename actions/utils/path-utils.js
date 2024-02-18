@@ -2,9 +2,10 @@ import path from "path";
 import { camelize } from "@/utils/string-utils";
 
 const DATABASE = process.env.DATABASE;
+const QUERY = process.env.QUERY
 const publishedProjectPath = path.resolve(
   ".",
-  `${DATABASE}/publishedProjects/publishedProjects.json`
+  `${QUERY}/allProjects.json`
 );
 
 /**
@@ -14,14 +15,7 @@ const publishedProjectPath = path.resolve(
  */
 export function getProjectDirectory(_creator) {
   const dir = _creator.slice(2, 42);
-  const projectsPath = path.resolve(
-    ".",
-    DATABASE,
-    "projects",
-    dir,
-    "projects.json"
-  );
-  return projectsPath;
+  return path.resolve(".", DATABASE, "projects", dir, "projects.json");
 }
 
 /**
@@ -54,7 +48,7 @@ export function getProjectFilesDirectory(_creator, _uuid) {
 export function getProjectMetadataPath(_creator, _uuid, _projectName) {
   const contractName = camelize(_projectName, true);
   const dir = _creator.slice(2, 42);
-  const abiPath = path.resolve(
+  return path.resolve(
     ".",
     DATABASE,
     "projects",
@@ -62,7 +56,6 @@ export function getProjectMetadataPath(_creator, _uuid, _projectName) {
     _uuid,
     `${contractName}.json`
   );
-  return abiPath;
 }
 
 /**
@@ -72,14 +65,7 @@ export function getProjectMetadataPath(_creator, _uuid, _projectName) {
  */
 export function getProjectDataDirectory(_creator) {
   const dir = _creator.slice(2, 42);
-  const projectsDataPath = path.resolve(
-    ".",
-    DATABASE,
-    "projects",
-    dir,
-    "projectsData.json"
-  );
-  return projectsDataPath;
+  return path.resolve(".", DATABASE, "projects", dir, "projectsData.json");
 }
 
 /**
@@ -89,12 +75,5 @@ export function getProjectDataDirectory(_creator) {
  */
 export function getBuildDirectory(_project) {
   const dir = _project.creator.slice(2, 42);
-  const buildDirectory = path.resolve(
-    ".",
-    DATABASE,
-    "projects",
-    dir,
-    _project.uuid
-  );
-  return buildDirectory;
+  return path.resolve(".", DATABASE, "projects", dir, _project.uuid);
 }

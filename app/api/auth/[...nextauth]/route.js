@@ -67,7 +67,7 @@ export const authOptions = {
     },
   },
   pages: {
-    signIn: "/auth",
+    signIn: "/creator/auth",
   },
 };
 

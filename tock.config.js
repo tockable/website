@@ -10,3 +10,41 @@ export const SOCIAL = {
   discord: "https://discord.gg",
   mirror: "https://mirror.xyz",
 };
+
+export const SUPPORTED_CHAINS = [
+  { name: "Ethereum", value: "1" },
+  { name: "Optimism", value: "10" },
+  // { name: "Optimism goerli", value: "420" },
+  // { name: "Polygon", value: "137" },
+  // { name: "Polygon mumbai", value: "80001" },
+  // { name: "Base", value: "8453" },
+  // { name: "Base goerli", value: "84531" },
+  // { name: "Linea", value: "59144" },
+  { name: "Blast Sepolia", value: "168587773" },
+];
+
+export const DROP_TYPES = [
+  {
+    type: "tockable",
+    typeNo: 0,
+    currentVersion: 2,
+    title: "Tockable drop",
+    description:
+      "Create a Tockable drop, unlimited or fixed supply, customizable metadata during the mint",
+  },
+  // {
+  //   type: "regular",
+  //   tyoeNo: 1,
+  //   currentVersion: 1,
+  //   title: "Regular drop",
+  //   description:
+  //     "Create a traditional NFT collection with fixed supply and pre-uploaded metadata",
+  // },
+];
+
+{
+  /* <option value="7777777">Zora</option> */
+}
+{
+  /* <option value="42161">Arbitrum One</option> */
+}

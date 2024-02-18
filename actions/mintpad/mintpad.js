@@ -15,7 +15,8 @@ export async function fetchProjectMintData(slug) {
     });
     const publishedProjects = JSON.parse(publishedProjectJson);
     const projectBySlug = publishedProjects.find(
-      (publishedProject) => publishedProject.slug === slug
+      (publishedProject) =>
+        publishedProject.slug.toLowerCase() === slug.toLowerCase()
     );
 
     if (!projectBySlug) {
@@ -52,6 +53,7 @@ export async function fetchProjectMintData(slug) {
       cids: project.cids,
       signer: project.signer,
       chainData,
+      chainId: chainData.chainId,
       activeSession: project.activeSession,
       slug,
     };
@@ -67,11 +69,13 @@ export async function getElligibility(_address, _creator, _slug) {
     const creatorProjectsJson = fs.readFileSync(creatorProjectsDir, {
       encoding: "utf8",
     });
+
     const creatorProjects = JSON.parse(creatorProjectsJson);
     const project = creatorProjects.find((project) => _slug === project.slug);
     const activeSessionData = project.activeSession;
 
     const _current = new Date();
+
     const current = Date.UTC(
       _current.getUTCFullYear(),
       _current.getUTCMonth(),
@@ -79,64 +83,85 @@ export async function getElligibility(_address, _creator, _slug) {
       _current.getUTCHours(),
       _current.getUTCMinutes()
     );
-    // const current = _current.getTime();
 
-    // if mint not started
-    if (project.activeSession.toString().length === 0) {
-      const timestamps = [];
-      for (let i = 0; i < project.sessions.length; i++) {
-        const _append = project.sessions[i].start + ":00Z";
-        const _date = new Date(_append);
-        timestamps.push(_date.getTime());
-      }
-      timestamps.sort((a, b) => a - b);
-
-      const firstSession = timestamps[0];
-      const untilStart = firstSession - current;
-
-      return { success: true, notStarted: true, untilStart };
+    // if not active
+    if (!project.activeSession.toString().length) {
+      return { success: true, stauts: "notActive", payload: {} };
     }
 
+    // if paused
     if (project.paused) {
-      return { success: true, paused: true };
+      return { success: true, status: "paused", payload: {} };
     }
 
-    const timestamps = [];
+    const starts = [];
+
     for (let i = 0; i < project.sessions.length; i++) {
       const _append = project.sessions[i].start + ":00Z";
       const _date = new Date(_append);
-      timestamps.push(_date.getTime());
+      starts.push(_date.getTime());
     }
 
-    timestamps.sort((a, b) => b - a);
+    const firstSession = Math.min(...starts);
 
-    const endOfMint = timestamps[0];
+    // if not started
+    if (current < firstSession) {
+      const timer = firstSession - current;
+      return { success: true, status: "notStarted", payload: { timer } };
+    }
 
-    // if mint ended
-    if (current < endOfMint) {
-      return { success: true, mintEnded: true };
+    // if ended
+    const ends = [];
+    for (let i = 0; i < project.sessions.length; i++) {
+      const _append = project.sessions[i].end + ":00Z";
+      const _date = new Date(_append);
+      ends.push(_date.getTime());
+    }
+
+    const endOfMint = Math.max(...ends);
+
+    if (current > endOfMint) {
+      return { success: true, status: "ended", payload: {} };
     }
 
     // until current session
     const currentSession = project.sessions[Number(project.activeSession)];
 
-    const _append = currentSession.end + ":00Z";
-    const _end = new Date(_append);
+    const _appendStart = currentSession.start + ":00Z";
+    const _start = new Date(_appendStart);
+    const _appendEnd = currentSession.end + ":00Z";
+    const _end = new Date(_appendEnd);
 
+    const start = _start.getTime();
     const end = _end.getTime();
 
-    let untilEnd;
-    if (current < end) {
-      untilEnd = end - current;
+    if (current < start) {
+      const timer = start - current;
+      return { success: true, status: "notStartedSession", payload: { timer } };
     }
+
+    if (current > end) {
+      let nextStart;
+      for (let i = 0; i < starts.length; i++) {
+        if (current < start) {
+          nextStart = starts[i];
+          break;
+        } else {
+          return { success: true, status: "ended", payload: {} };
+        }
+      }
+      return { success: true, status: "notStartedSession", payload: { timer } };
+    }
+
+    const timer = end - current;
 
     if (project.activeSession == 0) {
       return {
         success: true,
+        stauts: "justPublic",
         payload: {
-          untilEnd,
+          timer,
           elligibility: true,
-          justPublicMint: true,
           activeSession: project.activeSession,
           availableRoles: [
             {
@@ -151,6 +176,7 @@ export async function getElligibility(_address, _creator, _slug) {
     }
 
     const availableRoles = [];
+
     for (let roleId of project.sessions[activeSessionData].roles) {
       if (roleId == 0) {
         const newRole = {
@@ -180,19 +206,20 @@ export async function getElligibility(_address, _creator, _slug) {
       if (availableRoles[0].id == 0) {
         return {
           success: true,
+          status: "justPublic",
           payload: {
-            untilEnd,
+            timer,
             elligibility: true,
             activeSession: project.activeSession,
-            justPublicMint: true,
             availableRoles,
           },
         };
       } else {
         return {
           success: true,
+          status: "notPublic",
           payload: {
-            untilEnd,
+            timer,
             activeSession: project.activeSession,
             elligibility: true,
             justPublicMint: false,
@@ -203,22 +230,22 @@ export async function getElligibility(_address, _creator, _slug) {
     } else if (availableRoles.length > 1) {
       return {
         success: true,
+        status: "notPublic",
         payload: {
-          untilEnd,
+          timer,
           elligibility: true,
           activeSession: project.activeSession,
-          justPublicMint: false,
           availableRoles,
         },
       };
     } else {
       return {
         success: true,
+        status: "notPublic",
         payload: {
-          untilEnd,
+          timer,
           elligibility: false,
           activeSession: project.activeSession,
-          justPublicMint: false,
           availableRoles,
         },
       };

@@ -1,4 +1,5 @@
 "use server";
+
 import fs from "fs";
 import rimraf from "rimraf";
 import path from "path";
@@ -61,7 +62,6 @@ function compile(_contractName, _project, _buildDirectory) {
   // } else {
   const output = solc.compile(JSON.stringify(input));
 
-  // console.log(output);
   const contract = JSON.parse(output);
 
   const metadata = {
@@ -75,12 +75,6 @@ function compile(_contractName, _project, _buildDirectory) {
   };
 
   return metadata;
-  // }
-  // });
-
-  // return "s";
-
-  // const output = solc.compile(JSON.stringify(input));
 }
 
 function compileImports(sources, _project, _contractName, _buildDirectory) {
@@ -106,7 +100,7 @@ export async function createAndCompile(_creator, _uuid) {
     if (res.success) {
       project = res.payload;
     } else {
-      throw new Error("No Project find");
+      throw new Error("No Project found");
     }
 
     const buildDirectory = getBuildDirectory(project);

@@ -32,25 +32,13 @@ const VERIFY_CHAIN_DATA = [
     apikey: process.env.BASESCAN_API,
   },
   {
-    chainId: 84531,
-    endpoint: "https://api-goerli.basescan.org",
-    apikey: process.env.BASE_GOERLISCAN_API,
-  },
-  {
-    chainId: 84531,
-    endpoint: "https://api-goerli.basescan.org",
-    apikey: process.env.BASE_GOERLISCAN_API,
-  },
-  {
-    chainId: 59144,
-    endpoint: "",
-    apikey: process.env.LINEASCAN_API,
+    chainId: 168587773,
+    endpoint:
+      "https://api.routescan.io/v2/network/testnet/evm/168587773/etherscan/api",
+    apikey: "blast-sepolia",
   },
 ];
 
 export default async function getVerifyChainData(_chainId) {
-  const chaindata = VERIFY_CHAIN_DATA.find(
-    (chain) => chain.chainId === _chainId
-  );
-  return chaindata;
+  return VERIFY_CHAIN_DATA.find((chain) => chain.chainId === _chainId);
 }

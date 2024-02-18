@@ -2,14 +2,11 @@
 
 import fs from "fs";
 import path from "path";
-import { getAddress } from "viem";
 import storeFileToIpfs from "../ipfs/uploadFileToIpfs.js";
-import {
-  getProjectDirectory,
-  getPublishedProjectPath,
-} from "../utils/path-utils.js";
+import { getProjectDirectory } from "../utils/path-utils.js";
 
 const DATABASE = process.env.DATABASE;
+const QUERY = process.env.QUERY;
 
 /**
  *
@@ -21,15 +18,20 @@ export async function fetchProjectByUUID(_creator, _uuid) {
   if (!_creator.match(/(\b0x[a-fA-F0-9]{40}\b)/g))
     return { success: false, message: "Invalid wallet address" };
 
+  const dir = _creator.slice(2, 42);
+
   const projectsPath = getProjectDirectory(_creator);
-  if (!fs.existsSync(projectsPath)) {
-    return { success: false };
-  }
-  const json = fs.readFileSync(projectsPath, { encoding: "utf8" });
-  const projects = JSON.parse(json);
+
+  if (!fs.existsSync(projectsPath)) return { success: false };
+
+  const projects = (
+    await import(`../../${DATABASE}/projects/${dir}/projects.json`)
+  ).default;
 
   const project = projects.find((p) => p.uuid === _uuid);
+
   if (!project) return { success: false, message: "Project not found" };
+
   return { success: true, payload: project };
 }
 
@@ -40,34 +42,84 @@ export async function fetchProjectByUUID(_creator, _uuid) {
  */
 export async function checkUniqueSlug(_slug) {
   try {
-    const json = fs.readFileSync(path.resolve(".", `${DATABASE}/slugs.json`));
-    const slugs = JSON.parse(json);
+    const slugs = (await import(`../../${DATABASE}/slugs.json`)).default;
+
     const duplicate = slugs.find(
       (slug) => slug.toLowerCase() === _slug.toLowerCase()
     );
+
     if (duplicate) return { success: true, duplicate: true };
+
     return { success: true, duplicate: false };
   } catch (err) {
     return { success: false, message: err.message };
   }
 }
+
+/**
+ *
+ * @param {*} _creator
+ * @param {*} params
+ * @returns
+ */
+export async function updateProject(_creator, params) {
+  const dir = _creator.slice(2, 42);
+
+  const projects = (
+    await import(`../../${DATABASE}/projects/${dir}/projects.json`)
+  ).default;
+
+  const project = projects.find((p) => p.uuid === params.uuid);
+  console.log(project);
+
+  if (_creator.toLowerCase() !== project.creator.toLowerCase())
+    throw new Error("forbidden");
+
+  Object.assign(project, params);
+
+  const _path = path.resolve(".", DATABASE, "projects", dir, "projects.json");
+  fs.writeFileSync(_path, JSON.stringify(projects, null, 2));
+
+  if (params.isDeployed) {
+    await updateAllProjects({
+      uuid: params.uuid,
+      contractAddress: params.contractAddress,
+    });
+  }
+
+  if (params.isPublished) {
+    await updateAllProjects({
+      uuid: params.uuid,
+      isPublished: params.isPublished,
+    });
+  }
+
+  return project;
+}
+
+async function updateAllProjects(params) {
+  const allProjects = (await import(`../../${QUERY}/allProjects.json`)).default;
+
+  const project = allProjects.find((p) => p.uuid === params.uuid);
+
+  Object.assign(project, params);
+
+  const _path = path.resolve(".", QUERY, "allProjects.json");
+  fs.writeFileSync(_path, JSON.stringify(allProjects, null, 2));
+}
+
 /**
  *
  * @param {string} _creator
  * @param {object} _project
  */
-export async function updateProjectDetails(_creator, _projectDetails, _files) {
-  const projectsPath = getProjectDirectory(_creator);
-  const json = fs.readFileSync(projectsPath, { encoding: "utf8" });
-  const projects = JSON.parse(json);
-  const ind = projects.findIndex((p) => p.uuid === _projectDetails.uuid);
-  if (_creator.toLowerCase() !== projects[ind].creator.toLowerCase()) {
-    return { success: false, message: "forbidden" };
-  }
 
+export async function updateProjectDetails(_creator, _projectDetails, _files) {
   let image, cover;
-  const { name, description, website, twitter, discord, slug } =
+
+  const { uuid, name, description, website, twitter, discord, slug } =
     _projectDetails;
+
   if (_files !== null) {
     image = _files.get("image");
     cover = _files.get("cover");
@@ -77,12 +129,7 @@ export async function updateProjectDetails(_creator, _projectDetails, _files) {
   }
 
   try {
-    projects[ind].name = name;
-    projects[ind].description = description;
-    projects[ind].website = website;
-    projects[ind].twitter = twitter;
-    projects[ind].discord = discord;
-    projects[ind].slug = slug;
+    const params = { uuid, name, description, website, twitter, discord, slug };
 
     if (image !== null && image !== "null") {
       const bytes = await image.arrayBuffer();
@@ -94,7 +141,7 @@ export async function updateProjectDetails(_creator, _projectDetails, _files) {
         res.cid !== "" &&
         res.cid !== undefined
       ) {
-        projects[ind].image = res.cid;
+        params.image = res.cid;
       } else {
         return { success: false, message: "Something wrong with ipfs" };
       }
@@ -110,19 +157,18 @@ export async function updateProjectDetails(_creator, _projectDetails, _files) {
         res.cid !== "" &&
         res.cid !== undefined
       ) {
-        projects[ind].cover = res.cid;
+        params.cover = res.cid;
       } else {
         return { success: false, message: "Something wrong with ipfs" };
       }
     }
-    await fs.promises.writeFile(
-      projectsPath,
-      JSON.stringify(projects, null, 2)
-    );
+
+    const updatedProject = await updateProject(_creator, params);
 
     const slugPath = path.resolve(".", `${DATABASE}/slugs.json`);
     const slugsJSon = fs.readFileSync(slugPath, { encoding: "utf8" });
     const slugs = JSON.parse(slugsJSon);
+
     const writedBefore = slugs.find(
       (s) => s.toLowerCase() === slug.toLowerCase()
     );
@@ -134,413 +180,17 @@ export async function updateProjectDetails(_creator, _projectDetails, _files) {
       );
     }
 
+    await updateAllProjects({
+      uuid: params.uuid,
+      name: params.name,
+      image: params.image,
+      slug: params.slug,
+    });
+
     return {
       success: true,
-      payload: projects[ind],
+      payload: updatedProject,
       message: "Project details updated successfully",
-    };
-  } catch (err) {
-    return { success: false, message: err.message };
-  }
-}
-
-/**
- *
- * @param {string} _creator
- * @param {object} _project
- */
-export async function updateProjectContract(_creator, _projectContract) {
-  const projectsPath = getProjectDirectory(_creator);
-  const json = fs.readFileSync(projectsPath, { encoding: "utf8" });
-  const projects = JSON.parse(json);
-  const ind = projects.findIndex((p) => p.uuid === _projectContract.uuid);
-  if (_creator.toLowerCase() !== projects[ind].creator.toLowerCase()) {
-    return { success: false, message: "forbidden" };
-  }
-
-  try {
-    const {
-      tokenName,
-      tokenSymbol,
-      isUnlimited,
-      totalSupply,
-      firstTokenId,
-      duplicateVerification,
-    } = _projectContract;
-    projects[ind].tokenName = tokenName;
-    projects[ind].isUnlimited = isUnlimited;
-    projects[ind].tokenSymbol = tokenSymbol;
-    projects[ind].totalSupply = totalSupply;
-    projects[ind].firstTokenId = firstTokenId;
-    projects[ind].duplicateVerification = duplicateVerification;
-
-    await fs.promises.writeFile(
-      projectsPath,
-      JSON.stringify(projects, null, 2)
-    );
-    return {
-      success: true,
-      payload: projects[ind],
-      message: "project contract updated successfully.",
-    };
-  } catch (err) {
-    return { success: false, message: err.message };
-  }
-}
-
-/**
- *
- * @param {*} _creator
- * @param {*} _projectRoles
- * @returns
- */
-export async function updateProjectRoles(_creator, _projectRoles) {
-  const projectsPath = getProjectDirectory(_creator);
-  const json = fs.readFileSync(projectsPath, { encoding: "utf8" });
-  const projects = JSON.parse(json);
-  const ind = projects.findIndex((p) => p.uuid === _projectRoles.uuid);
-  if (_creator.toLowerCase() !== projects[ind].creator.toLowerCase()) {
-    return { success: false, message: "forbidden" };
-  }
-  try {
-    projects[ind].roles = _projectRoles.roles;
-    projects[ind].roleDeployed = true;
-    await fs.promises.writeFile(
-      projectsPath,
-      JSON.stringify(projects, null, 2)
-    );
-    return {
-      success: true,
-      payload: projects[ind],
-      message: "project roles updated successfully.",
-    };
-  } catch (err) {
-    return { success: false, message: err.message };
-  }
-}
-
-/**
- *
- * @param {*} _creator
- * @param {*} _projectSessions
- * @returns
- */
-export async function updateProjectSessions(_creator, _projectSessions) {
-  const projectsPath = getProjectDirectory(_creator);
-  const json = fs.readFileSync(projectsPath, { encoding: "utf8" });
-  const projects = JSON.parse(json);
-  const ind = projects.findIndex((p) => p.uuid === _projectSessions.uuid);
-  if (_creator.toLowerCase() !== projects[ind].creator.toLowerCase()) {
-    return { success: false, message: "forbidden" };
-  }
-  try {
-    projects[ind].sessions = _projectSessions.sessions;
-    await fs.promises.writeFile(
-      projectsPath,
-      JSON.stringify(projects, null, 2)
-    );
-    return {
-      success: true,
-      payload: projects[ind],
-      message: "project sessions updated successfully.",
-    };
-  } catch (err) {
-    return { success: false, message: err.message };
-  }
-}
-
-/**
- *
- * @param {*} _uuid
- * @param {*} _creator
- * @returns
- */
-export async function publishProject(_uuid, _creator) {
-  const projectsPath = getProjectDirectory(_creator);
-  const json = fs.readFileSync(projectsPath, { encoding: "utf8" });
-  const projects = JSON.parse(json);
-  const ind = projects.findIndex((p) => p.uuid === _uuid);
-  if (_creator.toLowerCase() !== projects[ind].creator.toLowerCase()) {
-    return { success: false, message: "forbidden" };
-  }
-  try {
-    projects[ind].isPublished = true;
-    await fs.promises.writeFile(
-      projectsPath,
-      JSON.stringify(projects, null, 2)
-    );
-
-    const publishedProjectPath = getPublishedProjectPath();
-
-    const json = fs.readFileSync(publishedProjectPath, { encoding: "utf8" });
-    const publishedProjects = JSON.parse(json);
-    const newPublishedProject = {
-      name: projects[ind].tokenName,
-      image: projects[ind].image,
-      chain: projects[ind].chain,
-      slug: projects[ind].slug,
-      creator: projects[ind].creator,
-      contractAddress: projects[ind].contractAddress,
-    };
-    const editedPublishedProjects = [...publishedProjects, newPublishedProject];
-    await fs.promises.writeFile(
-      publishedProjectPath,
-      JSON.stringify(editedPublishedProjects, null, 2)
-    );
-
-    return {
-      success: true,
-      payload: projects[ind],
-      message: "project successfully published.",
-    };
-  } catch (err) {
-    return { success: false, message: err.message };
-  }
-}
-
-/**
- *
- * @param {*} _uuid
- * @param {*} _creator
- * @returns
- */
-export async function unPublishProject(_uuid, _creator) {
-  const projectsPath = getProjectDirectory(_creator);
-  const json = fs.readFileSync(projectsPath, { encoding: "utf8" });
-  const projects = JSON.parse(json);
-
-  const ind = projects.findIndex((p) => p.uuid === _uuid);
-
-  if (_creator.toLowerCase() !== projects[ind].creator.toLowerCase()) {
-    return { success: false, message: "forbidden" };
-  }
-
-  try {
-    projects[ind].isPublished = false;
-    await fs.promises.writeFile(
-      projectsPath,
-      JSON.stringify(projects, null, 2)
-    );
-
-    const publishedProjectPath = getPublishedProjectPath();
-
-    const json = fs.readFileSync(publishedProjectPath, { encoding: "utf8" });
-    const publishedProjects = JSON.parse(json);
-    const publishedInd = publishedProjects.findIndex(
-      (p) => p.slug.toLowerCase() === projects[ind].slug.toLowerCase()
-    );
-
-    publishedProjects.splice(publishedInd, 1);
-
-    await fs.promises.writeFile(
-      publishedProjectPath,
-      JSON.stringify(publishedProjects, null, 2)
-    );
-
-    return {
-      success: true,
-      payload: projects[ind],
-      message: "project successfully unpublished.",
-    };
-  } catch (err) {
-    console.log(err);
-    return { success: false, message: err.message };
-  }
-}
-
-/**
- *
- * @param {*} _uuid
- * @param {*} _creator
- * @param {*} _contractAddress
- * @returns
- */
-export async function updateDeployStatus(_uuid, _creator, _contractAddress) {
-  const projectsPath = getProjectDirectory(_creator);
-  const json = fs.readFileSync(projectsPath, { encoding: "utf8" });
-  const projects = JSON.parse(json);
-  const ind = projects.findIndex((p) => p.uuid === _uuid);
-  if (_creator.toLowerCase() !== projects[ind].creator.toLowerCase()) {
-    return { success: false, message: "forbidden" };
-  }
-  try {
-    projects[ind].isDeployed = true;
-    projects[ind].contractAddress = getAddress(_contractAddress);
-    await fs.promises.writeFile(
-      projectsPath,
-      JSON.stringify(projects, null, 2)
-    );
-
-    return {
-      success: true,
-      payload: projects[ind],
-      message: "project successfully unpublished.",
-    };
-  } catch (err) {
-    return { success: false, message: err.message };
-  }
-}
-
-/**
- *
- * @param {*} _uuid
- * @param {*} _creator
- * @param {*} _signer
- * @returns
- */
-export async function upddateProjectSigner(_uuid, _creator, _signer) {
-  const projectsPath = getProjectDirectory(_creator);
-  const json = fs.readFileSync(projectsPath, { encoding: "utf8" });
-  const projects = JSON.parse(json);
-  const ind = projects.findIndex((p) => p.uuid === _uuid);
-  if (_creator.toLowerCase() !== projects[ind].creator.toLowerCase()) {
-    return { success: false, message: "forbidden" };
-  }
-  try {
-    projects[ind].signer = _signer;
-    await fs.promises.writeFile(
-      projectsPath,
-      JSON.stringify(projects, null, 2)
-    );
-
-    return {
-      success: true,
-      payload: projects[ind],
-      message: "updated successfully",
-    };
-  } catch (err) {
-    return { success: false, message: err.message };
-  }
-}
-
-/**
- *
- * @param {*} _uuid
- * @param {*} _creator
- * @param {*} _layers
- * @param {*} _layerFilesNames
- * @param {*} _cids
- * @returns
- */
-export async function updateProjectMetadata(
-  _uuid,
-  _creator,
-  _layers,
-  _layerFilesNames,
-  _cids
-) {
-  const projectsPath = getProjectDirectory(_creator);
-  const json = fs.readFileSync(projectsPath, { encoding: "utf8" });
-  const projects = JSON.parse(json);
-  const ind = projects.findIndex((p) => p.uuid === _uuid);
-  if (_creator.toLowerCase() !== projects[ind].creator.toLowerCase()) {
-    return { success: false, message: "forbidden" };
-  }
-  try {
-    projects[ind].layers = _layers;
-    projects[ind].fileNames = _layerFilesNames;
-    projects[ind].cids = _cids;
-    fs.writeFileSync(projectsPath, JSON.stringify(projects, null, 2));
-
-    return {
-      success: true,
-      payload: projects[ind],
-      message: "metadata updated successfully",
-    };
-  } catch (err) {
-    return { success: false, message: err.message };
-  }
-}
-
-/**
- *
- * @param {*} _creator
- * @param {*} _uuid
- * @param {*} _activeSession
- * @returns
- */
-export async function updateActiveSession(_creator, _uuid, _activeSession) {
-  const projectsPath = getProjectDirectory(_creator);
-  const json = fs.readFileSync(projectsPath, { encoding: "utf8" });
-  const projects = JSON.parse(json);
-  const ind = projects.findIndex((p) => p.uuid === _uuid);
-  if (_creator.toLowerCase() !== projects[ind].creator.toLowerCase()) {
-    return { success: false, message: "forbidden" };
-  }
-  try {
-    projects[ind].activeSession = Number(_activeSession);
-    projects[ind].paused = false;
-    await fs.promises.writeFile(
-      projectsPath,
-      JSON.stringify(projects, null, 2)
-    );
-
-    return {
-      success: true,
-      payload: projects[ind],
-      message: "active session updated successfully",
-    };
-  } catch (err) {
-    return { success: false, message: err.message };
-  }
-}
-
-/**
- *
- * @param {*} _creator
- * @param {*} _uuid
- * @returns
- */
-export async function setMintPaused(_creator, _uuid) {
-  const projectsPath = getProjectDirectory(_creator);
-  const json = fs.readFileSync(projectsPath, { encoding: "utf8" });
-  const projects = JSON.parse(json);
-  const ind = projects.findIndex((p) => p.uuid === _uuid);
-  if (_creator.toLowerCase() !== projects[ind].creator.toLowerCase()) {
-    return { success: false, message: "forbidden" };
-  }
-  try {
-    projects[ind].paused = true;
-    await fs.promises.writeFile(
-      projectsPath,
-      JSON.stringify(projects, null, 2)
-    );
-
-    return {
-      success: true,
-      payload: projects[ind],
-      message: "mint status updated!",
-    };
-  } catch (err) {
-    return { success: false, message: err.message };
-  }
-}
-
-/**
- *
- * @param {*} _creator
- * @param {*} _uuid
- * @returns
- */
-export async function updateIsVerified(_creator, _uuid) {
-  const projectsPath = getProjectDirectory(_creator);
-  const json = fs.readFileSync(projectsPath, { encoding: "utf8" });
-  const projects = JSON.parse(json);
-  const ind = projects.findIndex((p) => p.uuid === _uuid);
-  if (_creator.toLowerCase() !== projects[ind].creator.toLowerCase()) {
-    return { success: false, message: "forbidden" };
-  }
-  try {
-    projects[ind].isVerified = true;
-    await fs.promises.writeFile(
-      projectsPath,
-      JSON.stringify(projects, null, 2)
-    );
-
-    return {
-      success: true,
-      payload: projects[ind],
-      message: "mint status updated!",
     };
   } catch (err) {
     return { success: false, message: err.message };

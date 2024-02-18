@@ -9,7 +9,7 @@ export const metadata = TOCKABLE_METADATA;
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={c.className}>
-      <body>{children}</body>
+      <body className="bg-tock-black">{children}</body>
     </html>
   );
 }

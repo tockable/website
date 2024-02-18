@@ -1,9 +1,10 @@
 "use server";
 
+import fs from "fs";
 import { keccak256, encodePacked, toBytes } from "viem";
 import { ethers } from "ethers";
 import { getProjectDataDirectory } from "../utils/path-utils";
-import fs from "fs";
+
 /**
  *
  * @param {*} _creator
@@ -22,10 +23,13 @@ export default async function getHashAndSignature(
 ) {
   try {
     const projectsDataPath = getProjectDataDirectory(_creator);
+
     const json = fs.readFileSync(projectsDataPath, {
       encoding: "utf8",
     });
+
     const projectsData = JSON.parse(json);
+
     const projectData = projectsData.find(
       (projectData) =>
         projectData.address.toLowerCase() === _signer.toLowerCase()
@@ -42,6 +46,7 @@ export default async function getHashAndSignature(
 
     const messageBytes = toBytes(hash);
     const signature = await signer.signMessage(messageBytes);
+
     return { success: true, payload: { hash, signature } };
   } catch (err) {
     return { success: false, payload: {} };

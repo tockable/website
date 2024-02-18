@@ -3,36 +3,33 @@
 import fs from "fs";
 import { ethers } from "ethers";
 import { getProjectDataDirectory } from "../utils/path-utils";
-import { fetchProjectByUUID } from "../launchpad/projects";
 
 export async function createNewSigner(_creator, _uuid) {
-  try {
-    const projectsDataPath = getProjectDataDirectory(_creator);
-    const project = await fetchProjectByUUID(_uuid);
+  const projectsDataPath = getProjectDataDirectory(_creator);
 
-    let projectsData = [];
+  let projectsData = [];
 
-    if (fs.existsSync(projectsDataPath)) {
-      const json = fs.readFileSync(projectsDataPath, {
-        encoding: "utf8",
-      });
-      projectsData = JSON.parse(json);
-    }
-    const wallet = ethers.Wallet.createRandom();
+  if (fs.existsSync(projectsDataPath)) {
+    const json = fs.readFileSync(projectsDataPath, {
+      encoding: "utf8",
+    });
 
-    const newData = {
-      address: wallet.address,
-      mnemonic: wallet.mnemonic.phrase,
-      privateKey: wallet.privateKey,
-      uuid: project.uuid,
-    };
-
-    fs.writeFileSync(
-      projectsDataPath,
-      JSON.stringify([...projectsData, newData])
-    );
-    return { success: true, signer: wallet.address };
-  } catch (err) {
-    return { success: false, message: err.message };
+    projectsData = JSON.parse(json);
   }
+
+  const wallet = ethers.Wallet.createRandom();
+
+  const walletData = {
+    address: wallet.address,
+    mnemonic: wallet.mnemonic.phrase,
+    privateKey: wallet.privateKey,
+    uuid: _uuid,
+  };
+
+  fs.writeFileSync(
+    projectsDataPath,
+    JSON.stringify([...projectsData, walletData], null, 2)
+  );
+
+  return wallet.address;
 }

@@ -6,16 +6,16 @@ import { camelize } from "@/utils/string-utils";
 import getVerifyChainData from "./getVerifyChainData";
 import { encodeAbiParameters } from "viem";
 import { TOCKABLE_ADDRESS } from "@/tock.config";
-import { updateIsVerified } from "../launchpad/projects";
+import { updateProject } from "../launchpad/projects";
 
-// const COMPILER_VERSIONS = {
-//   v800: "v0.8.0+commit.c7dfd78e",
-//   v819: "v0.8.19+commit.7dd6d404",
-//   v820: "v0.8.20+commit.a1b79de6",
-//   v821: "v0.8.21+commit.d9974bed",
-//   v822: "v0.8.22+commit.4fc1097e",
-//   v823: "v0.8.23+commit.f704f362",
-// };
+const COMPILER_VERSIONS = {
+  v800: "v0.8.0+commit.c7dfd78e",
+  v819: "v0.8.19+commit.7dd6d404",
+  v820: "v0.8.20+commit.a1b79de6",
+  v821: "v0.8.21+commit.d9974bed",
+  v822: "v0.8.22+commit.4fc1097e",
+  v823: "v0.8.23+commit.f704f362",
+};
 
 const DATABASE = process.env.DATABASE;
 
@@ -27,6 +27,7 @@ const constructorAbi = {
   stateMutability: "nonpayable",
   type: "constructor",
 };
+
 export default async function verify(_project) {
   try {
     const chainData = await getVerifyChainData(Number(_project.chainId));
@@ -58,7 +59,7 @@ export default async function verify(_project) {
       contractaddress: _project.contractAddress,
       codeformat: "solidity-single-file",
       contractname: contractName,
-      compilerversion: "v0.8.21+commit.d9974bed",
+      compilerversion: COMPILER_VERSIONS["v821"],
       optimizationUsed: 1,
       runs: 200,
       evmVersion: "paris",
@@ -112,6 +113,7 @@ export default async function verify(_project) {
 
     formBody = formBody.join("&");
 
+
     const res1 = await fetch(chainData.endpoint, {
       method: "POST",
       headers: {
@@ -119,6 +121,7 @@ export default async function verify(_project) {
       },
       body: formBody,
     });
+
 
     const data1 = await res1.json();
 
@@ -128,29 +131,34 @@ export default async function verify(_project) {
 
         const res2 = await fetch(checkGuid);
         const data2 = await res2.json();
-
+        // isVerified
         if (
           data2.status == 1 ||
           data2.status == "1" ||
           data2.result == "Pending in queue"
         ) {
-          const res3 = await updateIsVerified(_project.creator, _project.uuid);
-          if (res3.success) {
-            return { success: true, payload: res3.payload };
-          } else {
+
+          try {
+            const updatedProject = await updateProject(_project.creator, {
+              uuid: _project.uuid,
+              isVerified: true,
+            });
+
+            return { success: true, payload: updatedProject };
+          } catch (_) {
             throw new Error(
-              "contract verified but you may see unverified on your dashboard which is not a big problem"
+              "Contract verified successfully but dashboard may show something else, we are working on it."
             );
           }
         } else {
-          throw new Error("not verified:", data2);
+          throw new Error("Not verified:", data2);
         }
       } else {
-        throw new Error("not verified:", data1);
+        throw new Error("Not verified:", data1);
       }
     } else {
       throw new Error(
-        "chain explorer end-point not respond, please try again later."
+        "Explorer end-point not respond, please try again later."
       );
     }
   } catch (err) {

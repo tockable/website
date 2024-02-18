@@ -2217,7 +2217,7 @@ abstract contract ERC721AQueryable is ERC721A, IERC721AQueryable {
 
 pragma solidity ^0.8.0;
 
-contract TockableDrop is ERC721AQueryable, Ownable, ReentrancyGuard {
+contract TockableContractName is ERC721AQueryable, Ownable, ReentrancyGuard {
     /// contract version
     uint256 public constant TOCKABLE_CONTRACT_VERSION = 1;
 
@@ -2258,7 +2258,7 @@ contract TockableDrop is ERC721AQueryable, Ownable, ReentrancyGuard {
     string private constant TOKEN_SYMBOL = "TCKBLE";
     uint256 public constant TOTAL_SUPPLY = 0; // 0 if collection is unlimited
     uint256 private constant FIRST_TOKEN_ID = 1;
-    uint256 private constant BASE_FEE = 0.0002 ether;
+    uint256 private constant BASE_FEE = 0.00025 ether;
     bool public constant duplicateVerification = false;
     bool public constant isUnlimited = false;
 

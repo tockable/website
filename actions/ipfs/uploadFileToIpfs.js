@@ -1,7 +1,7 @@
 "use server";
 import { NFTStorage, File } from "nft.storage";
 
-const MAX_RETRIES = 5;
+const MAX_RETRIES = 6;
 const NFT_STORAGE_KEY = process.env.NFT_STORAGE_KEY;
 
 export default async function storeFileToIpfs(

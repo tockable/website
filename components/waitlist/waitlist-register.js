@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import addToRegistery from "@/actions/wait-list/regsitery";
+import addToRegistery from "@/actions/waitlist/regsitery";
 import Fade from "@/components/design/fade/fade";
-import Button from "../design/button/button";
+import Button from "../design/button";
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -58,13 +58,14 @@ export default function Register() {
   }
 
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center w-full">
       <div className="basis-11/12 md:basis-3/4 lg:basis-1/2">
         <Fade show={renderFrom}>
-          <form className="bg-tock-semiblack rounded-2xl px-8 pt-6 pb-8 mb-4">
-            <h1 className="mb-12 mt-6 text-xl font-bold text-tock-green">
-              JOIN TOCKABLE WAITLIST
+          <form className="bg-tock-semiblack rounded-2xl p-4 pb-8 mb-4">
+            <h1 className="mb-2 mt-6 text-xl font-bold text-tock-green">
+              JOIN TOCKABLE
             </h1>
+            <p className="text-xs text-zinc-400 mb-12">Maybe one email per year.</p>
             <div className="mb-10">
               <label className="block text-tock-blue text-sm font-bold mb-2">
                 Email

@@ -1,7 +1,7 @@
 import { fetchProjectMintData } from "@/actions/mintpad/mintpad";
 import { TOCKABLE_METADATA } from "@/constants/metadata";
 import { IPFS_GATEWAY } from "@/tock.config";
-import MintpadLanding from "@/components/mintpad/mintpad-landing";
+import MintpadLanding from "@/app/c/[slug]/components/mintpad-landing";
 import NotFound from "@/components/not-found/not-found";
 
 export async function generateMetadata({ params }) {
@@ -16,10 +16,18 @@ export async function generateMetadata({ params }) {
     return {
       title: `${project.name} @Tockable`,
       description: project.description,
-      applicationNAme: "tockable.xyz",
-      keywords: ["nft", "launchpad", "optimism", "tockable", "mint", "mintpad"],
+      applicationName: "tockable.xyz",
+      keywords: [
+        "nft",
+        "launchpad",
+        "optimism",
+        "tockable",
+        "mint",
+        "mintpad",
+        "blockchain",
+      ],
       authors: [{ name: project.twitter }],
-      colorSchemte: "dark",
+      colorScheme: "dark",
       creator: project.creator,
       themeColor: "#231f20",
       twitter: {
@@ -53,14 +61,19 @@ export async function generateMetadata({ params }) {
 
 export default async function Page({ params }) {
   const getProject = fetchProjectMintData(params.slug);
+
   let project = null;
+
   const res = await getProject;
+
   if (res.success) {
     project = res.payload;
   }
+
   if (project) {
     return <MintpadLanding project={project} />;
   }
+
   if (!project) {
     return <NotFound />;
   }

@@ -39,12 +39,22 @@ body {
     )
     rgb(var(--background-start-rgb)); */
 }
+
 #banner {
+  min-height: 100vh;
+  max-height: max-content;
+  background: url(../svgs/dbmgradient.svg);
+  background-position: center center;
+  background-size: cover;
+}
+
+#banner-static {
   height: 100vh;
   background: url(../svgs/dbmgradient.svg);
   background-position: center center;
   background-size: cover;
 }
+
 
 .rti--container {
   border-radius: 0.75rem !important;

@@ -1,20 +1,36 @@
 import fs from "fs";
 import path from "path";
 import getChainData from "@/utils/chain-utils";
+
+function getBaseContract(_project, _chainId) {
+  const isBlast = _chainId === 168587773 ? "Blast" : "";
+  const dropType = _project.dropType === "tockable" ? "Tockable" : "Regular";
+  const version = _project.version;
+
+  const constructedName = `Flatten${isBlast}${dropType}DropV${version}.sol`;
+
+  const baseContract = fs.readFileSync(
+    path.resolve(".", "contracts", constructedName),
+    "utf8"
+  );
+  
+  return baseContract;
+}
+
 export default async function createCostimizedContractFile(
   _project,
   _buildDirectory,
   _contractName
 ) {
   const chainData = getChainData(Number(_project.chainId));
-  const base_fee = Number(chainData.base_fee);
-  const baseContract = fs.readFileSync(
-    path.resolve(".", "contracts", "FlattenTockableDrop.sol"),
-    "utf8"
-  );
+  const baseContract = getBaseContract(_project, chainData.chainId);
+  const base_fee =
+    _project.dropType === "tockable"
+      ? Number(chainData.base_fee)
+      : Number(chainData.regular_base_fee);
 
   let editedBaseContract = baseContract.replace(
-    /TockableDrop/g,
+    /TockableContractName/g,
     `${_contractName}`
   );
 
@@ -37,12 +53,12 @@ export default async function createCostimizedContractFile(
 
   if (_project.slug.toLowerCase() === "tock") {
     editedBaseContract = editedBaseContract.replace(
-      /uint256 private constant BASE_FEE = 0.0002 ether;/g,
+      /uint256 private constant BASE_FEE = 0.00025 ether;/g,
       `uint256 private constant BASE_FEE = 0 ether;`
     );
   } else {
     editedBaseContract = editedBaseContract.replace(
-      /uint256 private constant BASE_FEE = 0.0002 ether;/g,
+      /uint256 private constant BASE_FEE = 0.00025 ether;/g,
       `uint256 private constant BASE_FEE = ${Number(base_fee)} ether;`
     );
   }
@@ -69,5 +85,6 @@ export default async function createCostimizedContractFile(
       `bool public constant isUnlimited = true;`
     );
   }
+  
   return editedBaseContract;
 }

@@ -4,7 +4,7 @@ const NFT_STORAGE_KEY = process.env.NFT_STORAGE_KEY;
 
 export default async function storeJsonToIpfs(
   metadataJson,
-  retries = 5,
+  retries = 6,
   err = null
 ) {
   if (!retries) return { success: false, cid: null, message: err.message };

@@ -8,39 +8,14 @@ import {
   darkTheme,
 } from "@rainbow-me/rainbowkit";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import {
-  linea,
-  baseGoerli,
-  mainnet,
-  polygon,
-  optimism,
-  optimismGoerli,
-  arbitrum,
-  base,
-  zora,
-  polygonMumbai,
-} from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 import { alchemyProvider } from "wagmi/providers/alchemy";
+import { TOCKABLE_CHAINS } from "./chains";
 
-const { chains, publicClient } = configureChains(
-  [
-    mainnet,
-    polygon,
-    optimism,
-    base,
-    zora,
-    polygonMumbai,
-    baseGoerli,
-    optimismGoerli,
-    arbitrum,
-    linea,
-  ],
-  [
-    alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY }),
-    publicProvider(),
-  ]
-);
+const { chains, publicClient } = configureChains(TOCKABLE_CHAINS, [
+  alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY }),
+  publicProvider(),
+]);
 
 const { connectors } = getDefaultWallets({
   appName: process.env.NEXT_PUBLIC_CONNECT_WALLET_APP_NAME,

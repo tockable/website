@@ -1,0 +1,72 @@
+import { v4 as uuidv4 } from "uuid";
+
+export function tockableDrop(creator, name, chain, chainId, dropType) {
+  const uuid = uuidv4();
+  return {
+    uuid,
+    version: 2,
+    creator,
+    chain,
+    chainId,
+    dropType,
+    name,
+    description: "",
+    website: "",
+    twitter: "",
+    discord: "",
+    slug: "",
+    image: null,
+    cover: null,
+    tokenName: "",
+    tokenSymbol: "",
+    duplicateVerification: false,
+    firstTokenId: 1,
+    roles: [],
+    sessions: [],
+    signer: "",
+    contractAddress: "",
+    layers: [],
+    fileNames: [],
+    cids: [],
+    paused: true,
+    activeSession: "",
+    isDeployed: false,
+    isPublished: false,
+    isUnlimited: false,
+    isVerified: false,
+  };
+}
+
+export function regularDrop(creator, name, chain, chainId, dropType) {
+  const uuid = uuidv4();
+  return {
+    uuid,
+    version: 1,
+    creator,
+    chain,
+    chainId,
+    dropType,
+    name,
+    description: "",
+    cid: "",
+    hasExtension: true,
+    website: "",
+    twitter: "",
+    discord: "",
+    slug: "",
+    image: null,
+    cover: null,
+    tokenName: "",
+    tokenSymbol: "",
+    firstTokenId: 1,
+    roles: [],
+    sessions: [],
+    signer: "",
+    contractAddress: "",
+    paused: true,
+    activeSession: "",
+    isDeployed: false,
+    isPublished: false,
+    isVerified: false,
+  };
+}
