@@ -36,11 +36,14 @@ export default function Mint({
   return (
     <div
       onClick={handleClick}
-      className="flex grow bg-tock-black rounded-2xl p-4 my-4 mx-4 hover:bg-tock-semiblack hover:ring hover:ring-zinc-600 transition ease-in-out duration-200 cursor-pointer"
+      className={`flex grow bg-tock-black rounded-2xl p-4 my-4 mx-4 ${
+        !show &&
+        "hover:bg-tock-semiblack hover:ring hover:ring-zinc-600 transition ease-in-out duration-200 cursor-pointer"
+      }`}
     >
       <div className="flex flex-col gap-4 w-full">
-        <div className="flex flex-row">
-          <div className="flex-1">
+        <div className="flex">
+          <div className="flex-auto">
             <p className="text-zinc-400 text-xs items-center pr-4">
               mint as{" "}
               <span className="text-tock-orange text-sm">{role.name}</span> |
@@ -59,7 +62,7 @@ export default function Mint({
               )}
             </p>
           </div>
-          <div className="flex-0 text-tock-green text-xs justify-end">
+          <div className="text-tock-green text-xs justify-end">
             {!show && <p className="">click to expand</p>}
           </div>
         </div>
@@ -78,7 +81,7 @@ export default function Mint({
 
 function MintHandler({ role, prepareMint, session }) {
   const { address } = useAccount();
-  const { abi, project, blobs, setDuplicatedIndexes, setSuccessFullyMinted } =
+  const { abi, project, blobs, setDuplicatedIndexes, setSuccessfullyMinted } =
     useContext(MintContext);
 
   const [preparing, setPreparing] = useState(false);
@@ -131,9 +134,7 @@ function MintHandler({ role, prepareMint, session }) {
           } else if (errorName === "MoreThanAvailable") {
             setPrintedError("Mint limit exceeded on this session/contract.");
           } else if (errorName === "NotElligible") {
-            setWsetPrintedErrorrning(
-              "Mint session changed, Please refresh the page."
-            );
+            setPrintedError("Mint session changed, Please refresh the page.");
           } else if (errorName === "TokenHasBeenTakenBefore") {
             setDuplicatedIndexes(revertError.data.args[0]);
             setPrintedError("This traits has been taken before.");
@@ -158,7 +159,6 @@ function MintHandler({ role, prepareMint, session }) {
   useEffect(() => {
     if (invalidArgs(writeArgs)) {
       setPreparing(false);
-      setSuccessFullyMinted(false);
       return;
     }
     setEnableState(true);
@@ -171,7 +171,7 @@ function MintHandler({ role, prepareMint, session }) {
 
   useEffect(() => {
     if (!uwt.isSuccess) return;
-    setSuccessFullyMinted(true);
+    setSuccessfullyMinted(true);
     refetch?.();
     resetMint();
     setWarning("");
@@ -180,7 +180,7 @@ function MintHandler({ role, prepareMint, session }) {
 
   useEffect(() => {
     if (!uwt.isError) return;
-    setSuccessFullyMinted(false);
+    setSuccessfullyMinted(false);
     setWarning("");
     setPrintedError("Transaction failed.");
     resetMint();
@@ -188,7 +188,7 @@ function MintHandler({ role, prepareMint, session }) {
 
   useEffect(() => {
     if (!wc.isError) return;
-    setSuccessFullyMinted(false);
+    setSuccessfullyMinted(false);
     setWarning("");
     resetMint();
 
@@ -206,7 +206,7 @@ function MintHandler({ role, prepareMint, session }) {
   }, [wc.isError]);
 
   async function mint() {
-    setSuccessFullyMinted(false);
+    setSuccessfullyMinted(false);
     if (blobs.length === 0) return;
 
     setPreparing(true);
@@ -256,7 +256,9 @@ function MintHandler({ role, prepareMint, session }) {
         <div className="flex flex-col">
           <p className="text-zinc-400 text-xs items-center my-2">
             mint left for wallet on this role:{" "}
-            <span className="text-tock-orange text-sm">{maxMintable(data)}</span>
+            <span className="text-tock-orange text-sm">
+              {maxMintable(data)}
+            </span>
           </p>
           <div className="flex justify-center">
             {maxMintable(data) != 0 && (
@@ -313,10 +315,10 @@ function MintHandler({ role, prepareMint, session }) {
           )}
           {blobs.length > maxMintable(data) && maxMintable(data) !== 0 && (
             <p className="text-tock-red text-xs mt-2 border rounded-2xl border-zinc-400 p-4">
-              you are elligible to mint {maxMintable(data)} max in this role, please
-              consider removing {blobs.length - maxMintable(data)}{" "}
-              {blobs.length - maxMintable(data) === 1 ? "token" : "tokens"} from the
-              basket to enable minting in this role.{" "}
+              you are elligible to mint {maxMintable(data)} max in this role,
+              please consider removing {blobs.length - maxMintable(data)}{" "}
+              {blobs.length - maxMintable(data) === 1 ? "token" : "tokens"} from
+              the basket to enable minting in this role.{" "}
             </p>
           )}
           {printedError.length > 0 && (

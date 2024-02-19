@@ -37,6 +37,7 @@
     "react-spinners": "^0.13.8",
     "react-tag-input-component": "^2.0.2",
     "react-timer-hook": "^3.0.7",
+    "react-toastify": "^10.0.4",
     "referral-codes": "^2.0.3",
     "siwe": "^2.1.4",
     "solc": "^0.8.21",

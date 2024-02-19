@@ -19,6 +19,17 @@ export function blobToBase64(blob) {
   return res;
 }
 
+export function ls() {
+  const test = "test";
+  try {
+    localStorage.setItem(test, test);
+    localStorage.removeItem(test);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
 //canvas to  arraybuffer
 
 // var imageData = context.getImageData(x, y, w, h);

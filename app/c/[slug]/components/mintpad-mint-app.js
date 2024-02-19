@@ -194,71 +194,70 @@ export default function MintpadDapp({ layers, fileNames, cids }) {
       )}
       {loaded && (
         <div>
-          <div>
-            <div className="flex flex-col items-center lg:flex-row-reverse justify-center w-full">
-              <div className="flex flex-col justify-center">
-                {canvasWidth > 0 && canvasHeight > 0 && (
-                  <canvas
-                    id="app-canvas"
-                    className="rounded-xl mt-4 border border-zinc-500 mb-2 w-[350px] h-[350px] object-contain"
-                    width={canvasWidth}
-                    height={canvasHeight}
-                  ></canvas>
-                )}
-                <div className="flex flex-col justify-center mt-4 ml-[13px]">
-                  <div className="w-[350px] flex justify-center items-center">
-                    <Button variant="primary" onClick={addTokenToBasket}>
-                      + add to basket (pre-mint)
-                    </Button>
-                  </div>
-
-                  {duplicated && (
-                    <p className="flex justify-center text-tock-red text-xs mt-4">
-                      cannot mint duplicated token in this collection
-                    </p>
-                  )}
-                </div>
-              </div>
-              {built && (
-                <div className="mb-6 mt-2 px-10">
-                  {Object.keys(drawing).map((layer, i) => {
-                    return (
-                      <div
-                        key={"drawing_" + i}
-                        className="mt-6 mb-4 flex flex-col sm:grid sm:grid-cols-2 items-center justify-center"
-                      >
-                        <p className="text-sm text-zinc-400 text-start">
-                          <span className="text-tock-orange">
-                            {layers[layer]}:
-                          </span>{" "}
-                          {assets[layer][drawing[layer]].name.slice(0, -4)}
-                        </p>
-                        <div className="flex justify-center select-none">
-                          <button
-                            className="disabled:border-zinc-700 disabled:text-zinc-700 border border-zinc-500 transition ease-in-out mx-4 enabled:hover:bg-zinc-600 duration-300 bg-tock-semiblack text-zinc-400 font-bold py-2 px-4 rounded-2xl focus:outline-none focus:shadow-outline active:text-white"
-                            onClick={() => prevImg(layer)}
-                            disabled={IsPrevImgNotAvailable(layer)}
-                          >
-                            &lt;
-                          </button>
-
-                          <p className="text-zinc-500 text-xs w-12 text-center align-middle mt-4">
-                            {drawing[layer] + 1}/{assets[layer].length}
-                          </p>
-                          <button
-                            className="disabled:border-zinc-700 disabled:text-zinc-700 border border-zinc-500 transition ease-in-out mx-4 enabled:hover:bg-zinc-600 duration-300 bg-tock-semiblack text-zinc-400 font-bold py-2 px-4 rounded-2xl focus:outline-none focus:shadow-outline active:text-white"
-                            onClick={() => nextImg(layer)}
-                            disabled={IsNextImgNotAvailable(layer)}
-                          >
-                            &gt;
-                          </button>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+          <h1 className="p-8 text-center lg:text-start font-bold text-tock-green text-2xl">design your NFT</h1>
+          <div className="flex flex-col items-center lg:flex-row-reverse justify-center w-full">
+            <div className="flex flex-col justify-center">
+              {canvasWidth > 0 && canvasHeight > 0 && (
+                <canvas
+                  id="app-canvas"
+                  className="rounded-xl mt-4 border border-zinc-500 mb-2 w-[350px] h-[350px] object-contain"
+                  width={canvasWidth}
+                  height={canvasHeight}
+                ></canvas>
               )}
+              <div className="flex flex-col justify-center mt-4 ml-[13px]">
+                <div className="w-[350px] flex justify-center items-center">
+                  <Button variant="primary" onClick={addTokenToBasket}>
+                    + add to basket (pre-mint)
+                  </Button>
+                </div>
+
+                {duplicated && (
+                  <p className="flex justify-center text-tock-red text-xs mt-4">
+                    cannot mint duplicated token in this collection
+                  </p>
+                )}
+              </div>
             </div>
+            {built && (
+              <div className="mb-6 mt-2 px-10">
+                {Object.keys(drawing).map((layer, i) => {
+                  return (
+                    <div
+                      key={"drawing_" + i}
+                      className="mt-6 mb-4 flex flex-col sm:grid sm:grid-cols-2 items-center justify-center"
+                    >
+                      <p className="text-sm text-zinc-400 text-start">
+                        <span className="text-tock-orange">
+                          {layers[layer]}:
+                        </span>{" "}
+                        {assets[layer][drawing[layer]].name.slice(0, -4)}
+                      </p>
+                      <div className="flex justify-center select-none">
+                        <button
+                          className="disabled:border-zinc-700 disabled:text-zinc-700 border border-zinc-500 transition ease-in-out mx-4 enabled:hover:bg-zinc-600 duration-300 bg-tock-semiblack text-zinc-400 font-bold py-2 px-4 rounded-2xl focus:outline-none focus:shadow-outline active:text-white"
+                          onClick={() => prevImg(layer)}
+                          disabled={IsPrevImgNotAvailable(layer)}
+                        >
+                          &lt;
+                        </button>
+
+                        <p className="text-zinc-500 text-xs w-12 text-center align-middle mt-4">
+                          {drawing[layer] + 1}/{assets[layer].length}
+                        </p>
+                        <button
+                          className="disabled:border-zinc-700 disabled:text-zinc-700 border border-zinc-500 transition ease-in-out mx-4 enabled:hover:bg-zinc-600 duration-300 bg-tock-semiblack text-zinc-400 font-bold py-2 px-4 rounded-2xl focus:outline-none focus:shadow-outline active:text-white"
+                          onClick={() => nextImg(layer)}
+                          disabled={IsNextImgNotAvailable(layer)}
+                        >
+                          &gt;
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
       )}

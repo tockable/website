@@ -65,6 +65,7 @@ export default function Mintpad({ prepareMint }) {
 
     getElligibility(address, project.creator, project.slug)
       .then((res) => {
+        console.log(res);
         if (res.success === false) {
           setErrorGettingElligibility(true);
           return;
@@ -97,7 +98,7 @@ export default function Mintpad({ prepareMint }) {
           setUntilEnd(res.payload?.timer);
         }
       })
-      .catch(setErrorGettingElligibility(true));
+      .catch((_) => setErrorGettingElligibility(true));
   }, [isConnected]);
 
   return (
@@ -147,18 +148,42 @@ export default function Mintpad({ prepareMint }) {
             </div>
           )}
 
+          {mintEnded && (
+            <div className="my-4 flex flex-col justify-center items-center my-8">
+              <p className="text-tock-blue text-xl font-bold my-2">
+                <span className="font-normal text-zinc-400">Status:</span>{" "}
+                <span className="text-tock-green">Finished</span>
+              </p>
+              {!project.isUnlimited && project.slug !== "tock" && (
+                <p className="text-tock-blue text-xl font-bold my-2">
+                  <span className="font-normal text-zinc-400">Minted:</span>{" "}
+                  {Number(project.totalSupply) - parseInt(data[1].result)} /{" "}
+                  {project.totalSupply}
+                </p>
+              )}
+              {project.isUnlimited && (
+                <p className="text-tock-blue text-xl font-bold my-2">
+                  Supply:{" "}
+                  {Number(project.totalSupply) - parseInt(data[1].result)}/
+                  Unlimited
+                </p>
+              )}
+            </div>
+          )}
           {isConnected &&
+            !mintEnded &&
+            !notStarted &&
             chain.id === Number(project.chainData.chainId) &&
             data &&
             !data[0]?.error &&
             !isNaN(parseInt(data[1].result)) && (
               <div className="my-4 flex flex-col justify-center items-center my-8">
                 <p className="text-tock-blue text-xl font-bold my-2">
-                  <span className="font-normal text-zinc-400">status:</span>{" "}
+                  <span className="font-normal text-zinc-400">Status:</span>{" "}
                   {data[0]?.result === true ? (
                     <span className="text-tock-green">live</span>
                   ) : (
-                    <span className="text-tock-orange">pause</span>
+                    <span className="text-tock-orange">paused</span>
                   )}
                 </p>
                 {!project.isUnlimited && project.slug !== "tock" && (
@@ -207,34 +232,29 @@ export default function Mintpad({ prepareMint }) {
               {isConnected && chain.id === project.chainData.chainId && (
                 <div>
                   {!data && isLoading && (
-                    <div className="p-4">
-                      <div className="text-tock-orange text-center p-2 border rounded-xl mt-8 border-zinc-400 text-centerr">
-                        <Loading isLoading={isLoading && !data} size={20} />
-                      </div>
+                    <div className="text-tock-orange text-center p-6 border rounded-xl mt-8 border-zinc-400 text-centerr">
+                      <Loading isLoading={isLoading && !data} size={20} />
                     </div>
                   )}
 
                   {!isLoading && (isError || (data && data[0]?.error)) && (
-                    <div className="p-4">
-                      <p className="text-tock-red p-2 border rounded-xl mt-8 border-tock-red text-center text-xs">
-                        cannot fetch data form blockchain at this moment. please
-                        refresh the page or try with another proxy/vpn setting.
-                        <br />
-                        <br />
-                        If the problem persists, please come back later.
-                      </p>
-                    </div>
+                    <p className="mx-4 my-4 text-tock-red p-2 border rounded-xl mt-8 border-tock-red text-center text-xs">
+                      cannot fetch data form blockchain at this moment. please
+                      refresh the page or try with another proxy/vpn setting.
+                      <br />
+                      <br />
+                      If the problem persists, please come back later.
+                    </p>
                   )}
 
                   {data && !data[0]?.error && !isError && (
                     <>
-                      <div className="my-2 p-4">
-                        {data[0]?.result === false && (
-                          <p className="text-tock-orange text-sm mt-4 text-center p-2 border rounded-xl border-tock-orange">
-                            minting is not available at this moment.
-                          </p>
-                        )}
-                      </div>
+                      {data[0]?.result === false && (
+                        <p className="text-tock-orange text-sm mx-4 mt-10 mb-6 text-center p-2 border rounded-xl border-tock-orange">
+                          minting is not available at this moment.
+                        </p>
+                      )}
+
                       {!notStarted &&
                         !mintEnded &&
                         data[0]?.result === true && (

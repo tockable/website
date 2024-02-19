@@ -16,22 +16,27 @@ const initialArgs = [
   [{ part1: EMPTY_BYTES_32, part2: EMPTY_BYTES_32 }],
   [[{ trait_type: EMPTY_BYTES_32, value: EMPTY_BYTES_32 }]],
 ];
+
 export default function AdminMint({ prepareMint }) {
   const [show, setShow] = useState(false);
+  const [successMint, setSuccessMint] = useState(false);
+  useEffect(() => console.log(successMint), [successMint]);
 
-  function handleClick() {
-    setShow(true);
-  }
+  const handleClick = () => setShow(true);
 
   return (
     <div className="w-full">
       <div
         onClick={handleClick}
-        className="flex grow bg-tock-black rounded-2xl p-4 my-4 mx-4 hover:bg-tock-semiblack hover:ring hover:ring-zinc-600 transition ease-in-out duration-200 cursor-pointer"
+        className={`flex grow bg-tock-black rounded-2xl p-4 my-4 mx-4 ${
+          !show &&
+          "hover:bg-tock-semiblack hover:ring hover:ring-zinc-600 transition ease-in-out duration-200 cursor-pointer"
+        }`}
       >
         <div className="flex flex-col gap-4 w-full">
-          <div className="flex flex-row">
-            <div className="flex-1">
+          {successMint && <div>yey</div>}
+          <div className="flex">
+            <div className="flex-auto">
               <p className="text-zinc-400 text-xs items-center">
                 as <span className="text-tock-orange text-sm">owner</span> | Max
                 mint/wallet:{" "}
@@ -40,22 +45,25 @@ export default function AdminMint({ prepareMint }) {
                 </span>
               </p>
             </div>
-            <div className="flex-0 text-tock-green text-xs justify-end">
+            <div className="text-tock-green text-xs justify-end">
               {!show && <span>click to expand</span>}
             </div>
           </div>
-          {show && <MintHandler prepareMint={prepareMint} />}
+
+          {show && (
+            <MintHandler setter={setSuccessMint} prepareMint={prepareMint} />
+          )}
         </div>
       </div>
     </div>
   );
 }
 
-function MintHandler({ prepareMint }) {
-  const { abi, project, blobs, setDuplicatedIndexes } = useContext(MintContext);
+function MintHandler({ prepareMint, setter }) {
+  const { abi, project, blobs, setDuplicatedIndexes, setSuccessfullyMinted } =
+    useContext(MintContext);
   const { address } = useAccount();
 
-  const [successMint, setSuccessMint] = useState(false);
   const [preparing, setPreparing] = useState(false);
   const [readyToMint, setReadyToMint] = useState(false);
   const [apiError, setApiError] = useState(false);
@@ -108,7 +116,7 @@ function MintHandler({ prepareMint }) {
         setWarning("");
         setPrintedError("Unknown error occured.");
       }
-      setSuccessMint(false);
+      setter(false);
       resetMint();
     },
   });
@@ -119,7 +127,6 @@ function MintHandler({ prepareMint }) {
   useEffect(() => {
     if (invalidArgs(writeArgs)) {
       setPreparing(false);
-      setSuccessMint(false);
       return;
     }
     setEnableState(true);
@@ -137,7 +144,8 @@ function MintHandler({ prepareMint }) {
 
   useEffect(() => {
     if (!uwt.isSuccess) return;
-    setSuccessMint(true);
+    console.log("minted");
+    setter(true);
     resetMint();
     setWarning("");
     setPrintedError("");
@@ -145,7 +153,7 @@ function MintHandler({ prepareMint }) {
 
   useEffect(() => {
     if (!uwt.isError) return;
-    setSuccessMint(false);
+    setter(false);
     setWarning("");
     setPrintedError("Transaction failed.");
     resetMint();
@@ -153,7 +161,7 @@ function MintHandler({ prepareMint }) {
 
   useEffect(() => {
     if (!wc.isError) return;
-    setSuccessMint(false);
+    setter(false);
     setWarning("");
     resetMint();
 
@@ -238,9 +246,6 @@ function MintHandler({ prepareMint }) {
         <p className="text-tock-red text-xs mt-2">
           something went wrong, please try again.
         </p>
-      )}
-      {successMint && (
-        <p className="text-tock-green text-xs mt-2">Successfully minted!</p>
       )}
     </div>
   );

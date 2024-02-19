@@ -30,7 +30,7 @@ export default function MintBasket() {
               className={`object-contain rounded-xl  ${
                 parseInt(duplicatedIndexes[i]) === 1
                   ? "border-tock-red border-4 border-solid"
-                  : "border-zinc-600 border-2 border-solid"
+                  : "border-tock-black border-4 border-solid"
               }`}
               src={blob.url}
               alt={"nft-reserved-for-mint-" + i}

@@ -85,7 +85,6 @@ export async function updateProject(_creator, params) {
   }
 
   if (params.isPublished) {
-    console.log("run");
     await updateAllProjects({
       uuid: params.uuid,
       isPublished: params.isPublished,
@@ -96,16 +95,15 @@ export async function updateProject(_creator, params) {
 }
 
 async function updateAllProjects(params) {
-  console.log("runs");
   const allProjectsPath = path.resolve(".", QUERY, "allProjects.json");
 
   const json = fs.readFileSync(allProjectsPath, { encoding: "utf8" });
   const allProjects = JSON.parse(json);
-  console.log(allProjects);
+
   const project = allProjects.find((p) => p.uuid === params.uuid);
-  console.log(project);
+
   Object.assign(project, params);
-  console.log(project);
+
   fs.writeFileSync(allProjectsPath, JSON.stringify(allProjects, null, 2));
 }
 
