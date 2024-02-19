@@ -1,5 +1,5 @@
 import MintpadSocialbar from "@/components/design/mintpad-socialbar";
-
+import { NFT_STORAGE_GATEWAY } from "@/tock.config";
 export default function MintpadProjectDetails({ project }) {
   return (
     <div>
@@ -10,7 +10,7 @@ export default function MintpadProjectDetails({ project }) {
         <figure className="mb-4 lg:mb-0 flex justify-center lg:flex-none">
           <img
             className="rounded-2xl h-[300px] w-[300px] object-cover"
-            src={`https://ipfs.io/ipfs/${project.image}`}
+            src={`https://${project.image}.${NFT_STORAGE_GATEWAY}`}
             width={300}
             height={300}
           />

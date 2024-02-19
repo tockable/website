@@ -8,8 +8,8 @@ import {
 } from "wagmi";
 import { EMPTY_BYTES_32 } from "@/constants/constants";
 import { MintContext } from "@/contexts/mint-context";
-import Button from "../../../../components/design/button";
-import Loading from "../../../../components/loading/loading";
+import Button from "@/components/design/button";
+import Loading from "@/components/loading/loading";
 
 const initialArgs = [
   1,
@@ -76,7 +76,7 @@ function MintHandler({ prepareMint }) {
     abi: abi,
     functionName: "ownerMint",
     args: writeArgs,
-    gas: 3_000_000n,
+    // gas: 3_000_000n,
     enabled: enableState,
     onSuccess(_) {
       setReadyToMint(true);

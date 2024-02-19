@@ -19,9 +19,8 @@ export async function fetchProjectMintData(slug) {
         publishedProject.slug.toLowerCase() === slug.toLowerCase()
     );
 
-    if (!projectBySlug) {
-      return { success: false, notFound: true };
-    }
+    if (!projectBySlug) return { success: false, notFound: true };
+
     const creatorProjectsDir = getProjectDirectory(projectBySlug.creator);
     const creatorProjectsJson = fs.readFileSync(creatorProjectsDir, {
       encoding: "utf8",

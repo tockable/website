@@ -133,7 +133,9 @@ async function addEntryToAllProjects({
   chainId,
   dropType,
 }) {
-  const allProjects = (await import(`../../${QUERY}/allProjects.json`)).default;
+  const allProjectsPath = path.resolve(".", QUERY, "allProjects.json");
+  const json = fs.readFileSync(allProjectsPath, { encoding: "utf8" });
+  const allProjects = JSON.parse(json);
 
   const newProject = {
     uuid,
@@ -150,6 +152,5 @@ async function addEntryToAllProjects({
 
   allProjects.push(newProject);
 
-  const _path = path.resolve(".", QUERY, "allProjects.json");
-  fs.writeFileSync(_path, JSON.stringify(allProjects, null, 2));
+  fs.writeFileSync(allProjectsPath, JSON.stringify(allProjects, null, 2));
 }

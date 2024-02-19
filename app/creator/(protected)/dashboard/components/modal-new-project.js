@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAccount } from "wagmi";
 import { DROP_TYPES } from "@/tock.config";
+import { SUPPORTED_CHAINS } from "@/tock.config";
 import getChainData from "@/utils/chain-utils";
 import { chainData } from "@/constants/chaindata";
 import Loading from "@/components/loading/loading";
@@ -115,8 +116,8 @@ export default function NewProjectModal({ isOpen, onClose }) {
                 onChange={onChangeChain}
                 required
               >
-                {chainData.map((c, i) => (
-                  <option key={"chain_" + i} value={c.chainId.toString()}>
+                {SUPPORTED_CHAINS.map((c, i) => (
+                  <option key={"chain_" + i} value={c.value}>
                     {c.name}
                   </option>
                 ))}

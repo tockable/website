@@ -18,15 +18,12 @@ export async function fetchProjectByUUID(_creator, _uuid) {
   if (!_creator.match(/(\b0x[a-fA-F0-9]{40}\b)/g))
     return { success: false, message: "Invalid wallet address" };
 
-  const dir = _creator.slice(2, 42);
-
   const projectsPath = getProjectDirectory(_creator);
 
   if (!fs.existsSync(projectsPath)) return { success: false };
 
-  const projects = (
-    await import(`../../${DATABASE}/projects/${dir}/projects.json`)
-  ).default;
+  const json = fs.readFileSync(projectsPath, { encoding: "utf8" });
+  const projects = JSON.parse(json);
 
   const project = projects.find((p) => p.uuid === _uuid);
 
@@ -42,7 +39,10 @@ export async function fetchProjectByUUID(_creator, _uuid) {
  */
 export async function checkUniqueSlug(_slug) {
   try {
-    const slugs = (await import(`../../${DATABASE}/slugs.json`)).default;
+    const slugsPath = path.resolve(".", DATABASE, "slugs.json");
+
+    const json = fs.readFileSync(slugsPath, { encoding: "utf8" });
+    const slugs = JSON.parse(json);
 
     const duplicate = slugs.find(
       (slug) => slug.toLowerCase() === _slug.toLowerCase()
@@ -63,22 +63,19 @@ export async function checkUniqueSlug(_slug) {
  * @returns
  */
 export async function updateProject(_creator, params) {
-  const dir = _creator.slice(2, 42);
+  const projectsPath = getProjectDirectory(_creator);
 
-  const projects = (
-    await import(`../../${DATABASE}/projects/${dir}/projects.json`)
-  ).default;
+  const json = fs.readFileSync(projectsPath, { encoding: "utf8" });
+  const projects = JSON.parse(json);
 
   const project = projects.find((p) => p.uuid === params.uuid);
-  console.log(project);
 
   if (_creator.toLowerCase() !== project.creator.toLowerCase())
     throw new Error("forbidden");
 
   Object.assign(project, params);
 
-  const _path = path.resolve(".", DATABASE, "projects", dir, "projects.json");
-  fs.writeFileSync(_path, JSON.stringify(projects, null, 2));
+  fs.writeFileSync(projectsPath, JSON.stringify(projects, null, 2));
 
   if (params.isDeployed) {
     await updateAllProjects({
@@ -88,6 +85,7 @@ export async function updateProject(_creator, params) {
   }
 
   if (params.isPublished) {
+    console.log("run");
     await updateAllProjects({
       uuid: params.uuid,
       isPublished: params.isPublished,
@@ -98,14 +96,17 @@ export async function updateProject(_creator, params) {
 }
 
 async function updateAllProjects(params) {
-  const allProjects = (await import(`../../${QUERY}/allProjects.json`)).default;
+  console.log("runs");
+  const allProjectsPath = path.resolve(".", QUERY, "allProjects.json");
 
+  const json = fs.readFileSync(allProjectsPath, { encoding: "utf8" });
+  const allProjects = JSON.parse(json);
+  console.log(allProjects);
   const project = allProjects.find((p) => p.uuid === params.uuid);
-
+  console.log(project);
   Object.assign(project, params);
-
-  const _path = path.resolve(".", QUERY, "allProjects.json");
-  fs.writeFileSync(_path, JSON.stringify(allProjects, null, 2));
+  console.log(project);
+  fs.writeFileSync(allProjectsPath, JSON.stringify(allProjects, null, 2));
 }
 
 /**

@@ -10,7 +10,7 @@ export default function MintBasket() {
   const maxMintArray = Array.from({ length: maxMint }, (_, i) => i);
 
   return (
-    <div>
+    <>
       <div className="mx-4 mt-6">
         <h1 className="text-tock-blue mb-1">
           Your NFT basket{" "}
@@ -65,6 +65,6 @@ export default function MintBasket() {
           }
         })}
       </div>
-    </div>
+    </>
   );
 }
