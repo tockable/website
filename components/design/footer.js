@@ -1,7 +1,6 @@
 import Link from "next/link";
 import DiscordSvg from "@/svgs/social-svgs/DiscordSvg";
 import TwitterSvg from "@/svgs/social-svgs/TwitterSvg";
-// import MirrorSvg from "@/svgs/social-svgs/MirrorSvg";
 import { SOCIAL } from "@/tock.config";
 
 export default function Footer() {
@@ -20,12 +19,9 @@ export default function Footer() {
             className="w-6 hover:opacity-50 transition ease-in-out duration-200"
           />
         </Link>
-        {/* <Link href={SOCIAL.mirror}>
-        <MirrorSvg className="w-6" />
-      </Link> */}
       </div>
-      <p className="mt-24">&copy;2023 Tockable. All rights reserved.</p>
-      <p>v0.1.3</p>
+      <p className="mt-24">&copy;2024 Tockable. All rights reserved.</p>
+      <p>v0.2.0</p>
     </footer>
   );
 }
