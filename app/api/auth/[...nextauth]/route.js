@@ -47,7 +47,6 @@ export const authOptions = {
             id: siwe.address,
           };
         } catch (error) {
-          // console.log(error);
           return null;
         }
       },

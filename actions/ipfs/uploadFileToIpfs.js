@@ -18,6 +18,7 @@ export default async function storeFileToIpfs(
       existance: false,
       message: err.message,
     };
+
   try {
     const { cid, existance } = await _store(
       buffer,
@@ -28,6 +29,7 @@ export default async function storeFileToIpfs(
 
     if (cid === "" || cid === null || cid === undefined)
       throw new Error("invalid cid");
+    
     return { success: true, cid, existance };
   } catch (err) {
     return await storeFileToIpfs(buffer, mimeType, fileName, retries - 1, err);

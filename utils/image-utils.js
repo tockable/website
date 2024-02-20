@@ -1,8 +1,10 @@
 export async function imageUrlFromArrayFile(_file) {
   const arrayBuffer = await _file.arrayBuffer();
   const arrayBufferView = new Uint8Array(arrayBuffer);
+  
   const blob = new Blob([arrayBufferView], { type: _file.type });
   const urlCreator = window.URL || window.webkitURL;
+
   return urlCreator.createObjectURL(blob);
 }
 

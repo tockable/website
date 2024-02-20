@@ -8,7 +8,6 @@ export default function NotFound() {
         <Link href="/">Return Home</Link>
       </div>
       <NotFoundSVG />
-      <svg></svg>
     </div>
   );
 }

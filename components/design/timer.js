@@ -38,7 +38,13 @@ export default function CountDown({ exts, variant }) {
 
 function TimeBox({ time, variant }) {
   return (
-    <p className={`p-2 mx-2 w-12 text-center ${variants[variant]}`}>{time}</p>
+    <p
+      className={`p-2 mx-2 ${time >= 100 ? "w-16" : "w-12"} text-center ${
+        variants[variant]
+      }`}
+    >
+      {time}
+    </p>
   );
 }
 

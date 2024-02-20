@@ -7,7 +7,7 @@ import {
   useWaitForTransaction,
 } from "wagmi";
 import { EMPTY_BYTES_32 } from "@/constants/constants";
-import { MintContext } from "@/contexts/mint-context";
+import { MintContextTockable } from "@/contexts/mint-context-tockable";
 import Button from "@/components/design/button";
 import Loading from "@/components/loading/loading";
 
@@ -17,10 +17,8 @@ const initialArgs = [
   [[{ trait_type: EMPTY_BYTES_32, value: EMPTY_BYTES_32 }]],
 ];
 
-export default function AdminMint({ prepareMint }) {
+export default function OwnerMintTockable({ prepareMint }) {
   const [show, setShow] = useState(false);
-  const [successMint, setSuccessMint] = useState(false);
-  useEffect(() => console.log(successMint), [successMint]);
 
   const handleClick = () => setShow(true);
 
@@ -34,7 +32,6 @@ export default function AdminMint({ prepareMint }) {
         }`}
       >
         <div className="flex flex-col gap-4 w-full">
-          {successMint && <div>yey</div>}
           <div className="flex">
             <div className="flex-auto">
               <p className="text-zinc-400 text-xs items-center">
@@ -50,18 +47,16 @@ export default function AdminMint({ prepareMint }) {
             </div>
           </div>
 
-          {show && (
-            <MintHandler setter={setSuccessMint} prepareMint={prepareMint} />
-          )}
+          {show && <MintHandler prepareMint={prepareMint} />}
         </div>
       </div>
     </div>
   );
 }
 
-function MintHandler({ prepareMint, setter }) {
+function MintHandler({ prepareMint }) {
   const { abi, project, blobs, setDuplicatedIndexes, setSuccessfullyMinted } =
-    useContext(MintContext);
+    useContext(MintContextTockable);
   const { address } = useAccount();
 
   const [preparing, setPreparing] = useState(false);
@@ -116,7 +111,7 @@ function MintHandler({ prepareMint, setter }) {
         setWarning("");
         setPrintedError("Unknown error occured.");
       }
-      setter(false);
+      setSuccessfullyMinted(false);
       resetMint();
     },
   });
@@ -144,8 +139,7 @@ function MintHandler({ prepareMint, setter }) {
 
   useEffect(() => {
     if (!uwt.isSuccess) return;
-    console.log("minted");
-    setter(true);
+    setSuccessfullyMinted(true);
     resetMint();
     setWarning("");
     setPrintedError("");
@@ -153,7 +147,7 @@ function MintHandler({ prepareMint, setter }) {
 
   useEffect(() => {
     if (!uwt.isError) return;
-    setter(false);
+    setSuccessfullyMinted(false);
     setWarning("");
     setPrintedError("Transaction failed.");
     resetMint();
@@ -161,7 +155,7 @@ function MintHandler({ prepareMint, setter }) {
 
   useEffect(() => {
     if (!wc.isError) return;
-    setter(false);
+    setSuccessfullyMinted(false);
     setWarning("");
     resetMint();
 

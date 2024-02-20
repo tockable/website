@@ -1,10 +1,10 @@
 import { useContext } from "react";
 import { MAX_MINT_PER_TX } from "@/tock.config";
-import { MintContext } from "@/contexts/mint-context";
+import { MintContextTockable } from "@/contexts/mint-context-tockable";
 
 export default function MintBasket() {
   const { blobs, project, removeFromBasket, duplicatedIndexes } =
-    useContext(MintContext);
+    useContext(MintContextTockable);
 
   const maxMint = project.maxMint || MAX_MINT_PER_TX;
   const maxMintArray = Array.from({ length: maxMint }, (_, i) => i);

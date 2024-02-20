@@ -6,17 +6,20 @@ import {
   getProjectDirectory,
 } from "../utils/path-utils";
 import getChainData from "@/utils/chain-utils";
+import * as mintpadData from "./payload-models";
 
 export async function fetchProjectMintData(slug) {
-  const publishedProjectPath = getPublishedProjectPath();
+  const allProjectsPath = getPublishedProjectPath();
+
   try {
-    const publishedProjectJson = fs.readFileSync(publishedProjectPath, {
+    const json = fs.readFileSync(allProjectsPath, {
       encoding: "utf8",
     });
-    const publishedProjects = JSON.parse(publishedProjectJson);
+
+    const publishedProjects = JSON.parse(json);
+
     const projectBySlug = publishedProjects.find(
-      (publishedProject) =>
-        publishedProject.slug.toLowerCase() === slug.toLowerCase()
+      (p) => p.slug.toLowerCase() === slug.toLowerCase()
     );
 
     if (!projectBySlug) return { success: false, notFound: true };
@@ -25,37 +28,18 @@ export async function fetchProjectMintData(slug) {
     const creatorProjectsJson = fs.readFileSync(creatorProjectsDir, {
       encoding: "utf8",
     });
+
     const creatorProjects = JSON.parse(creatorProjectsJson);
-    const project = creatorProjects.find(
-      (project) => projectBySlug.slug === project.slug
-    );
+
+    const project = creatorProjects.find((p) => projectBySlug.slug === p.slug);
 
     const chainData = getChainData(project.chainId);
-    const payload = {
-      uuid: project.uuid,
-      name: project.name,
-      tokenName: project.tokenName,
-      description: project.description,
-      twitter: project.twitter,
-      discord: project.discord,
-      website: project.website,
-      creator: project.creator,
-      image: project.image,
-      cover: project.cover,
-      totalSupply: project.totalSupply,
-      isUnlimited: project.isUnlimited,
-      duplicateVerification: project.duplicateVerification,
-      contractAddress: project.contractAddress,
-      dropType: project.dropType,
-      layers: project.layers,
-      fileNames: project.fileNames,
-      cids: project.cids,
-      signer: project.signer,
-      chainData,
-      chainId: chainData.chainId,
-      activeSession: project.activeSession,
-      slug,
-    };
+
+    const payload =
+      project.dropType === "tockable"
+        ? mintpadData.tockableDrop(project, chainData)
+        : mintpadData.regularDrop(project, chainData);
+
     return { success: true, payload };
   } catch (err) {
     return { success: false, message: err.message };
@@ -140,7 +124,6 @@ export async function getElligibility(_address, _creator, _slug) {
     }
 
     if (current > end) {
-      let nextStart;
       for (let i = 0; i < starts.length; i++) {
         if (current < start) {
           nextStart = starts[i];

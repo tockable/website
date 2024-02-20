@@ -7,8 +7,8 @@ import {
   zora,
   optimism,
   polygonMumbai,
-  // optimismSepolia,
-  // baseSepolia,
+  optimismSepolia,
+  baseSepolia,
 } from "wagmi/chains";
 
 const blastSepolia = {
@@ -42,7 +42,7 @@ export const TOCKABLE_CHAINS = [
   zora,
   optimism,
   polygonMumbai,
-  // optimismSepolia,
-  // baseSepolia,
+  optimismSepolia,
+  baseSepolia,
   blastSepolia,
 ];

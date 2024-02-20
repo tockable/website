@@ -1,20 +1,11 @@
-import { hexEncode } from "@/utils/crypto-utils";
+import { toHex32 } from "@/utils/crypto-utils";
 
 export default function getCidTuple(_cid) {
   const _part1 = _cid.slice(0, 32);
   const _part2 = _cid.slice(32);
 
-  let encodedPart1 = hexEncode(_part1);
-  let encodedPart2 = hexEncode(_part2);
-
-  let zeroPaddingLen = 64 - encodedPart2.length;
-
-  for (let i = 0; i < zeroPaddingLen; i++) {
-    encodedPart2 = encodedPart2 + "0";
-  }
-
-  const hexPart1 = "0x" + encodedPart1;
-  const hexPart2 = "0x" + encodedPart2;
+  const hexPart1 = toHex32(_part1);
+  const hexPart2 = toHex32(_part2);
 
   return { part1: hexPart1, part2: hexPart2 };
 }
@@ -27,6 +18,6 @@ export function decodeCid(_cidTuple) {
   let decodedPart2 = hexDecode(_part2);
 
   const cid = decodedPart1 + decodedPart2;
-  
+
   return cid;
 }

@@ -29,34 +29,48 @@ export default function MintpadProjectDetails({ project }) {
               <p className="text-zinc-400 my-2">
                 total supply:{" "}
                 <span className="text-tock-orange">
-                  {project.isUnlimited ? "unlimited" : project.totalSupply}
+                  {project.isUnlimited && project.isUnlimited === true
+                    ? "unlimited"
+                    : project.totalSupply}
                 </span>
               </p>
             )}
-            {project.duplicateVerification && (
+            {project.hasOwnProperty(isFrozen) && project.isFrozen === true && (
               <p className="text-zinc-400 my-2">
-                ensure unique-ness:{" "}
-                <span className="text-tock-orange">available</span>
+                Metadata: <span className="text-tock-orange">Immutable</span>
               </p>
             )}
-            {!project.duplicateVerification && (
+            {project.hasOwnProperty(isFrozen) && project.isFrozen === false && (
               <p className="text-zinc-400 my-2">
-                duplicate minting:{" "}
-                <span className="text-tock-orange">available</span>
+                Metadata: <span className="text-tock-orange">Mutable</span>
               </p>
             )}
+            {project.hasOwnProperty(duplicateVerification) &&
+              project.duplicateVerification === true && (
+                <p className="text-zinc-400 my-2">
+                  Are all tokens unique:{" "}
+                  <span className="text-tock-orange">Yes</span>
+                </p>
+              )}
+            {project.hasOwnProperty(duplicateVerification) &&
+              project.duplicateVerification === false && (
+                <p className="text-zinc-400 my-2">
+                  Duplicate minting:{" "}
+                  <span className="text-tock-orange">Allowed</span>
+                </p>
+              )}
             <p className="text-zinc-400 text-xs my-2">
-              contract:{" "}
+              Contract:{" "}
               <span className="text-tock-orange">
                 {project.contractAddress}
               </span>
             </p>
             <p className="text-zinc-400 text-xs my-2">
-              chain:{" "}
+              Chain:{" "}
               <span className="text-tock-orange">{project.chainData.name}</span>
             </p>
             <p className="text-zinc-400 text-xs my-2">
-              see contract on:{" "}
+              See contract on:{" "}
               <a
                 className="text-blue-400 transition duration-300 ease-in-out hover:text-blue-300"
                 href={`https://${project.chainData.scan}/address/${project.contractAddress}`}

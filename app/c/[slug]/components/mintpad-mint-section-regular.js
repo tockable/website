@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
-import Mint from "./mint";
+import MintRegular from "./mint-regular";
 
-export default function MintpadMintSection({ roles, prepareMint, session }) {
+export default function MintpadMintSectionRegular({
+  roles,
+  prepareMint,
+  session,
+}) {
   const [states, setStates] = useState({});
 
   useEffect(() => {
@@ -24,7 +28,7 @@ export default function MintpadMintSection({ roles, prepareMint, session }) {
       } else {
         newStates[roles[i].id] = false;
       }
-      
+
       setStates(newStates);
     }
   }
@@ -33,7 +37,7 @@ export default function MintpadMintSection({ roles, prepareMint, session }) {
     <div>
       {roles.map((role, i) => (
         <div key={"mint-sec-" + i}>
-          <Mint
+          <MintRegular
             handleRoleVisibility={handleRoleVisibility}
             prepareMint={prepareMint}
             role={role}

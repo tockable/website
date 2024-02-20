@@ -7,18 +7,13 @@ const BUTTON_VARIANTS = {
     "disabled:bg-zinc-400 h-10 transition ease-in-out mr-4 hover:bg-orange-300 duration-300 bg-tock-orange text-tock-blue text-xs font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline active:text-tock-semiblack",
 };
 
-export default function Button(props) {
+export default function Button({ variant, className, children, ...props }) {
   return (
     <button
-      id={props.id}
-      className={`${props.variant && BUTTON_VARIANTS[props.variant]} ${
-        props.className
-      }`}
-      type={props.type}
-      onClick={props.onClick}
-      disabled={props.disabled}
+      className={`${variant && BUTTON_VARIANTS[variant]} ${className}`}
+      {...props}
     >
-      {props.children}
+      {children}
     </button>
   );
 }

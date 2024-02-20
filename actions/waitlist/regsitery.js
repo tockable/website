@@ -23,9 +23,8 @@ export default async function addToRegistery(_email) {
   // Check email
   if (_email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g)) {
     const index = registery.findIndex((w) => w.email === _email);
-    if (index !== -1) {
-      duplicateEmail = true;
-    }
+
+    if (index !== -1) duplicateEmail = true;
   } else {
     wrongEmail = true;
   }

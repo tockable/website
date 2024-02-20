@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useEffect, useContext } from "react";
-import { MintContext } from "@/contexts/mint-context";
+import { MintContextTockable } from "@/contexts/mint-context-tockable";
 import { useAccount, useNetwork, useContractReads } from "wagmi";
 import { getElligibility } from "@/actions/mintpad/mintpad";
-import MintpadMintSection from "./mintpad-mint-section";
-import AdminMint from "./admin-mint";
+import MintpadMintSectionTockable from "./mintpad-mint-section-tockable";
+import OwnerMintTockable from "./owner-mint-tockable";
 import MintpadDapp from "./mintpad-mint-app";
 import MintBasket from "./mint-basket";
 import SwitchNetworkButton from "@/components/design/button-switch-network";
@@ -13,13 +13,13 @@ import Loading from "@/components/loading/loading";
 import CountDown from "@/components/design/timer";
 import NavbarMintpad from "@/components/design/navbar/navbar-mintpad";
 
-export default function Mintpad({ prepareMint }) {
+export default function MintpadContainerTockable({ prepareMint }) {
   // Hooks and Contexts
   const { address, isConnected } = useAccount();
   const { chain } = useNetwork();
-  const { abi, project } = useContext(MintContext);
-
+  const { abi, project } = useContext(MintContextTockable);
   // States
+  const [loading, setLoading] = useState(true);
   const [mintEnded, setMintEnded] = useState(false);
   const [untilStart, setUntilStart] = useState(0);
   const [untilEnd, setUntilEnd] = useState(0);
@@ -62,10 +62,9 @@ export default function Mintpad({ prepareMint }) {
   // Effects
   useEffect(() => {
     if (!isConnected) return;
-
+    setLoading(true);
     getElligibility(address, project.creator, project.slug)
       .then((res) => {
-        console.log(res);
         if (res.success === false) {
           setErrorGettingElligibility(true);
           return;
@@ -99,6 +98,7 @@ export default function Mintpad({ prepareMint }) {
         }
       })
       .catch((_) => setErrorGettingElligibility(true));
+    setLoading(false);
   }, [isConnected]);
 
   return (
@@ -106,24 +106,6 @@ export default function Mintpad({ prepareMint }) {
       <NavbarMintpad />
       <div className="flex justify-center">
         <div className="basis-full">
-          {notStarted && (
-            <div className="my-8">
-              <h1 className="text-center text-tock-green p-2 mt-2">
-                Until mint starts
-              </h1>
-              <CountDown variant="start" exts={untilStart} />
-            </div>
-          )}
-
-          {untilEnd > 0 && (
-            <div className="my-8">
-              <h1 className="text-center text-blue-400 p-2 mt-2">
-                Live until on:
-              </h1>
-              <CountDown variant="end" exts={untilEnd} />
-            </div>
-          )}
-
           {!isConnected && (
             <div className="my-4 flex flex-col justify-center items-center my-8">
               <p className="text-tock-orange text-xl font-bold my-2">
@@ -131,78 +113,119 @@ export default function Mintpad({ prepareMint }) {
               </p>
             </div>
           )}
-
-          {isConnected && chain.id !== Number(project.chainData.chainId) && (
-            <div className="my-4 flex flex-col justify-center items-center my-8">
-              <p className="text-tock-orange text-xl font-bold my-2">
-                please switch network
-              </p>
-
-              <div className="mb-12">
-                <p className="text-tock-orange text-xs text-center mb-2">
-                  to see minting options, please switch network to the project
-                  chain
-                </p>
-                <SwitchNetworkButton project={project.chainData} />
-              </div>
-            </div>
-          )}
-
-          {mintEnded && (
-            <div className="my-4 flex flex-col justify-center items-center my-8">
-              <p className="text-tock-blue text-xl font-bold my-2">
-                <span className="font-normal text-zinc-400">Status:</span>{" "}
-                <span className="text-tock-green">Finished</span>
-              </p>
-              {!project.isUnlimited && project.slug !== "tock" && (
-                <p className="text-tock-blue text-xl font-bold my-2">
-                  <span className="font-normal text-zinc-400">Minted:</span>{" "}
-                  {Number(project.totalSupply) - parseInt(data[1].result)} /{" "}
-                  {project.totalSupply}
+          {isConnected && loading && <Loading isLoading={loading} size={20} />}
+          {isConnected && !loading && (
+            <>
+              {errorGettingElligibility && (
+                <p className="text-tock-orange text-xs p-2 border rounded-xl mt-8 mx-4 border-tock-orange text-center">
+                  Something went wrong, please refresh the page.
                 </p>
               )}
-              {project.isUnlimited && (
-                <p className="text-tock-blue text-xl font-bold my-2">
-                  Supply:{" "}
-                  {Number(project.totalSupply) - parseInt(data[1].result)}/
-                  Unlimited
-                </p>
-              )}
-            </div>
-          )}
-          {isConnected &&
-            !mintEnded &&
-            !notStarted &&
-            chain.id === Number(project.chainData.chainId) &&
-            data &&
-            !data[0]?.error &&
-            !isNaN(parseInt(data[1].result)) && (
-              <div className="my-4 flex flex-col justify-center items-center my-8">
-                <p className="text-tock-blue text-xl font-bold my-2">
-                  <span className="font-normal text-zinc-400">Status:</span>{" "}
-                  {data[0]?.result === true ? (
-                    <span className="text-tock-green">live</span>
-                  ) : (
-                    <span className="text-tock-orange">paused</span>
+              {!errorGettingElligibility && (
+                <>
+                  {notStarted && (
+                    <div className="my-8">
+                      <h1 className="text-center text-tock-green p-2 mt-2">
+                        Until mint starts
+                      </h1>
+                      <CountDown variant="start" exts={untilStart} />
+                    </div>
                   )}
-                </p>
-                {!project.isUnlimited && project.slug !== "tock" && (
-                  <p className="text-tock-blue text-xl font-bold my-2">
-                    <span className="font-normal text-zinc-400">Minted:</span>{" "}
-                    {Number(project.totalSupply) - parseInt(data[1].result)} /{" "}
-                    {project.totalSupply}
-                  </p>
-                )}
-                {project.isUnlimited && (
-                  <p className="text-tock-blue text-xl font-bold my-2">
-                    Supply:{" "}
-                    {Number(project.totalSupply) - parseInt(data[1].result)}/
-                    Unlimited
-                  </p>
-                )}
-              </div>
-            )}
 
+                  {untilEnd > 0 && (
+                    <div className="my-8">
+                      <h1 className="text-center text-blue-400 p-2 mt-2">
+                        Live until:
+                      </h1>
+                      <CountDown variant="end" exts={untilEnd} />
+                    </div>
+                  )}
+
+                  {chain.id !== Number(project.chainData.chainId) && (
+                    <div className="my-4 flex flex-col justify-center items-center my-8">
+                      <p className="text-tock-orange text-xl font-bold my-2">
+                        please switch network
+                      </p>
+
+                      <div className="mb-12">
+                        <p className="text-tock-orange text-xs text-center mb-2">
+                          to see minting options, please switch network to the
+                          project chain
+                        </p>
+                        <SwitchNetworkButton project={project.chainData} />
+                      </div>
+                    </div>
+                  )}
+
+                  {mintEnded && (
+                    <div className="my-4 flex flex-col justify-center items-center my-8">
+                      <p className="text-tock-blue text-xl font-bold my-2">
+                        <span className="font-normal text-zinc-400">
+                          Status:
+                        </span>{" "}
+                        <span className="text-tock-green">Finished</span>
+                      </p>
+                      {!project.isUnlimited && project.slug !== "tock" && (
+                        <p className="text-tock-blue text-xl font-bold my-2">
+                          <span className="font-normal text-zinc-400">
+                            Minted:
+                          </span>{" "}
+                          {Number(project.totalSupply) -
+                            parseInt(data[1].result)}{" "}
+                          / {project.totalSupply}
+                        </p>
+                      )}
+                      {project.isUnlimited && (
+                        <p className="text-tock-blue text-xl font-bold my-2">
+                          Supply:{" "}
+                          {Number(project.totalSupply) -
+                            parseInt(data[1].result)}
+                          / Unlimited
+                        </p>
+                      )}
+                    </div>
+                  )}
+                  {!mintEnded &&
+                    !notStarted &&
+                    chain.id === Number(project.chainData.chainId) &&
+                    data &&
+                    !data[0]?.error &&
+                    !isNaN(parseInt(data[1].result)) && (
+                      <div className="my-4 flex flex-col justify-center items-center my-8">
+                        <p className="text-tock-blue text-xl font-bold my-2">
+                          <span className="font-normal text-zinc-400">
+                            Status:
+                          </span>{" "}
+                          {data[0]?.result === true ? (
+                            <span className="text-tock-green">live</span>
+                          ) : (
+                            <span className="text-tock-orange">paused</span>
+                          )}
+                        </p>
+                        {!project.isUnlimited && project.slug !== "tock" && (
+                          <p className="text-tock-blue text-xl font-bold my-2">
+                            <span className="font-normal text-zinc-400">
+                              Minted:
+                            </span>{" "}
+                            {Number(project.totalSupply) -
+                              parseInt(data[1].result)}{" "}
+                            / {project.totalSupply}
+                          </p>
+                        )}
+                        {project.isUnlimited && (
+                          <p className="text-tock-blue text-xl font-bold my-2">
+                            Supply:{" "}
+                            {Number(project.totalSupply) -
+                              parseInt(data[1].result)}
+                            / Unlimited
+                          </p>
+                        )}
+                      </div>
+                    )}
+                </>
+              )}
+            </>
+          )}
           <div className="rounded-2xl p-4 mt-8 bg-tock-semiblack">
             <MintpadDapp
               layers={project.layers}
@@ -285,7 +308,7 @@ export default function Mintpad({ prepareMint }) {
                                             available roles for you:
                                           </p>
                                         )}
-                                        <MintpadMintSection
+                                        <MintpadMintSectionTockable
                                           roles={roles}
                                           session={session}
                                           prepareMint={prepareMint}
@@ -307,7 +330,7 @@ export default function Mintpad({ prepareMint }) {
                     </>
                   )}
                   {address === project.creator && (
-                    <AdminMint prepareMint={prepareMint} />
+                    <OwnerMintTockable prepareMint={prepareMint} />
                   )}
                 </div>
               )}

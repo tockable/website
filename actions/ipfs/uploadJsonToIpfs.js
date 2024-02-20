@@ -1,4 +1,4 @@
-import { NFTStorage, File } from "nft.storage";
+import { NFTStorage } from "nft.storage";
 
 const NFT_STORAGE_KEY = process.env.NFT_STORAGE_KEY;
 
@@ -11,6 +11,7 @@ export default async function storeJsonToIpfs(
 
   try {
     const cid = await _storeJsonToIpfs(metadataJson);
+    
     if (cid === "" || cid === null || cid === undefined)
       throw new Error("invalid cid");
 

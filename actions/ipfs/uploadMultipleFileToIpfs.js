@@ -27,10 +27,8 @@ export default async function storeMultipleFilesToIpfs(_files) {
     }
   }
 
-  if (!_success) {
-    return { success: false, cids: null };
-  }
-
+  if (!_success) return { success: false, cids: null };
+  
   return { success: true, cids };
 }
 
@@ -46,6 +44,7 @@ async function prepareBuffers(_files) {
     const file = key[1];
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
+    
     buffers.push({ buffer, type: "image/png" });
   }
 

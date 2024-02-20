@@ -2,7 +2,7 @@
 
 import fs from "fs";
 import path from "path";
-import * as Init from "@/actions/launchpad/initProjects.js";
+import * as Init from "@/actions/launchpad/drop-models.js";
 import { DROP_TYPES } from "@/tock.config.js";
 import { getProjectDirectory } from "../utils/path-utils.js";
 

@@ -1,15 +1,15 @@
 import { useState, useEffect, useRef, useContext } from "react";
 import { CID } from "multiformats/cid";
-import { IPFS_GATEWAY, NFT_STORAGE_GATEWAY } from "@/tock.config";
+import { NFT_STORAGE_GATEWAY } from "@/tock.config";
 import { imageUrlFromBlob } from "@/utils/image-utils";
-import { hexEncode } from "@/utils/crypto-utils";
-import { MintContext } from "@/contexts/mint-context";
+import { toHex32 } from "@/utils/crypto-utils";
+import { MintContextTockable } from "@/contexts/mint-context-tockable";
 import Loading from "@/components/loading/loading";
 import Button from "@/components/design/button";
 
 export default function MintpadDapp({ layers, fileNames, cids }) {
   // Contexts & Hooks
-  const { addToBasket } = useContext(MintContext);
+  const { addToBasket } = useContext(MintContextTockable);
   // States
   const [loaded, setLoaded] = useState(false);
   const [built, setBuilt] = useState(false);
@@ -163,7 +163,7 @@ export default function MintpadDapp({ layers, fileNames, cids }) {
     for (let i = 0; i < layers.length; i++) {
       const selectedLayer = assets[i];
       const _name = selectedLayer[drawing[i]].name;
-      const value = toHex(_name.slice(0, -4));
+      const value = toHex32(_name.slice(0, -4));
       traits.push(value);
     }
     canvas.current.toBlob((blob) => {
@@ -194,7 +194,9 @@ export default function MintpadDapp({ layers, fileNames, cids }) {
       )}
       {loaded && (
         <div>
-          <h1 className="p-8 text-center lg:text-start font-bold text-tock-green text-2xl">design your NFT</h1>
+          <h1 className="p-8 text-center lg:text-start font-bold text-tock-green text-2xl">
+            design your NFT
+          </h1>
           <div className="flex flex-col items-center lg:flex-row-reverse justify-center w-full">
             <div className="flex flex-col justify-center">
               {canvasWidth > 0 && canvasHeight > 0 && (
@@ -263,14 +265,4 @@ export default function MintpadDapp({ layers, fileNames, cids }) {
       )}
     </div>
   );
-}
-
-function toHex(_string) {
-  let bytes = hexEncode(_string);
-  let zeroPaddingLen = 64 - bytes.length;
-  for (let i = 0; i < zeroPaddingLen; i++) {
-    bytes = bytes + "0";
-  }
-  const hex = "0x" + bytes;
-  return hex;
 }

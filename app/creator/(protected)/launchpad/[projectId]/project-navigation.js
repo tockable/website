@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { extractSlug } from "@/utils/string-utils";
 import Link from "next/link";
 
 export default function ProjectNavigation() {
@@ -21,8 +22,7 @@ export default function ProjectNavigation() {
 
 function NavItem({ name, route }) {
   const pathname = usePathname();
-  const path = pathname.split("/")
-  const currentRoute = path[path.length - 1];
+  const currentRoute = extractSlug(pathname);
 
   const colorClass =
     currentRoute === route
@@ -31,7 +31,7 @@ function NavItem({ name, route }) {
   return (
     <Link
       className={`transition duration-200 rounded-xl h-10 border border-zinc-700 text-xs flex justify-center items-center ${colorClass}`}
-      href={`${route}`}
+      href={route}
     >
       {name}
     </Link>

@@ -68,5 +68,6 @@ export function regularDrop(creator, name, chain, chainId, dropType) {
     isDeployed: false,
     isPublished: false,
     isVerified: false,
+    isFrozen: false,
   };
 }

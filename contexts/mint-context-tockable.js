@@ -7,9 +7,9 @@ import { ls } from "@/utils/utils";
 import { MAX_MINT_PER_TX } from "@/tock.config";
 import "react-toastify/dist/ReactToastify.css";
 
-export const MintContext = createContext();
+export const MintContextTockable = createContext();
 
-export default function MintProvider({ project, abi, children }) {
+export default function MintProviderTockable({ project, abi, children }) {
   const [blobs, setBlobs] = useState([]);
   const [duplicatedIndexes, setDuplicatedIndexes] = useState([]);
   const [successfullyMinted, setSuccessfullyMinted] = useState(false);
@@ -84,7 +84,7 @@ export default function MintProvider({ project, abi, children }) {
   }, [successfullyMinted]);
 
   return (
-    <MintContext.Provider
+    <MintContextTockable.Provider
       value={{
         project,
         abi,
@@ -98,7 +98,7 @@ export default function MintProvider({ project, abi, children }) {
     >
       <ToastContainer closeOnClick={false} />
       {children}
-    </MintContext.Provider>
+    </MintContextTockable.Provider>
   );
 }
 

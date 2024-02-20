@@ -13,19 +13,21 @@ export async function generateMetadata({ params }) {
 
   if (!project) return TOCKABLE_METADATA;
 
+  const keywords = [
+    project.dropType === "tockable" ? "dynamic nft" : "valuable nft",
+    project.chainData.name,
+    "nft",
+    "launchpad",
+    "tockable",
+    "mint",
+    "blockchain",
+  ];
+
   return {
     title: `${project.name} @Tockable`,
     description: project.description,
     applicationName: "tockable.xyz",
-    keywords: [
-      project.chainData,
-      "dynamic nft",
-      "nft",
-      "launchpad",
-      "tockable",
-      "mint",
-      "blockchain",
-    ],
+    keywords,
     authors: [{ name: project.twitter }],
     colorScheme: "dark",
     creator: project.creator,

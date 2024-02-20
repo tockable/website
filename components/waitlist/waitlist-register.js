@@ -7,7 +7,6 @@ import Button from "../design/button";
 
 export default function Register() {
   const [email, setEmail] = useState("");
-
   const [correctMail, setCorrectMail] = useState(false);
   const [showWarnings, setShowWarnings] = useState(false);
   const [showApiErrors, setShowApiErrors] = useState(false);
@@ -20,7 +19,7 @@ export default function Register() {
   useEffect(() => {
     if (regSuccess) {
       setRenderForm(false);
-      const timeOut = setTimeout(() => {
+      setTimeout(() => {
         setRenderResult(true);
       }, 400);
     }
@@ -30,15 +29,19 @@ export default function Register() {
     setEmail(e.target.value);
     if (e.target.value.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g)) {
       setCorrectMail(true);
-    } else setCorrectMail(false);
+    } else {
+      setCorrectMail(false);
+    }
   }
 
   async function register() {
     isSubmitting(true);
+
     try {
       if (correctMail) {
         setShowWarnings(false);
         const res = await addToRegistery(email);
+
         if (res.success === true) {
           setEmail("");
           setShowApiErrors(false);
@@ -52,6 +55,7 @@ export default function Register() {
         setShowWarnings(true);
       }
     } catch (err) {
+      setApiErrors(["something wrong, in our side. please come back later."]);
       console.error(err);
     }
     isSubmitting(false);
@@ -65,7 +69,9 @@ export default function Register() {
             <h1 className="mb-2 mt-6 text-xl font-bold text-tock-green">
               JOIN TOCKABLE
             </h1>
-            <p className="text-xs text-zinc-400 mb-12">Maybe one email per year.</p>
+            <p className="text-xs text-zinc-400 mb-12">
+              Maybe one email per year.
+            </p>
             <div className="mb-10">
               <label className="block text-tock-blue text-sm font-bold mb-2">
                 Email
@@ -95,7 +101,6 @@ export default function Register() {
               </Button>
             </div>
 
-            {/* </div> */}
             {showWarnings && (
               <div className="mt-6 text-sm">
                 {!correctMail && (
@@ -140,7 +145,7 @@ export default function Register() {
           </div>
         </Fade>
         <p className="text-center text-gray-500 text-xs">
-          &copy;2023 Tockable. All rights reserved.
+          &copy;2024 Tockable. All rights reserved.
         </p>
       </div>
     </div>

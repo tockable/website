@@ -8,29 +8,23 @@ import {
   useContractRead,
 } from "wagmi";
 import { EMPTY_BYTES_32 } from "@/constants/constants";
-import { MintContext } from "@/contexts/mint-context";
+import { MintContextRegular } from "@/contexts/mint-context-regular";
 import Loading from "@/components/loading/loading";
 import Button from "@/components/design/button";
 
 const initialArgs = {
-  args: [
-    1,
-    [{ part1: EMPTY_BYTES_32, part2: EMPTY_BYTES_32 }],
-    EMPTY_BYTES_32,
-    0,
-    [[EMPTY_BYTES_32]],
-  ],
+  args: [1, EMPTY_BYTES_32, 0],
   value: 0,
 };
 
-export default function Mint({
+export default function MintRegular({
   handleRoleVisibility,
   prepareMint,
   role,
   session,
   show,
 }) {
-  const { project } = useContext(MintContext);
+  const { project } = useContext(MintContextRegular);
   const handleClick = () => handleRoleVisibility(role.id);
 
   return (
@@ -81,8 +75,8 @@ export default function Mint({
 
 function MintHandler({ role, prepareMint, session }) {
   const { address } = useAccount();
-  const { abi, project, blobs, setDuplicatedIndexes, setSuccessfullyMinted } =
-    useContext(MintContext);
+  const { abi, project, setSuccessfullyMinted } =
+    useContext(MintContextRegular);
 
   const [preparing, setPreparing] = useState(false);
   const [readyToMint, setReadyToMint] = useState(false);
@@ -138,8 +132,6 @@ function MintHandler({ role, prepareMint, session }) {
           } else if (errorName === "TokenHasBeenTakenBefore") {
             setDuplicatedIndexes(revertError.data.args[0]);
             setPrintedError("This traits has been taken before.");
-          } else if (errorName == "TokenIsTakenBefore") {
-            setPrintedError("This traits has been taken before.");
           } else {
             setPrintedError(errorName);
           }
@@ -148,7 +140,7 @@ function MintHandler({ role, prepareMint, session }) {
         setWarning("");
         setPrintedError("Unknown error occured.");
       }
-      setSuccessFullyMinted(false);
+      setSuccessfullyMinted(false);
       resetMint();
     },
   });
@@ -207,29 +199,15 @@ function MintHandler({ role, prepareMint, session }) {
 
   async function mint() {
     setSuccessfullyMinted(false);
-    if (blobs.length === 0) return;
 
     setPreparing(true);
     setPrintedError("");
     setWarning("");
 
-    const files = new FormData();
-    const traits = [];
-    blobs.forEach((blob, i) => {
-      files.append(`${i}`, blob.blob);
-      traits.push(blob.traits);
-    });
-
-    const res = await prepareMint(address, role.id, session, files);
+    const res = await prepareMint(address, role.id, session);
     if (res.success === true) {
-      const { cids, signature } = res;
-      const args = [
-        Number(blobs.length),
-        cids,
-        signature,
-        Number(role.id),
-        traits,
-      ];
+      const { signature } = res;
+      const args = [quanitity, signature, Number(role.id)];
 
       const fee =
         project.slug === "tock"
@@ -268,33 +246,27 @@ function MintHandler({ role, prepareMint, session }) {
                   wc.isLoading ||
                   uwt.isLoading ||
                   preparing ||
-                  blobs.length > maxMintable(data) ||
-                  maxMintable(data) == 0 ||
-                  blobs.length === 0
+                  maxMintable(data) == 0
                 }
                 onClick={() => mint()}
               >
                 {!wc.isLoading && !uwt.isLoading && !preparing && (
                   <div>
-                    {blobs.length === 0 && <p>basket is empty</p>}
-                    {blobs.length > 0 && (
-                      <div>
-                        {project.slug.toLowerCase() !== "tock" && (
-                          <p className="text-sm">
-                            mint {blobs.length}{" "}
-                            {blobs.length === 1 ? "token" : "tokens"} for{" "}
-                            {accPrice(role, project, blobs)}{" "}
-                            {project.chainData.nativeToken}
-                          </p>
-                        )}
-                        {project.slug.toLowerCase() === "tock" && (
-                          <p className="text-sm">
-                            mint {blobs.length}{" "}
-                            {blobs.length === 1 ? "token" : "tokens"} for Free
-                          </p>
-                        )}
-                      </div>
-                    )}
+                    <div>
+                      {project.slug.toLowerCase() !== "tock" && (
+                        <p className="text-sm">
+                          mint {quanitity} {quanitity === 1 ? "NFT" : "NFTs"}{" "}
+                          for {accPrice(role, project, blobs)}{" "}
+                          {project.chainData.nativeToken}
+                        </p>
+                      )}
+                      {project.slug.toLowerCase() === "tock" && (
+                        <p className="text-sm">
+                          mint {quanitity} {quanitity === 1 ? "NFT" : "NFTs"}{" "}
+                          for Free
+                        </p>
+                      )}
+                    </div>
                   </div>
                 )}
                 <div>
@@ -326,7 +298,7 @@ function MintHandler({ role, prepareMint, session }) {
           )}
           {preparing && (
             <p className="text-blue-400 text-xs mt-2">
-              preparing basket... please wait...
+              preparing... please wait...
             </p>
           )}
           {warning.length > 0 && (
@@ -337,7 +309,6 @@ function MintHandler({ role, prepareMint, session }) {
               something went wrong, please try again.
             </p>
           )}
-          {/* <div className="text-tock-green text-xs mt-2">{success.current}</div> */}
         </div>
       )}
     </div>

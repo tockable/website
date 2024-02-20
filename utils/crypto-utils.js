@@ -24,15 +24,22 @@ export function hexDecode(str) {
   return str;
 }
 
+export function toHex32(_string) {
+  let bytes = hexEncode(_string);
+  const zeroPaddingLen = 64 - bytes.length;
+
+  for (let i = 0; i < zeroPaddingLen; i++) {
+    bytes = bytes + "0";
+  }
+
+  const hex = "0x" + bytes;
+  return hex;
+}
+
 export function createTaits(_layers) {
   const _traits = [];
   for (let i = 0; i < _layers.length; i++) {
-    let bytes = hexEncode(_layers[i]);
-    let zeroPaddingLen = 64 - bytes.length;
-    for (let i = 0; i < zeroPaddingLen; i++) {
-      bytes = bytes + "0";
-    }
-    const hex = "0x" + bytes;
+    const hex = toHex32(_layers[i]);
     _traits.push(hex);
   }
   return _traits;
