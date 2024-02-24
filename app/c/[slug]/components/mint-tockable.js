@@ -56,8 +56,7 @@ export default function MintTockable({
               )}
               {project.slug.toLowerCase() !== "tock" && (
                 <span className="text-tock-orange">
-                  {Number(role.price) + getBaseFee(project)}{" "}
-                  {project.chainData.nativeToken}
+                  {accPrice(role, project, 1)} {project.chainData.nativeToken}
                 </span>
               )}
             </p>
@@ -309,8 +308,8 @@ function MintHandler({ role, prepareMint, session }) {
             )}
           </div>
           {maxMintable(data) === 0 && (
-            <p className="text-tock-red text-xs mt-4 border rounded-2xl border-tock-red p-4">
-              currnent wallet does not have any tokens to mint on this role
+            <p className="text-tock-red text-xs mt-4 border rounded-xl border-tock-red p-4">
+              current wallet does not have any tokens to mint on this role
             </p>
           )}
           {blobs.length > maxMintable(data) && maxMintable(data) !== 0 && (

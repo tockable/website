@@ -3,10 +3,10 @@ import MintpadRegular from "./mintpad-regular";
 
 export default function MintpadMainRouter({ project, abi }) {
   if (project.dropType === "tockable") {
-    <MintpadTockable project={project} abi={abi} />;
+    return <MintpadTockable project={project} abi={abi} />;
   }
-  
+
   if (project.dropType === "regular") {
-    <MintpadRegular project={project} abi={abi} />;
+    return <MintpadRegular project={project} abi={abi} />;
   }
 }

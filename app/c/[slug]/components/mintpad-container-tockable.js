@@ -29,7 +29,7 @@ export default function MintpadContainerTockable({ prepareMint }) {
   const [publicSession, setPublicSession] = useState();
   const [elligibility, setElligibility] = useState(null);
   const [errorGettingElligibility, setErrorGettingElligibility] =
-    useState(false);
+    useState(null);
 
   const { data, refetch, isError, isLoading } = useContractReads({
     contracts: [
@@ -63,9 +63,16 @@ export default function MintpadContainerTockable({ prepareMint }) {
   useEffect(() => {
     if (!isConnected) return;
     setLoading(true);
-    getElligibility(address, project.creator, project.slug)
-      .then((res) => {
+    (async () => {
+      try {
+        const res = await getElligibility(
+          address,
+          project.creator,
+          project.slug
+        );
+
         if (res.success === false) {
+          setLoading(false);
           setErrorGettingElligibility(true);
           return;
         }
@@ -77,16 +84,22 @@ export default function MintpadContainerTockable({ prepareMint }) {
           ) {
             setNotStarted(true);
             setUntilStart(res.payload.timer);
+            setErrorGettingElligibility(false);
+            setLoading(false);
             return;
           }
 
           if (res.status === "ended") {
             setMintEnded(true);
+            setLoading(false);
+            setErrorGettingElligibility(false);
             return;
           }
 
           if (res.payload?.timer <= 0) {
             setMintEnded(true);
+            setLoading(false);
+            setErrorGettingElligibility(false);
             return;
           }
 
@@ -95,10 +108,14 @@ export default function MintpadContainerTockable({ prepareMint }) {
           setRoles(res.payload?.availableRoles);
           setSession(Number(res.payload?.activeSession));
           setUntilEnd(res.payload?.timer);
+          setErrorGettingElligibility(false);
+          setLoading(false);
         }
-      })
-      .catch((_) => setErrorGettingElligibility(true));
-    setLoading(false);
+      } catch (err) {
+        setLoading(false);
+        setErrorGettingElligibility(true);
+      }
+    })();
   }, [isConnected]);
 
   return (
@@ -116,12 +133,12 @@ export default function MintpadContainerTockable({ prepareMint }) {
           {isConnected && loading && <Loading isLoading={loading} size={20} />}
           {isConnected && !loading && (
             <>
-              {errorGettingElligibility && (
+              {errorGettingElligibility === true && (
                 <p className="text-tock-orange text-xs p-2 border rounded-xl mt-8 mx-4 border-tock-orange text-center">
                   Something went wrong, please refresh the page.
                 </p>
               )}
-              {!errorGettingElligibility && (
+              {errorGettingElligibility === false && (
                 <>
                   {notStarted && (
                     <div className="my-8">
@@ -282,14 +299,14 @@ export default function MintpadContainerTockable({ prepareMint }) {
                         !mintEnded &&
                         data[0]?.result === true && (
                           <div>
-                            {errorGettingElligibility && (
+                            {errorGettingElligibility === true && (
                               <p className="text-tock-orange text-xs p-2 border rounded-xl mt-8 mx-4 border-tock-orange text-center">
                                 Something went wrong, please refresh the page.
                               </p>
                             )}
-                            {!errorGettingElligibility && (
+                            {errorGettingElligibility === false && (
                               <div className="w-full">
-                                {!elligibility ? (
+                                {elligibility === false && (
                                   <div className="mx-4 p-2 border rounded-xl border-tock-orange">
                                     <p className="text-tock-orange">
                                       It seems there is no mint option for this
@@ -299,7 +316,8 @@ export default function MintpadContainerTockable({ prepareMint }) {
                                       Please come back later...
                                     </p>
                                   </div>
-                                ) : (
+                                )}{" "}
+                                {elligibility === true && (
                                   <div className="w-full mt-8">
                                     {parseInt(data[2].result) > 0 && (
                                       <div>

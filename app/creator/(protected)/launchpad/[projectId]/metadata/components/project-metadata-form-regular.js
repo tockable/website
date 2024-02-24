@@ -34,7 +34,7 @@ export default function ProjectMetadataFormRegular({ _project }) {
 
     (async () => {
       try {
-        const _abi = getContractAbi(project);;
+        const _abi = await getContractAbi(project);
         setAbi(_abi);
       } catch (err) {
         console.error(err.message);

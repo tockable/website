@@ -7,7 +7,7 @@ import Footer from "@/components/design/footer";
 export default async function MintpadLanding({ project, abi }) {
   return (
     <main>
-      <MintpadHeader project={project.cover} />
+      <MintpadHeader project={project} />
       <div id="banner-static" className="flex justify-center">
         <div>
           <MintpadProjectDetails project={project} />

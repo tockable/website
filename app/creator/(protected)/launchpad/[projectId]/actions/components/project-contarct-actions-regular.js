@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useNetwork } from "wagmi";
+import { useNetwork, useAccount } from "wagmi";
 import ActionAdminMintRegular from "./actions-admin-mint-regular";
 import ActionConfigureMetadataRegular from "./actions-configure-metadata-regular";
 import ActionSetActiveSession from "./acitons-set-active-session";
@@ -25,6 +25,7 @@ export default function ProjectContractActionsTockable({ _project }) {
   const [project] = useState(_project);
   const [abi, setAbi] = useState([]);
   const { chain } = useNetwork();
+  const { isConnected } = useAccount();
 
   useEffect(() => {
     if (!project) return;
@@ -32,7 +33,7 @@ export default function ProjectContractActionsTockable({ _project }) {
 
     (async () => {
       try {
-        const _abi = await getContractAbi(project);;
+        const _abi = await getContractAbi(project);
         setAbi(_abi);
       } catch (err) {
         setAbiError(true);
@@ -58,11 +59,11 @@ export default function ProjectContractActionsTockable({ _project }) {
 
           {!abiError && (
             <section>
-              {chain.id != project.chainId && (
+              {isConnected && chain.id != project.chainId && (
                 <SwitchNetworkButton project={project} />
               )}
 
-              {chain.id === Number(project.chainId) && (
+              {isConnected && chain.id === Number(project.chainId) && (
                 <div>
                   <nav className="flex flex-row gap-2 text-sm text-tock-green  mb-2">
                     {actions.map((action) => (

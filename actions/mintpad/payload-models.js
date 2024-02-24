@@ -18,7 +18,7 @@ export function regularDrop(project, chainData) {
     chainData,
     chainId: chainData.chainId,
     activeSession: project.activeSession,
-    slug,
+    slug: project.slug,
   };
 }
 
@@ -46,6 +46,6 @@ export function tockableDrop(project, chainData) {
     chainData,
     chainId: chainData.chainId,
     activeSession: project.activeSession,
-    slug,
+    slug: project.slug,
   };
 }

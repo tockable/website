@@ -33,7 +33,6 @@ export default function ProjectContractFormRegular({ _project }) {
   const [pleaseFillRequired, setPleaseFillRequied] = useState(false);
   const [nonZeroSupply, setNonZeroSupply] = useState(false);
 
-
   const [abiReady, setAbiReady] = useState(false);
   const [bytecode, setBytecode] = useState("");
   const [abi, setAbi] = useState([]);
@@ -71,7 +70,8 @@ export default function ProjectContractFormRegular({ _project }) {
       project.tokenName != lastState.tokenName ||
       project.tokenSymbol != lastState.tokenSymbol ||
       Number(project.firstTokenId) != lastState.firstTokenId ||
-      project.totalSupply.toString() != lastState.totalSupply ||
+      project.totalSupply != lastState.totalSupply ||
+      Number(project.totalSupply).toString() != lastState.totalSupply ||
       Number(project.totalSupply) != lastState.totalSupply ||
       project.totalSupply != lastState.totalSupply
     ) {
@@ -235,7 +235,7 @@ export default function ProjectContractFormRegular({ _project }) {
     (async () => {
       try {
         if (!abi.length) {
-          const abi = await getContractAbi(project);;
+          const abi = await getContractAbi(project);
           setAbi(abi);
         }
 
@@ -273,6 +273,7 @@ export default function ProjectContractFormRegular({ _project }) {
           <div id="modals">
             {showDeployContractModal && (
               <DeployContractModal
+                project={project}
                 onClose={handleCloseDeployModalContract}
                 bytecode={bytecode}
                 abi={abi}

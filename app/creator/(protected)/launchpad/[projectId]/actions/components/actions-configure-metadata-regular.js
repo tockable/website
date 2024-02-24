@@ -151,6 +151,12 @@ function DeployNewBaseURI({ _project, abi }) {
   }, [readyToDeploy]);
 
   useEffect(() => {
+    if (!isError && !uwt.isError) return;
+
+    setCheking(false);
+  }, [isError, uwt.isError]);
+
+  useEffect(() => {
     if (!uwt.isSuccess) return;
     setWriting(true);
 
@@ -167,6 +173,7 @@ function DeployNewBaseURI({ _project, abi }) {
     })();
 
     setWriting(false);
+    setCheking(false);
   }, [uwt.isSuccess]);
 
   const deploy = async () => {
@@ -239,7 +246,6 @@ function DeployNewBaseURI({ _project, abi }) {
       }
     }
     setEnabled(true);
-    setCheking(false);
   };
 
   return (
@@ -257,13 +263,13 @@ function DeployNewBaseURI({ _project, abi }) {
           </label>
           <div className="flex">
             <input
-              className="select-none flex-none text-sm appearance-none rounded-l-xl pointer-events-none bg-tock-semiblack border border-zinc-700 text-gray-400 py-3 px-3 w-36 leading-tight"
+              className="select-none text-xs flex-none text-xs appearance-none rounded-l-xl pointer-events-none bg-tock-semiblack border border-zinc-700 text-gray-400 py-3 px-3 w-36 leading-tight"
               value="ipfs://"
               readOnly
               tabIndex="-1"
             />
             <input
-              className="flex-1 text-sm appearance-none bg-zinc-700 rounded-r-xl py-3 px-3 text-gray-200 border border-zinc-700 leading-tight focus:outline-none w- focus:ring focus:ring-2 focus:ring-zinc-500"
+              className="flex-1 text-xs appearance-none bg-zinc-700 rounded-r-xl py-3 px-3 text-gray-200 border border-zinc-700 leading-tight focus:outline-none w- focus:ring focus:ring-2 focus:ring-zinc-500"
               value={cid}
               id="cid"
               type="text"
@@ -279,15 +285,17 @@ function DeployNewBaseURI({ _project, abi }) {
         disabled={isLoading || uwt.isLoading || isChecking || incorrectMetadata}
         onClick={() => deploy()}
       >
-        {(isLoading || uwt.isLoading || isChecking) && (
+        {(isLoading || uwt.isLoading || isChecking || isWriting) && (
           <Loading
             isLoading={isLoading || uwt.isLoading || isChecking || isWriting}
             size={10}
           />
         )}
-        {!isLoading && !uwt.isLoading && !isChecking && !isWriting && (
-          <p>Set Metadata</p>
-        )}
+        {!isLoading &&
+          !uwt.isLoading &&
+          !isChecking &&
+          !isWriting &&
+          !isChecking && <p>Set Metadata</p>}
       </Button>
       {(isLoading || uwt.isLoading || isWriting || isChecking) && (
         <p className="text-tock-orange mt-2 text-xs">

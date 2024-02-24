@@ -6,12 +6,10 @@ import {
 } from "wagmi";
 import Button from "@/components/design/button";
 import Loading from "@/components/loading/loading";
-// import { useContractRead } from "wagmi";
 
 export default function ActionWithdraw({ abi, _project }) {
   return (
     <>
-      {/* <TestTokenURI project={_project} abi={abi} /> */}
       <Withdraw _project={_project} abi={abi} />
       {_project?.chainID === 168587773 && <div></div>}
       <ClaimAllGas _project={_project} abi={abi} />
@@ -51,7 +49,7 @@ function Withdraw({ abi, _project }) {
       <Button
         className="mt-6"
         variant={"secondary"}
-        disabled={isLoading || uwt.isLoading}
+        disabled={isLoading || uwt.isLoading || !write}
         onClick={() => write?.()}
       >
         {(isLoading || uwt.isLoading) && (
@@ -109,7 +107,7 @@ function ClaimAllGas({ abi, _project }) {
       <Button
         className="mt-6"
         variant={"secondary"}
-        disabled={isLoading || uwt.isLoading}
+        disabled={isLoading || uwt.isLoading || !write}
         onClick={() => write?.()}
       >
         {(isLoading || uwt.isLoading) && (
@@ -167,7 +165,7 @@ function ClaimMaxGas({ abi, _project }) {
       <Button
         className="mt-6"
         variant={"secondary"}
-        disabled={isLoading || uwt.isLoading}
+        disabled={isLoading || uwt.isLoading || !write}
         onClick={() => write?.()}
       >
         {(isLoading || uwt.isLoading) && (
@@ -183,14 +181,3 @@ function ClaimMaxGas({ abi, _project }) {
     </section>
   );
 }
-
-// function TestTokenURI({ project, abi }) {
-//   const { data, refetch, isError, isLoading } = useContractRead({
-//     address: project.contractAddress,
-//     abi,
-//     functionName: "tokenURI",
-//     args: [1],
-//   });
-//   console.log(JSON.parse(JSON.stringify(data)));
-//   return <>{data && <div>{JSON.stringify(data)}</div>}</>;
-// }

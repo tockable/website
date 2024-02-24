@@ -349,7 +349,7 @@ export default function ProjectDetailsForm({ params }) {
                   required={true}
                   disabled={project.isDeployed}
                   subtitle={
-                    <div>
+                    <div className="break-normal">
                       <p>-The title of the project for public display.</p>
                       <p>-Contract name will be generated using this field.</p>
                       <p className="text-tock-orange">

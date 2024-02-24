@@ -35,24 +35,26 @@ export default function MintpadProjectDetails({ project }) {
                 </span>
               </p>
             )}
-            {project.hasOwnProperty(isFrozen) && project.isFrozen === true && (
-              <p className="text-zinc-400 my-2">
-                Metadata: <span className="text-tock-orange">Immutable</span>
-              </p>
-            )}
-            {project.hasOwnProperty(isFrozen) && project.isFrozen === false && (
-              <p className="text-zinc-400 my-2">
-                Metadata: <span className="text-tock-orange">Mutable</span>
-              </p>
-            )}
-            {project.hasOwnProperty(duplicateVerification) &&
+            {project.hasOwnProperty("isFrozen") &&
+              project.isFrozen === true && (
+                <p className="text-zinc-400 my-2">
+                  Metadata: <span className="text-tock-orange">Immutable</span>
+                </p>
+              )}
+            {project.hasOwnProperty("isFrozen") &&
+              project.isFrozen === false && (
+                <p className="text-zinc-400 my-2">
+                  Metadata: <span className="text-tock-orange">Mutable</span>
+                </p>
+              )}
+            {project.hasOwnProperty("duplicateVerification") &&
               project.duplicateVerification === true && (
                 <p className="text-zinc-400 my-2">
                   Are all tokens unique:{" "}
                   <span className="text-tock-orange">Yes</span>
                 </p>
               )}
-            {project.hasOwnProperty(duplicateVerification) &&
+            {project.hasOwnProperty("duplicateVerification") &&
               project.duplicateVerification === false && (
                 <p className="text-zinc-400 my-2">
                   Duplicate minting:{" "}

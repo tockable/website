@@ -24,11 +24,14 @@ export default function DeploySessionsModal({
   const [failed, setFailed] = useState(false);
   const [updating, setUpdating] = useState(false);
   const [enableWrite, setEnableWrite] = useState(false);
+  const [redirecting, setRedirecing] = useState(false);
 
   const router = useRouter();
 
-  const proceed = () =>
+  const proceed = () => {
+    setRedirecing(true);
     router.push(`/creator/launchpad/${project.uuid}/publish`);
+  };
 
   const { config } = usePrepareContractWrite({
     address: project.contractAddress,
@@ -109,9 +112,17 @@ export default function DeploySessionsModal({
                   sessions successfully deployed.
                 </p>
                 <div className="flex justify-center my-6">
-                <Button variant="primary" onClick={proceed}>
-                  Proceed
-                </Button>
+                  <Button
+                    variant="primary"
+                    onClick={proceed}
+                    disabled={redirecting}
+                  >
+                    {redirecting ? (
+                      <Loading isLoading={redirecting} size={10} />
+                    ) : (
+                      "Proceed"
+                    )}
+                  </Button>
                 </div>
               </div>
             )}

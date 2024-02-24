@@ -54,7 +54,7 @@ export default function DeployedContractView({ _project }) {
           </section>
           <section className="mt-2 mb-8">
             <p className="text-tock-blue font-bold text-sm">Contract address</p>
-            <p className="text-zinc-400 text-sm mt-2">
+            <p className="text-zinc-400 text-sm mt-2 break-all">
               {project.contractAddress}
             </p>
           </section>

@@ -35,7 +35,7 @@ export default function MintpadMintSectionRegular({
 
   return (
     <div>
-      {roles.map((role, i) => (
+      {roles?.map((role, i) => (
         <div key={"mint-sec-" + i}>
           <MintRegular
             handleRoleVisibility={handleRoleVisibility}

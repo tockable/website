@@ -69,7 +69,7 @@ export async function getElligibility(_address, _creator, _slug) {
 
     // if not active
     if (!project.activeSession.toString().length) {
-      return { success: true, stauts: "notActive", payload: {} };
+      return { success: true, status: "notActive", payload: {} };
     }
 
     // if paused
@@ -140,7 +140,7 @@ export async function getElligibility(_address, _creator, _slug) {
     if (project.activeSession == 0) {
       return {
         success: true,
-        stauts: "justPublic",
+        status: "justPublic",
         payload: {
           timer,
           elligibility: true,

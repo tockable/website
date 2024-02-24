@@ -33,9 +33,17 @@ export default function Protected({ children }) {
   return (
     <>
       {loading ? (
-        <Loading isLoading={loading} size={30} />
+        <div className="flex justify-center items-center h-24">
+          <Loading isLoading={loading} size={30} />
+        </div>
       ) : (
-        <div>{children}</div>
+        <div>
+          {isConnected ? (
+            <div>{children}</div>
+          ) : (
+            <Loading isLoading={true} size={30} variant="page" />
+          )}
+        </div>
       )}
     </>
   );

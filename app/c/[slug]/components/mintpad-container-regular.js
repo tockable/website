@@ -4,7 +4,7 @@ import { useState, useEffect, useContext } from "react";
 import { MintContextRegular } from "@/contexts/mint-context-regular";
 import { useAccount, useNetwork, useContractReads } from "wagmi";
 import { getElligibility } from "@/actions/mintpad/mintpad";
-import MintpadMintSectionRegular from "./mintpad-mint-section-regualar";
+import MintpadMintSectionRegular from "./mintpad-mint-section-regular";
 import SwitchNetworkButton from "@/components/design/button-switch-network";
 import Loading from "@/components/loading/loading";
 import CountDown from "@/components/design/timer";
@@ -27,7 +27,7 @@ export default function MintpadContainerRegular({ prepareMint }) {
   const [publicSession, setPublicSession] = useState();
   const [elligibility, setElligibility] = useState(null);
   const [errorGettingElligibility, setErrorGettingElligibility] =
-    useState(false);
+    useState(null);
 
   const { data, refetch, isError, isLoading } = useContractReads({
     contracts: [
@@ -61,9 +61,16 @@ export default function MintpadContainerRegular({ prepareMint }) {
   useEffect(() => {
     if (!isConnected) return;
     setLoading(true);
-    getElligibility(address, project.creator, project.slug)
-      .then((res) => {
+    (async () => {
+      try {
+        const res = await getElligibility(
+          address,
+          project.creator,
+          project.slug
+        );
+
         if (res.success === false) {
+          setLoading(false);
           setErrorGettingElligibility(true);
           return;
         }
@@ -75,16 +82,22 @@ export default function MintpadContainerRegular({ prepareMint }) {
           ) {
             setNotStarted(true);
             setUntilStart(res.payload.timer);
+            setErrorGettingElligibility(false);
+            setLoading(false);
             return;
           }
 
           if (res.status === "ended") {
             setMintEnded(true);
+            setLoading(false);
+            setErrorGettingElligibility(false);
             return;
           }
 
           if (res.payload?.timer <= 0) {
             setMintEnded(true);
+            setLoading(false);
+            setErrorGettingElligibility(false);
             return;
           }
 
@@ -93,10 +106,14 @@ export default function MintpadContainerRegular({ prepareMint }) {
           setRoles(res.payload?.availableRoles);
           setSession(Number(res.payload?.activeSession));
           setUntilEnd(res.payload?.timer);
+          setErrorGettingElligibility(false);
+          setLoading(false);
         }
-      })
-      .catch((_) => setErrorGettingElligibility(true));
-    setLoading(false);
+      } catch (err) {
+        setLoading(false);
+        setErrorGettingElligibility(true);
+      }
+    })();
   }, [isConnected]);
 
   return (
@@ -111,15 +128,19 @@ export default function MintpadContainerRegular({ prepareMint }) {
               </p>
             </div>
           )}
-          {isConnected && loading && <Loading isLoading={loading} size={20} />}
+          {isConnected && loading && (
+            <div className="flex justify-center items-center h-64">
+              <Loading isLoading={loading} size={20} />
+            </div>
+          )}
           {isConnected && !loading && (
             <>
-              {errorGettingElligibility && (
+              {errorGettingElligibility === true && (
                 <p className="text-tock-orange text-xs p-2 border rounded-xl mt-8 mx-4 border-tock-orange text-center">
                   Something went wrong, please refresh the page.
                 </p>
               )}
-              {!errorGettingElligibility && (
+              {errorGettingElligibility === false && (
                 <>
                   {notStarted && (
                     <div className="my-8">
@@ -139,22 +160,6 @@ export default function MintpadContainerRegular({ prepareMint }) {
                     </div>
                   )}
 
-                  {chain.id !== Number(project.chainData.chainId) && (
-                    <div className="my-4 flex flex-col justify-center items-center my-8">
-                      <p className="text-tock-orange text-xl font-bold my-2">
-                        please switch network
-                      </p>
-
-                      <div className="mb-12">
-                        <p className="text-tock-orange text-xs text-center mb-2">
-                          to see minting options, please switch network to the
-                          project chain
-                        </p>
-                        <SwitchNetworkButton project={project.chainData} />
-                      </div>
-                    </div>
-                  )}
-
                   {mintEnded && (
                     <div className="my-4 flex flex-col justify-center items-center my-8">
                       <p className="text-tock-blue text-xl font-bold my-2">
@@ -163,7 +168,7 @@ export default function MintpadContainerRegular({ prepareMint }) {
                         </span>{" "}
                         <span className="text-tock-green">Finished</span>
                       </p>
-                      {!project.isUnlimited && project.slug !== "tock" && (
+                      {project.slug !== "tock" && (
                         <p className="text-tock-blue text-xl font-bold my-2">
                           <span className="font-normal text-zinc-400">
                             Minted:
@@ -171,14 +176,6 @@ export default function MintpadContainerRegular({ prepareMint }) {
                           {Number(project.totalSupply) -
                             parseInt(data[1].result)}{" "}
                           / {project.totalSupply}
-                        </p>
-                      )}
-                      {project.isUnlimited && (
-                        <p className="text-tock-blue text-xl font-bold my-2">
-                          Supply:{" "}
-                          {Number(project.totalSupply) -
-                            parseInt(data[1].result)}
-                          / Unlimited
                         </p>
                       )}
                     </div>
@@ -200,7 +197,7 @@ export default function MintpadContainerRegular({ prepareMint }) {
                             <span className="text-tock-orange">paused</span>
                           )}
                         </p>
-                        {!project.isUnlimited && project.slug !== "tock" && (
+                        {project.slug !== "tock" && (
                           <p className="text-tock-blue text-xl font-bold my-2">
                             <span className="font-normal text-zinc-400">
                               Minted:
@@ -210,121 +207,132 @@ export default function MintpadContainerRegular({ prepareMint }) {
                             / {project.totalSupply}
                           </p>
                         )}
-                        {project.isUnlimited && (
-                          <p className="text-tock-blue text-xl font-bold my-2">
-                            Supply:{" "}
-                            {Number(project.totalSupply) -
-                              parseInt(data[1].result)}
-                            / Unlimited
-                          </p>
-                        )}
                       </div>
                     )}
                 </>
               )}
             </>
           )}
-          <div className="rounded-2xl p-4 mt-8 bg-tock-semiblack">
-            {!isConnected && (
-              <div className="p-4">
-                <p className="text-tock-orange p-2 border rounded-xl mt-8 border-tock-orange text-center text-xs">
-                  please connect wallet to mint.
-                </p>
-              </div>
-            )}
 
-            <div>
-              {isConnected && chain.id != project.chainData.chainId && (
-                <div className="my-12">
-                  <p className="text-tock-orange text-xs text-center mb-2">
-                    to see minting options, please switch network to the project
-                    chain
+          {!mintEnded && !notStarted && !loading && (
+            <div className="rounded-2xl p-4 mt-8 bg-tock-semiblack">
+              <h1 className="mx-8 mt-4 font-bold text-2xl text-tock-green">
+                Mint!
+              </h1>
+              {!isConnected && (
+                <div className="p-4">
+                  <p className="text-tock-orange p-2 border rounded-xl mt-8 border-tock-orange text-center text-xs">
+                    please connect wallet to mint.
                   </p>
-                  <SwitchNetworkButton project={project.chainData} />
                 </div>
               )}
 
-              {isConnected && chain.id === project.chainData.chainId && (
-                <div>
-                  {!data && isLoading && (
-                    <div className="text-tock-orange text-center p-6 border rounded-xl mt-8 border-zinc-400 text-centerr">
-                      <Loading isLoading={isLoading && !data} size={20} />
+              <div>
+                {isConnected &&
+                  chain.id !== Number(project.chainData.chainId) && (
+                    <div className="my-4 flex flex-col justify-center items-center my-8">
+                      <p className="text-tock-orange text-xl font-bold my-2">
+                        please switch network
+                      </p>
+
+                      <div className="mb-12">
+                        <p className="text-tock-orange text-xs text-center mb-2">
+                          to see minting options, please switch network to the
+                          project chain
+                        </p>
+                        <SwitchNetworkButton
+                          forDeploy={false}
+                          project={project.chainData}
+                        />
+                      </div>
                     </div>
                   )}
 
-                  {!isLoading && (isError || (data && data[0]?.error)) && (
-                    <p className="mx-4 my-4 text-tock-red p-2 border rounded-xl mt-8 border-tock-red text-center text-xs">
-                      cannot fetch data form blockchain at this moment. please
-                      refresh the page or try with another proxy/vpn setting.
-                      <br />
-                      <br />
-                      If the problem persists, please come back later.
-                    </p>
-                  )}
+                {isConnected && chain.id === project.chainData.chainId && (
+                  <div>
+                    {!data && isLoading && (
+                      <div className="text-tock-orange text-center p-6 border rounded-xl mt-8 border-zinc-400 text-centerr">
+                        <Loading isLoading={isLoading && !data} size={20} />
+                      </div>
+                    )}
 
-                  {data && !data[0]?.error && !isError && (
-                    <>
-                      {data[0]?.result === false && (
-                        <p className="text-tock-orange text-sm mx-4 mt-10 mb-6 text-center p-2 border rounded-xl border-tock-orange">
-                          minting is not available at this moment.
-                        </p>
-                      )}
+                    {!isLoading && (isError || (data && data[0]?.error)) && (
+                      <p className="mx-4 my-4 text-tock-red p-2 border rounded-xl mt-8 border-tock-red text-center text-xs">
+                        cannot fetch data form blockchain at this moment. please
+                        refresh the page or try with another proxy/vpn setting.
+                        <br />
+                        <br />
+                        If the problem persists, please come back later.
+                      </p>
+                    )}
 
-                      {!notStarted &&
-                        !mintEnded &&
-                        data[0]?.result === true && (
-                          <div>
-                            {errorGettingElligibility && (
-                              <p className="text-tock-orange text-xs p-2 border rounded-xl mt-8 mx-4 border-tock-orange text-center">
-                                Something went wrong, please refresh the page.
-                              </p>
-                            )}
-                            {!errorGettingElligibility && (
-                              <div className="w-full">
-                                {!elligibility ? (
-                                  <div className="mx-4 p-2 border rounded-xl border-tock-orange">
-                                    <p className="text-tock-orange">
-                                      It seems there is no mint option for this
-                                      wallet at this moment...
-                                    </p>
-                                    <p className="text-tock-orange">
-                                      Please come back later...
-                                    </p>
-                                  </div>
-                                ) : (
-                                  <div className="w-full mt-8">
-                                    {parseInt(data[2].result) > 0 && (
-                                      <div>
-                                        {!publicSession && (
-                                          <p className="text-tock-blue mt-12 mx-4">
-                                            available roles for you:
-                                          </p>
-                                        )}
-                                        <MintpadMintSectionRegular
-                                          roles={roles}
-                                          session={session}
-                                          prepareMint={prepareMint}
-                                        />
-                                      </div>
-                                    )}
-                                    {parseInt(data[2].result) == 0 && (
-                                      <p className="mt-8 text-tock-orange text-center p-2 border rounded-xl border-zinc-400">
-                                        Current session reaches its total
-                                        supply, please wait until next session.
-                                      </p>
-                                    )}
-                                  </div>
-                                )}
-                              </div>
-                            )}
-                          </div>
+                    {!loading && data && !data[0]?.error && !isError && (
+                      <>
+                        {data[0]?.result === false && (
+                          <p className="text-tock-orange text-sm mx-4 mt-10 mb-6 text-center p-2 border rounded-xl border-tock-orange">
+                            minting is not available at this moment.
+                          </p>
                         )}
-                    </>
-                  )}
-                </div>
-              )}
+
+                        {!loading &&
+                          !notStarted &&
+                          !mintEnded &&
+                          data[0]?.result === true && (
+                            <div>
+                              {errorGettingElligibility === true && (
+                                <p className="text-tock-orange text-xs p-2 border rounded-xl mt-8 mx-4 border-tock-orange text-center">
+                                  Something went wrong, please refresh the page.
+                                </p>
+                              )}
+                              {errorGettingElligibility === false && (
+                                <div className="w-full">
+                                  {elligibility === false && (
+                                    <div className="mx-4 p-2 mt-2 border rounded-xl border-tock-orange text-xs">
+                                      <p className="text-tock-orange">
+                                        It seems there is no mint option for
+                                        this wallet at this moment...
+                                      </p>
+                                      <p className="text-tock-orange">
+                                        Please come back later...
+                                      </p>
+                                    </div>
+                                  )}
+                                  {elligibility === true && (
+                                    <div className="w-full mt-8">
+                                      {parseInt(data[2].result) > 0 && (
+                                        <div>
+                                          {!publicSession && (
+                                            <p className="text-tock-blue mt-12 mx-4">
+                                              available roles for you:
+                                            </p>
+                                          )}
+                                          <MintpadMintSectionRegular
+                                            roles={roles}
+                                            session={session}
+                                            prepareMint={prepareMint}
+                                          />
+                                        </div>
+                                      )}
+                                      {parseInt(data[2].result) == 0 && (
+                                        <p className="mt-8 text-tock-orange text-center p-2 border rounded-xl border-zinc-400">
+                                          Current session reaches its total
+                                          supply, please wait until next
+                                          session.
+                                        </p>
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          )}
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </main>

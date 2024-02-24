@@ -24,12 +24,14 @@ export default function DeployRolesModal({
   const [failed, setFailed] = useState(false);
   const [updating, setUpdating] = useState(false);
   const [enableWrite, setEnableWrite] = useState(false);
-  const [redirecting, setRedirecing] = useState(false) // here
+  const [redirecting, setRedirecing] = useState(false); // here
 
   const router = useRouter();
 
-  const proceed = () =>
+  const proceed = () => {
+    setRedirecing(true);
     router.push(`/creator/launchpad/${project.uuid}/sessions`);
+  };
 
   const { config } = usePrepareContractWrite({
     address: project.contractAddress,
@@ -109,8 +111,16 @@ export default function DeployRolesModal({
                   roles successfully deployed.
                 </p>
                 <div className="flex justify-center my-6">
-                  <Button variant="primary" onClick={proceed}>
-                    Proceed
+                  <Button
+                    variant="primary"
+                    onClick={proceed}
+                    disabled={redirecting}
+                  >
+                    {redirecting ? (
+                      <Loading isLoading={redirecting} size={10} />
+                    ) : (
+                      "Proceed"
+                    )}
                   </Button>
                 </div>
               </div>

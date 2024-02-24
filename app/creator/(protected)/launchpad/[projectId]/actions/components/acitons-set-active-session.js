@@ -11,7 +11,11 @@ import Button from "@/components/design/button";
 export default function ActionSetActiveSession({ abi, _project }) {
   const [project, setProject] = useState(_project);
   const [key, setKey] = useState(1);
-  const [sessionToActive, setSessionToActive] = useState();
+  const [sessionToActive, setSessionToActive] = useState(
+    project.activeSession.toString().length === 0
+      ? "0"
+      : project.activeSession.toString()
+  );
   const [isWriting, setWriting] = useState(false);
   const [sessionName, setSessionName] = useState();
   const [updated, setUpdated] = useState(false);
@@ -26,11 +30,11 @@ export default function ActionSetActiveSession({ abi, _project }) {
   const { data, isLoading, isError, write, error } = useContractWrite(config);
   const uwt = useWaitForTransaction({ hash: data?.hash });
 
-  useEffect(() => {
-    if (project.activeSession.length !== 0)
-      setSessionToActive(project.activeSession.toString());
-    else setSessionToActive("0");
-  }, []);
+  // useEffect(() => {
+  //   if (project.activeSession.length !== 0)
+  //     setSessionToActive(project.activeSession.toString());
+  //   else setSessionToActive("0");
+  // }, []);
 
   function onChangeActiveSession(e) {
     setSessionToActive(e.target.value);
@@ -114,7 +118,7 @@ export default function ActionSetActiveSession({ abi, _project }) {
           })}
       </div>
       <Button
-        disabled={isLoading || uwt.isLoading || isWriting}
+        disabled={isLoading || uwt.isLoading || isWriting || !write}
         className="mt-4"
         variant={"secondary"}
         onClick={() => write?.()}
@@ -126,7 +130,9 @@ export default function ActionSetActiveSession({ abi, _project }) {
           />
         )}
         {!isLoading && !uwt.isLoading && !isWriting && (
-          <p> set active session to {sessionName}</p>
+          <p>
+            active "{sessionName}" session (session id: {sessionToActive})
+          </p>
         )}
       </Button>
       {(isLoading || uwt.isLoading || isWriting) && (

@@ -60,8 +60,8 @@ export default function ProjectMetadataRouter({ params }) {
           )}
 
           {project.isDeployed &&
-            ((project.cids && project.cids.length === 0) ||
-              (project.cid && project.cid.length === 0)) && (
+            ((project.hasOwnProperty("cids") && project.cids.length === 0) ||
+              (project.hasOwnProperty("cid") && project.cid.length === 0)) && (
               <>
                 {project.dropType === "tockable" && (
                   <ProjectMetadataFormTockable _project={project} />

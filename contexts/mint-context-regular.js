@@ -8,9 +8,6 @@ import "react-toastify/dist/ReactToastify.css";
 export const MintContextRegular = createContext();
 
 export default function MintProviderRegular({ project, abi, children }) {
-  const [successfullyMinted, setSuccessfullyMinted] = useState(false);
-  const [isFollow, setFollow] = useState(setFollowState());
-
   const setFollowState = () => {
     return ls()
       ? Boolean(localStorage.getItem("tockfollow"))
@@ -18,6 +15,9 @@ export default function MintProviderRegular({ project, abi, children }) {
         : false
       : true;
   };
+
+  const [successfullyMinted, setSuccessfullyMinted] = useState(false);
+  const [isFollow, setFollow] = useState(setFollowState());
 
   useEffect(() => {
     if (!successfullyMinted) return;

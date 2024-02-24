@@ -36,13 +36,13 @@ export default function DeployMetadataRegularDropModal({
     args: [cid, hasExtension],
     // gas: 2_000_000n,
   });
-
+  console.log(config);
   const { data, write, isError, error, isLoading } = useContractWrite(config);
   const uwt = useWaitForTransaction({ hash: data?.hash });
 
   function closeOnSuccess() {
     if (success) {
-      router.push(`/${project.uuid}/roles`);
+      router.push(`/creator/launchpad/${project.uuid}/roles`);
     } else {
       onClose();
     }
@@ -75,16 +75,20 @@ export default function DeployMetadataRegularDropModal({
           <h1 className="text-tock-green font-bold text-xl mt-4 mb-6 ">
             Deploy metadata
           </h1>
-          <p className="text-zinc-400">
-            You are deploying "ipfs://{writeArgs}/" for token base URI
-          </p>
-          {notSpecify && (
-            <p className="text-zinc-400">
-              {"("}in case of empty image on nfts, you may need to update
-              metadata later{")"}, you can change contract base url until you
-              freeze it.
+          <div className="mb-6">
+            <p className="text-xs text-zinc-400">
+              You are deploying{" "}
+              <span className="text-blue-400 break-all">"ipfs://{cid}/</span>{" "}
+              for token base URI
             </p>
-          )}
+            {notSpecify && (
+              <p className="text-xs text-zinc-400">
+                {"("}in case of empty image on nfts, you may need to update
+                metadata later{")"}, you can change contract base url until you
+                freeze it.
+              </p>
+            )}
+          </div>
           <div className="mb-6">
             {!success && (
               <div>

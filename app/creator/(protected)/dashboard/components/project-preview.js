@@ -23,12 +23,15 @@ export default function ProjectPreview({ project }) {
   return (
     <div className="flex flex-col items-center px-8 pt-6 pb-8 bg-tock-semiblack rounded-2xl">
       {project.image && (
-        <img
-          className="rounded-xl"
-          // src={`${IPFS_GATEWAY}/${project.image}`}
-          src={`https://${project.image}.${NFT_STORAGE_GATEWAY}`}
-          width="206"
-        ></img>
+        <div className="h-[206px] object-cover">
+          <img
+            className="rounded-xl"
+            // src={`${IPFS_GATEWAY}/${project.image}`}
+            src={`https://${project.image}.${NFT_STORAGE_GATEWAY}`}
+            width="206"
+            height="206"
+          ></img>
+        </div>
       )}
       {!project.image && (
         <div className="w-[206px]">
@@ -55,7 +58,7 @@ export default function ProjectPreview({ project }) {
         </p>
       </div>
       <Link href={`/creator/launchpad/${project.uuid}/details`}>
-        <Button className="ml-4" variant="secondary" onClick={handleLoading}>
+        <Button variant="secondary" onClick={handleLoading} disabled={loading}>
           {loading ? (
             <Loading isLoading={loading} size={10} />
           ) : (

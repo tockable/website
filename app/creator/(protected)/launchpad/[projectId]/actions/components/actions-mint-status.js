@@ -59,6 +59,7 @@ export default function ActionMintStatus({ abi, _project }) {
         <Button
           className="mt-4"
           variant={"secondary"}
+          disabled={!write || isLoading || isWriting || uwt.isLoading}
           onClick={() => write?.()}
         >
           {(isLoading || uwt.isLoading || isWriting) && (

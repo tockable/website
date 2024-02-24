@@ -2,7 +2,7 @@ import { useSwitchNetwork } from "wagmi";
 import Loading from "@/components/loading/loading";
 import Button from "./button";
 
-export default function SwitchNetworkButton({ project }) {
+export default function SwitchNetworkButton({ project, forDeploy = true }) {
   const { isLoading, pendingChainId, switchNetwork, error } =
     useSwitchNetwork();
 
@@ -25,7 +25,10 @@ export default function SwitchNetworkButton({ project }) {
             />
           )}
           {!isLoading && (
-            <div> switch network to {project.chain || project.name} for deploy</div>
+            <div>
+              switch network to {project.chain || project.name}{" "}
+              {forDeploy && <span>for deploy</span>}
+            </div>
           )}
         </div>
       </Button>

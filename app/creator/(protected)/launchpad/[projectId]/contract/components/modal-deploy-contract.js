@@ -39,15 +39,13 @@ export default function DeployContractModal({
     (async () => {
       try {
         const signer = await createNewSigner(address, project.uuid);
-
         setSuccess("");
         setError("");
         setSigner(signer);
         setTakeMoment(false);
       } catch (err) {
         setTakeMoment(false);
-        if (err.message === "forbidden")
-          setError("Only creator can edit the project");
+        if (err.message === "forbidden") setError("Forbidden");
         else setError("Something happened in our side, please try again.");
       }
     })();
@@ -55,8 +53,8 @@ export default function DeployContractModal({
 
   function closeOnSuccess() {
     if (success) {
-    setLoadingRouter(true);
-    router.push(`/creator/launchpad/${project.uuid}/contract/`);
+      setLoadingRouter(true);
+      router.push(`/creator/launchpad/${project.uuid}/contract/`);
     } else {
       onClose();
     }

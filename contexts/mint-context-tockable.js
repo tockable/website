@@ -10,11 +10,6 @@ import "react-toastify/dist/ReactToastify.css";
 export const MintContextTockable = createContext();
 
 export default function MintProviderTockable({ project, abi, children }) {
-  const [blobs, setBlobs] = useState([]);
-  const [duplicatedIndexes, setDuplicatedIndexes] = useState([]);
-  const [successfullyMinted, setSuccessfullyMinted] = useState(false);
-  const [isFollow, setFollow] = useState(setFollowState());
-
   const setFollowState = () => {
     return ls()
       ? Boolean(localStorage.getItem("tockfollow"))
@@ -22,6 +17,11 @@ export default function MintProviderTockable({ project, abi, children }) {
         : false
       : true;
   };
+
+  const [blobs, setBlobs] = useState([]);
+  const [duplicatedIndexes, setDuplicatedIndexes] = useState([]);
+  const [successfullyMinted, setSuccessfullyMinted] = useState(false);
+  const [isFollow, setFollow] = useState(setFollowState());
 
   const addToBasket = (blob) => {
     if (blobs.length === MAX_MINT_PER_TX) return { duplicated: false };

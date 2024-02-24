@@ -35,10 +35,10 @@ export default function MintRegular({
         "hover:bg-tock-semiblack hover:ring hover:ring-zinc-600 transition ease-in-out duration-200 cursor-pointer"
       }`}
     >
-      <div className="flex flex-col gap-4 w-full">
-        <div className="flex">
+      <div className="w-full">
+        <div className="flex w-full">
           <div className="flex-auto">
-            <p className="text-zinc-400 text-xs items-center pr-4">
+            <p className="text-zinc-400 text-xs items-center">
               mint as{" "}
               <span className="text-tock-orange text-sm">{role.name}</span> |
               max mint/wallet:{" "}
@@ -50,14 +50,14 @@ export default function MintRegular({
               )}
               {project.slug.toLowerCase() !== "tock" && (
                 <span className="text-tock-orange">
-                  {Number(role.price) + getBaseFee(project)}{" "}
-                  {project.chainData.nativeToken}
+                  {accPrice(role, project, 1)} {project.chainData.nativeToken}
                 </span>
               )}
             </p>
           </div>
-          <div className="text-tock-green text-xs justify-end">
-            {!show && <p className="">click to expand</p>}
+          <div className="text-tock-green text-xs justify-end ml-4">
+            {!show && <p className="">click to see</p>}
+            {show && <p className="invisible">click to see</p>}
           </div>
         </div>
 
@@ -78,6 +78,7 @@ function MintHandler({ role, prepareMint, session }) {
   const { abi, project, setSuccessfullyMinted } =
     useContext(MintContextRegular);
 
+  const [quanitity, setQuantity] = useState(1);
   const [preparing, setPreparing] = useState(false);
   const [readyToMint, setReadyToMint] = useState(false);
   const [apiError, setApiError] = useState(false);
@@ -93,6 +94,19 @@ function MintHandler({ role, prepareMint, session }) {
     args: [address, Number(role.id)],
     structuralSharing: (prev, next) => (prev === next ? prev : next),
   });
+
+  const increase = () => setQuantity(quanitity + 1);
+  const decrease = () => setQuantity(quanitity - 1);
+
+  function isIncreaseNotAvailable(d) {
+    if (quanitity + 1 <= maxMintable(d)) return false;
+    else return true;
+  }
+
+  function IsDecreaseNotAvailable() {
+    if (quanitity - 1 > 0) return false;
+    else return true;
+  }
 
   useEffect(() => {
     refetch?.();
@@ -204,6 +218,11 @@ function MintHandler({ role, prepareMint, session }) {
     setPrintedError("");
     setWarning("");
 
+    if (quanitity > maxMintable(data)) {
+      setPrintedError("Cannot mint more than available");
+      return;
+    }
+
     const res = await prepareMint(address, role.id, session);
     if (res.success === true) {
       const { signature } = res;
@@ -215,7 +234,7 @@ function MintHandler({ role, prepareMint, session }) {
           : parseEther(
               (
                 (Number(role.price) + getBaseFee(project)) *
-                blobs.length
+                quanitity
               ).toString(),
               "wei"
             );
@@ -230,14 +249,46 @@ function MintHandler({ role, prepareMint, session }) {
 
   return (
     <div>
+      {!data && (
+        <div className="flex justify-center items-center h-24">
+          <Loading isLoading={!data} size={10} />
+        </div>
+      )}
       {data && (
         <div className="flex flex-col">
-          <p className="text-zinc-400 text-xs items-center my-2">
+          <p className="text-zinc-400 text-xs items-center mb-2">
             mint left for wallet on this role:{" "}
             <span className="text-tock-orange text-sm">
               {maxMintable(data)}
             </span>
           </p>
+          <div>
+            <p className="text-sm text-zinc-400 text-center mt-8">
+              amount to mint
+            </p>
+            <div className="my-4 flex items-center justify-center">
+              <div className="flex justify-center select-none mb-4">
+                <button
+                  className="disabled:border-zinc-700 disabled:text-zinc-700 border border-zinc-500 transition ease-in-out mx-4 enabled:hover:bg-zinc-600 duration-300 bg-tock-semiblack text-zinc-400 font-bold py-2 px-4 rounded-2xl focus:outline-none focus:shadow-outline active:text-white"
+                  onClick={decrease}
+                  disabled={IsDecreaseNotAvailable()}
+                >
+                  -
+                </button>
+
+                <p className="text-zinc-500 text-xs w-12 text-center align-middle mt-4">
+                  {quanitity}
+                </p>
+                <button
+                  className="disabled:border-zinc-700 disabled:text-zinc-700 border border-zinc-500 transition ease-in-out mx-4 enabled:hover:bg-zinc-600 duration-300 bg-tock-semiblack text-zinc-400 font-bold py-2 px-4 rounded-2xl focus:outline-none focus:shadow-outline active:text-white"
+                  onClick={increase}
+                  disabled={isIncreaseNotAvailable(data)}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          </div>
           <div className="flex justify-center">
             {maxMintable(data) != 0 && (
               <Button
@@ -256,7 +307,7 @@ function MintHandler({ role, prepareMint, session }) {
                       {project.slug.toLowerCase() !== "tock" && (
                         <p className="text-sm">
                           mint {quanitity} {quanitity === 1 ? "NFT" : "NFTs"}{" "}
-                          for {accPrice(role, project, blobs)}{" "}
+                          for {accPrice(role, project, quanitity)}{" "}
                           {project.chainData.nativeToken}
                         </p>
                       )}
@@ -285,11 +336,11 @@ function MintHandler({ role, prepareMint, session }) {
               currnent wallet does not have any tokens to mint on this role
             </p>
           )}
-          {blobs.length > maxMintable(data) && maxMintable(data) !== 0 && (
+          {quanitity > maxMintable(data) && maxMintable(data) !== 0 && (
             <p className="text-tock-red text-xs mt-2 border rounded-2xl border-zinc-400 p-4">
               you are elligible to mint {maxMintable(data)} max in this role,
-              please consider removing {blobs.length - maxMintable(data)}{" "}
-              {blobs.length - maxMintable(data) === 1 ? "token" : "tokens"} from
+              please consider removing {quanitity - maxMintable(data)}{" "}
+              {quanitity - maxMintable(data) === 1 ? "token" : "tokens"} from
               the basket to enable minting in this role.{" "}
             </p>
           )}
@@ -297,9 +348,7 @@ function MintHandler({ role, prepareMint, session }) {
             <p className="text-tock-red text-xs mt-2">{printedError}</p>
           )}
           {preparing && (
-            <p className="text-blue-400 text-xs mt-2">
-              preparing... please wait...
-            </p>
+            <p className="text-blue-400 text-xs mt-2">preparing...</p>
           )}
           {warning.length > 0 && (
             <p className="text-tock-orange text-xs mt-2">{warning}</p>
@@ -316,15 +365,7 @@ function MintHandler({ role, prepareMint, session }) {
 }
 
 function invalidArgs(_args) {
-  if (
-    _args.args[1].length === 0 ||
-    _args.args[1][0].part1 === EMPTY_BYTES_32 ||
-    _args.args[1][0].part2 === EMPTY_BYTES_32 ||
-    _args.args[2] === EMPTY_BYTES_32 ||
-    _args.args[4].length === 0 ||
-    _args.args[4][0][0] === EMPTY_BYTES_32 ||
-    _args.value === 0
-  ) {
+  if (_args.args[1] === EMPTY_BYTES_32 || _args.value === 0) {
     return true;
   } else {
     return false;
@@ -347,21 +388,21 @@ function getBaseFee(project) {
   );
 }
 
-function accPrice(role, project, blobs) {
+function accPrice(role, project, quanitity) {
   const BASE_FEE = getBaseFee(project);
-  return parseFloat((Number(role.price) + BASE_FEE) * blobs.length)
+  return parseFloat((Number(role.price) + BASE_FEE) * quanitity)
     .toPrecision(2)
     .toString()
     .charAt(
-      parseFloat((Number(role.price) + BASE_FEE) * blobs.length)
+      parseFloat((Number(role.price) + BASE_FEE) * quanitity)
         .toPrecision(2)
         .toString().length - 1
     ) === "0"
-    ? parseFloat((Number(role.price) + BASE_FEE) * blobs.length)
+    ? parseFloat((Number(role.price) + BASE_FEE) * quanitity)
         .toPrecision(2)
         .toString()
         .slice(0, -1)
-    : parseFloat((Number(role.price) + BASE_FEE) * blobs.length)
+    : parseFloat((Number(role.price) + BASE_FEE) * quanitity)
         .toPrecision(2)
         .toString();
 }
