@@ -11,9 +11,12 @@ export default function ActionWithdraw({ abi, _project }) {
   return (
     <>
       <Withdraw _project={_project} abi={abi} />
-      {_project?.chainID === 168587773 && <div></div>}
-      <ClaimAllGas _project={_project} abi={abi} />
-      <ClaimMaxGas _project={_project} abi={abi} />
+      {_project?.chainID === 168587773 && (
+        <div>
+          <ClaimAllGas _project={_project} abi={abi} />
+          <ClaimMaxGas _project={_project} abi={abi} />
+        </div>
+      )}
     </>
   );
 }
@@ -97,7 +100,7 @@ function ClaimAllGas({ abi, _project }) {
           target="_blank"
           rel="noopener noreferrer"
         >
-          learn about gas claim-rates on blast &gt;
+          learn about claiming gas fees on Blast &gt;
         </a>
       </p>
       <p className="text-zinc-400 font-normal text-xs mt-2 mb-6">

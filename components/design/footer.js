@@ -1,11 +1,11 @@
 import Link from "next/link";
 import DiscordSvg from "@/svgs/social-svgs/DiscordSvg";
 import TwitterSvg from "@/svgs/social-svgs/TwitterSvg";
-import { SOCIAL } from "@/tock.config";
+import { SOCIAL, TOCKBALE_VERSION } from "@/tock.config";
 
 export default function Footer() {
   return (
-    <footer className="text-center text-zinc-600 text-xs h-48 mt-32">
+    <footer className="text-center text-zinc-600 text-xs h-48 mt-32 mb-10">
       <div className="flex flex-row gap-10 md:gap-20 lg:gap-32 justify-center">
         <Link href={SOCIAL.twitter}>
           <TwitterSvg
@@ -21,7 +21,7 @@ export default function Footer() {
         </Link>
       </div>
       <p className="mt-24">&copy;2024 Tockable. All rights reserved.</p>
-      <p>v0.2.0</p>
+      <p>v{TOCKBALE_VERSION}</p>
     </footer>
   );
 }

@@ -159,14 +159,15 @@ export default function ProjectRolesForm({ params }) {
               ) : (
                 <div>
                   <div id="modal">
-                    <DeployRolesModal
-                      onClose={handleCloseDeployModal}
-                      isOpen={showDeployModal}
-                      writeArgs={rolesArg}
-                      project={project}
-                      abi={abi}
-                      roles={roles}
-                    />
+                    {showDeployModal && (
+                      <DeployRolesModal
+                        onClose={handleCloseDeployModal}
+                        writeArgs={rolesArg}
+                        project={project}
+                        abi={abi}
+                        roles={roles}
+                      />
+                    )}
                   </div>
                   <h1 className="text-tock-green font-bold text-xl mt-4 mb-6 ">
                     Add minting roles

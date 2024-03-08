@@ -145,9 +145,9 @@ export default function ProjectMetadataFormRegular({ _project }) {
 
             <p className="text-sm text-zinc-400 mb-12">
               please copy-paste your CID{" "}
-              <a className="text-xs text-blue-400 hover:text-blue-300 hover:cursor-pointer">
+              {/* <a className="text-xs text-blue-400 hover:text-blue-300 hover:cursor-pointer">
                 learn more about CID &gt;
-              </a>
+              </a> */}
             </p>
             <div>
               <div className="mb-10">

@@ -3,10 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAccount } from "wagmi";
-import { DROP_TYPES } from "@/tock.config";
-import { SUPPORTED_CHAINS } from "@/tock.config";
+import { DROP_TYPES, SUPPORTED_CHAINS } from "@/tock.config";
 import getChainData from "@/utils/chain-utils";
-import { chainData } from "@/constants/chaindata";
+import Link from "next/link";
 import Loading from "@/components/loading/loading";
 import Modal from "@/components/design/modal";
 import Button from "@/components/design/button";
@@ -62,9 +61,14 @@ export default function NewProjectModal({ isOpen, onClose }) {
           <div className="mb-10 rounded-2xl bg-zinc-800 p-4">
             <h2 className="text-sm font-bold text-tock-blue mb-2">
               choose your drop{" "}
-              <a className="text-xs text-blue-400 hover:text-blue-300 transition duration-200 cursor-pointer">
-                learn more &gt;
-              </a>
+              <Link
+                href="/docs/drop-types"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs text-blue-400 hover:text-blue-300 transition duration-200 cursor-pointer"
+              >
+                learn more about NFT drops &gt;
+              </Link>
             </h2>
             {DROP_TYPES.map((drop, i) => {
               return (

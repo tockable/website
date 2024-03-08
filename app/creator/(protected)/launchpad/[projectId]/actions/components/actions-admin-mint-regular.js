@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { zeroAddress } from "viem";
 import {
   useContractWrite,
@@ -9,13 +9,16 @@ import { regex } from "@/constants/regex";
 import Loading from "@/components/loading/loading";
 import LabeledInput from "@/components/design/labeled-input";
 import Button from "@/components/design/button";
+import { useDebounce } from "use-debounce";
 
 export default function ActionAdminMintRegular({ abi, _project }) {
   const [project] = useState(_project);
-  const [address, setAddress] = useState(_project?.creator);
-  const [correctAddress, setCorreactAddress] = useState(false);
+  const [destAddress, setDestAddress] = useState(project.creator);
+  const [debouncedAddress] = useDebounce(destAddress, 500);
+  const [correctAddress, setCorreactAddress] = useState(true);
   const [showAddressError, setAddressError] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const [debouncedQuantity] = useDebounce(quantity, 500);
 
   const onChangeAddress = (e) => {
     if (e.target.value === "") {
@@ -31,7 +34,7 @@ export default function ActionAdminMintRegular({ abi, _project }) {
       setCorreactAddress(false);
       setAddressError(true);
     }
-    setAddress(e.target.value);
+    setDestAddress(e.target.value);
   };
 
   const onChangeQuantity = (e) => setQuantity(Number(e.target.value));
@@ -40,8 +43,7 @@ export default function ActionAdminMintRegular({ abi, _project }) {
     address: project.contractAddress,
     abi: abi,
     functionName: "ownerMint",
-    args: [address, quantity],
-    enabled: quantity > 0 && correctAddress,
+    args: [debouncedAddress, debouncedQuantity],
     // gas: 3_000_000n,
   });
 
@@ -49,13 +51,13 @@ export default function ActionAdminMintRegular({ abi, _project }) {
   const uwt = useWaitForTransaction({ hash: data?.hash });
 
   return (
-    <section id="withdraw">
+    <section>
       <div>
         <h1 className="font-bold text-sm text-tock-blue mb-4 ">Admin Mint</h1>
       </div>
       <LabeledInput
         className="mb-8"
-        value={address}
+        value={destAddress}
         type="text"
         onChange={onChangeAddress}
         placeholder="0x..."
@@ -65,6 +67,7 @@ export default function ActionAdminMintRegular({ abi, _project }) {
       <LabeledInput
         className="mb-8"
         type="number"
+        value={quantity}
         min={1}
         step={1}
         onChange={onChangeQuantity}
@@ -76,7 +79,7 @@ export default function ActionAdminMintRegular({ abi, _project }) {
       <Button
         className="mt-6 w-32"
         variant={"secondary"}
-        disabled={isLoading || uwt.isLoading || !correctAddress}
+        disabled={isLoading || uwt.isLoading || !correctAddress || !write}
         onClick={() => write?.()}
       >
         {(isLoading || uwt.isLoading) && (

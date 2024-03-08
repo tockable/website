@@ -31,8 +31,10 @@ export default function IpfsImporter({
   const [writing, setWriting] = useState(false);
   const [successOnIpfs, setSuccessOnIpfs] = useState(false);
   const [cannotEmpty, setCannotEmpty] = useState(false);
+  const [redirecting, setRedirecing] = useState(false);
 
   const router = useRouter();
+
   const { chain } = useNetwork();
   const { config } = usePrepareContractWrite({
     address: project.contractAddress,
@@ -45,7 +47,10 @@ export default function IpfsImporter({
   const { data, isLoading, isError, write, error } = useContractWrite(config);
   const uwt = useWaitForTransaction({ hash: data?.hash });
 
-  const proceed = () => router.push(`/${project.uuid}/roles`);
+  const proceed = () => {
+    setRedirecing(true);
+    router.push(`/creator/launchpad/${project.uuid}/roles`);
+  };
 
   useEffect(() => {
     if (!uwt.isSuccess) return;
@@ -214,9 +219,19 @@ export default function IpfsImporter({
               <h1 className="text-tock-green font-normal text-lg mb-6">
                 Metadata deployed successully!
               </h1>
-              <Button className="mb-4" variant="primary" onClick={proceed}>
-                Proceed
-              </Button>
+              <div className="flex justify-center">
+                <Button
+                  variant="primary"
+                  onClick={proceed}
+                  disabled={redirecting}
+                >
+                  {redirecting ? (
+                    <Loading isLoading={redirecting} size={10} />
+                  ) : (
+                    "Proceed"
+                  )}
+                </Button>
+              </div>
             </div>
           )}
           {readyToDeploy &&
@@ -225,7 +240,7 @@ export default function IpfsImporter({
             !uwt.isLoading && (
               <div className="border rounded-2xl bg-tock-black border-zinc-400 p-4 my-4">
                 <h1 className="text-tock-green font-normal text-lg mb-12">
-                  sign to deploy
+                  Sign to deploy
                 </h1>
 
                 {chain.id != project.chainId && (

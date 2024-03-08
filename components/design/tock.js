@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import Link from "next/link";
 import {
@@ -15,7 +16,17 @@ const anton = Anton({ subsets: ["latin"], weight: ["400"] });
 const lilita = Lilita_One({ subsets: ["latin"], weight: ["400"] });
 const ub = Ubuntu_Mono({ subsets: ["latin"], weight: ["400"] });
 
-export default function TockBanner() {
+export default function TockBanner({ scrollToRef }) {
+  const scrollTo = (e) => {
+    e.preventDefault();
+    const yOffset = -250;
+    const y =
+      scrollToRef.current.getBoundingClientRect().top +
+      window.scrollY +
+      yOffset;
+    window.scrollTo({ top: y, behavior: "smooth" });
+  };
+
   const firstWord = [
     <span className={`text-tock-green font-bold ${dela.className}`}>
       empower
@@ -111,9 +122,7 @@ export default function TockBanner() {
   }
   return (
     <div>
-      <div
-        className="pt-[10vh] flex flex-col xl:flex-row" /*md:gap-[10vw]*/
-      >
+      <div className="pt-[10vh] flex flex-col xl:flex-row" /*md:gap-[10vw]*/>
         <div className="min-w-max md:w-full mb-10 flex flex-col">
           <p className="font-bold text-6xl text-center xl:text-start h-[4rem]">
             <Tock />
@@ -187,7 +196,10 @@ export default function TockBanner() {
           </div>
           <div className="flex grow justify-center mt-2">
             <Link href="/creator/dashboard">
-              <button className="w-56 transition ease-in-out hover:bg-tock-semiblack duration-300 text-zinc-400 border border-zinc-400 hover:border-zonc-400 font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline active:text-white">
+              <button
+                onClick={scrollTo}
+                className="w-56 transition ease-in-out hover:bg-tock-semiblack duration-300 text-zinc-400 border border-zinc-400 hover:border-zonc-400 font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline active:text-white"
+              >
                 how?
               </button>
             </Link>

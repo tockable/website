@@ -49,11 +49,19 @@ export default function ProjectContractActionsTockable({ _project }) {
             Contract actions
           </h1>
           <p className="text-zinc-400 text-sm mb-4">
-            you can write the contract with available functions
+            you can write the contract with available functions{" "}
           </p>
+          <a
+            className="text-xs text-blue-400 hover:text-blue-300"
+            href="/docs/contract-actions"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Learn how to start mint & interact with contracts &gt;
+          </a>
           {abiError && (
             <p className="text-tock-red text-sm">
-              something wrong, please refresh the page.
+              Something wrong, please refresh the page.
             </p>
           )}
 
@@ -92,7 +100,7 @@ export default function ProjectContractActionsTockable({ _project }) {
                       />
                     )}
                     {activeAction == "Owner Mint" && (
-                      <ActionAdminMintRegular _project={project} />
+                      <ActionAdminMintRegular abi={abi} _project={project} />
                     )}
                     {activeAction == "Withdraw" && (
                       <ActionWithdraw abi={abi} _project={project} />

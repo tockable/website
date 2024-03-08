@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-
 import { useRouter } from "next/navigation";
 import { useAccount } from "wagmi";
 import { getAllProjects } from "@/actions/launchpad/dashboard";
@@ -14,6 +13,7 @@ export default function CreatorDashboard() {
   const { address, isConnected } = useAccount();
 
   const router = useRouter();
+
   const [projects, setProjects] = useState([]);
   const [newPojectModalShow, setNewProjectModelShow] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -31,9 +31,7 @@ export default function CreatorDashboard() {
   }, []);
 
   const handleShowNewProjectModal = () => setNewProjectModelShow(true);
-  const handleCloseNewProjectModal = () => {
-    setNewProjectModelShow(false);
-  };
+  const handleCloseNewProjectModal = () => setNewProjectModelShow(false);
 
   return (
     <>

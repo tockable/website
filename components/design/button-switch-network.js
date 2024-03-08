@@ -27,7 +27,7 @@ export default function SwitchNetworkButton({ project, forDeploy = true }) {
           {!isLoading && (
             <div>
               switch network to {project.chain || project.name}{" "}
-              {forDeploy && <span>for deploy</span>}
+              {forDeploy === true && <span>for deploy</span>}
             </div>
           )}
         </div>

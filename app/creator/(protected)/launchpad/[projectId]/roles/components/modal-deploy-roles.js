@@ -14,7 +14,6 @@ import Loading from "@/components/loading/loading";
 
 export default function DeployRolesModal({
   onClose,
-  isOpen,
   project,
   abi,
   writeArgs,
@@ -24,7 +23,7 @@ export default function DeployRolesModal({
   const [failed, setFailed] = useState(false);
   const [updating, setUpdating] = useState(false);
   const [enableWrite, setEnableWrite] = useState(false);
-  const [redirecting, setRedirecing] = useState(false); // here
+  const [redirecting, setRedirecing] = useState(false);
 
   const router = useRouter();
 
@@ -69,7 +68,7 @@ export default function DeployRolesModal({
   }, [uwt.isSuccess]);
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={true} onClose={onClose}>
       <div className="flex basis-3/4 px-4">
         <div className="flex flex-col w-full">
           <h1 className="text-tock-green font-bold text-xl mt-4 mb-6 ">

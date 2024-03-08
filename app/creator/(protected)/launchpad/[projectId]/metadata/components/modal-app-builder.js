@@ -79,6 +79,17 @@ export default function AppBuilderModal({
                   if you are happy with your app, use one of following options
                   to deploy traits on contract.
                 </p>
+                <p className="text-xs text-tock-orange mt-2 mb-4">
+                  Don't know which one to choose? Read our{" "}
+                  <a
+                    className="text-blue-400 hover:text-blue-300"
+                    href="/docs/tockable-metadata"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    docs
+                  </a>
+                </p>
 
                 <div className="px-8">
                   <button
@@ -86,7 +97,7 @@ export default function AppBuilderModal({
                     className="my-4 rounded-2xl p-4 w-full border-2 duration-200 ease-in-out border-zinc-600 bg-zinc-800 hover:bg-zinc-700 hover:border-zinc-400"
                   >
                     <h1 className="text-tock-blue text-start mb-2">
-                      I've uploaded my files and have my cids{" "}
+                      I've uploaded my files and have my CIDs{" "}
                       <span className="text-tock-green text-xs">
                         (recommended)
                       </span>
@@ -103,7 +114,7 @@ export default function AppBuilderModal({
                     className="mb-4 rounded-2xl p-4 w-full border-2 duration-200 ease-in-out border-zinc-600 bg-zinc-800 hover:bg-zinc-700 hover:border-zinc-400"
                   >
                     <h1 className="text-tock-blue text-start mb-2">
-                      I want to upload using tockable{" "}
+                      I want to upload using Tockable{" "}
                       <span className="text-tock-orange text-xs">(BETA)</span>
                     </h1>
                     <p className="text-xs text-start text-zinc-400">

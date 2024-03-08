@@ -35,6 +35,7 @@ export default function IpfsUploader({
   const [abiNotFetched, setAbiNotFetched] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [writing, setWriting] = useState(false);
+  const [redirecting, setRedirecing] = useState(false);
 
   const { config } = usePrepareContractWrite({
     address: project.contractAddress,
@@ -49,7 +50,10 @@ export default function IpfsUploader({
   const { data, isLoading, isError, write, error } = useContractWrite(config);
   const uwt = useWaitForTransaction({ hash: data?.hash });
 
-  const proceed = () => router.push(`/creator/launchpad/${project.uuid}/roles`);
+  const proceed = () => {
+    setRedirecing(true);
+    router.push(`/creator/launchpad/${project.uuid}/roles`);
+  };
 
   useEffect(() => {
     if (!uwt.isSuccess) return;
@@ -103,8 +107,6 @@ export default function IpfsUploader({
   }, [traits]);
 
   async function deploy() {
-    console.log(abi);
-    console.log(config);
     setSuccessOnIpfs(false);
     write?.();
   }
@@ -173,10 +175,10 @@ export default function IpfsUploader({
       {!readyToDeploy && !uploading && (
         <div>
           <h1 className="text-tock-green font-bold text-xl mt-4 mb-6">
-            upload ipfs
+            Upload to IPFS
           </h1>
           <p className="text-zinc-400 text-sm mt-2 mb-4">
-            by clicking on button below, uploading process will be started.
+            By clicking on button below, uploading process will be started.
           </p>
           <button
             className="my-4 transition ease-in-out mr-4 hover:bg-zinc-700 duration-300 text-zinc-500 font-bold py-2 px-4 rounded-2xl focus:outline-none focus:shadow-outline hover:text-blue-400 active:text-white"
@@ -193,7 +195,7 @@ export default function IpfsUploader({
             {uploading ? (
               <Loading isLoading={uploading} size={10} />
             ) : (
-              "upload & deploy"
+              "Upload & deploy"
             )}
           </Button>
         </div>
@@ -202,10 +204,10 @@ export default function IpfsUploader({
       {uploading && (
         <div className="border rounded-2xl bg-tock-black border-zinc-400 p-4 my-4">
           <h1 className="text-tock-green font-normal text-lg mb-2">
-            uploading to ipfs...
+            Uploadploading to ipfs...
           </h1>
           <p className="text-tock-orange text-xs font-normal mb-6">
-            depending on your files size, it may take 5 to 30 minutes, please do
+            Depending on files size, it may take 5 to 30 minutes, please do
             not close this window ...
           </p>
           <p className="text-center text-tock-green mb-2 text-xs font-normal">
@@ -244,11 +246,17 @@ export default function IpfsUploader({
       {successOnIpfs && (
         <div className="border rounded-2xl bg-tock-black border-zinc-400 p-4 my-4">
           <h1 className="text-tock-green font-normal text-lg mb-6">
-            Metadata deployed successully!
+            Metadata deployed successfully!
           </h1>
-          <Button className="mb-4" variant="primary" onClick={proceed}>
-            Proceed
-          </Button>
+          <div className="flex justify-center">
+            <Button variant="primary" onClick={proceed} disabled={redirecting}>
+              {redirecting ? (
+                <Loading isLoading={redirecting} size={10} />
+              ) : (
+                "Proceed"
+              )}
+            </Button>
+          </div>
         </div>
       )}
 

@@ -57,7 +57,7 @@ function Success({ isFollow, setFollow }) {
       {!isFollow && (
         <div>
           <p className="text-xs mt-4 text-white">
-            If you enjoy, pease follow us on X
+            If you enjoy, please follow us on X
           </p>
           <button
             className="my-4"

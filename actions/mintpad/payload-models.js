@@ -2,6 +2,7 @@ export function regularDrop(project, chainData) {
   return {
     uuid: project.uuid,
     name: project.name,
+    version: project.version,
     tokenName: project.tokenName,
     description: project.description,
     twitter: project.twitter,
@@ -26,6 +27,7 @@ export function tockableDrop(project, chainData) {
   return {
     uuid: project.uuid,
     name: project.name,
+    version: project.version,
     tokenName: project.tokenName,
     description: project.description,
     twitter: project.twitter,

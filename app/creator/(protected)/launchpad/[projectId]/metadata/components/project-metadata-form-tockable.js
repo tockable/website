@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { FileUploader } from "react-drag-drop-files";
 import { MAX_LAYERS } from "@/tock.config";
 import { projectImageFileTypes } from "@/constants/constants";
@@ -158,18 +159,24 @@ export default function ProjectMetadataFormTockable({ _project }) {
               Add tockable metadata
             </h1>
             <p className="text-sm text-zinc-200 mb-4">
-              Create one layer per each trait and then drag & drop the related
-              image files on the corresponded area at once.{" "}
+              Create a layer per each trait, then drag & drop the related image
+              files on the corresponded area at once.{" "}
               <p>
-                <a className="font-normal text-xs text-blue-400 hover:text-blue-300 hover:cursor-pointer">
-                  learn with examples in our guide page &gt;
-                </a>
+                <Link
+                  href="/docs/tockable-metadata"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-normal text-xs text-blue-400 hover:text-blue-300 hover:cursor-pointer"
+                >
+                  learn with examples in the docs &gt;
+                </Link>
               </p>
             </p>
-            <p className="text-xs text-zinc-400 mb-10">
-              NOTE: choose <span className="text-tock-green">related</span> and{" "}
+            <p className="text-xs text-tock-orange p-2 bg-orange-500/10 rounded-lg mb-10">
+              NOTE: <b>NAMING is MATTER!</b> choose{" "}
+              <span className="text-tock-green">related</span> and{" "}
               <span className="text-tock-green">meaningful</span> names for the
-              layers and files, since these namas will be used in the token
+              layers and files, these namas will be public and used in the NFT
               metadata.
             </p>
             <div key={key}>
@@ -222,13 +229,13 @@ export default function ProjectMetadataFormTockable({ _project }) {
                   )}
                   {layersFiles[i].length == 0 && (
                     <div>
-                      <div className="mb-10">
+                      <div className="mb-1">
                         <FileUploader
                           handleChange={(file) =>
                             handleLayerFileUpload(file, layer)
                           }
                           name="file"
-                          maxSize={0.3}
+                          maxSize={0.35}
                           onSizeError={() => setImageSizeError(i)}
                           onTypeError={() => setImageTypeError(i)}
                           types={projectImageFileTypes}
@@ -248,7 +255,7 @@ export default function ProjectMetadataFormTockable({ _project }) {
                         />
                         {imageSizeError == i && (
                           <p className="text-tock-red mt-2 text-xs">
-                            max allowed file size is 300kb
+                            max allowed file size is 350kb
                           </p>
                         )}
                         {imageTypeError == i && (
@@ -278,11 +285,11 @@ export default function ProjectMetadataFormTockable({ _project }) {
               onClick={handleOpenAppBuilderModal}
               disabled={layersFiles.length == 0}
             >
-              build & test app
+              Build & Test app
             </Button>
             {emptyLayerError && (
               <p className="text-tock-red text-xs mt-2">
-                please fill or delete empty layers
+                Please fill or delete empty layers
               </p>
             )}
           </div>

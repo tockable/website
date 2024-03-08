@@ -67,16 +67,6 @@ export async function getElligibility(_address, _creator, _slug) {
       _current.getUTCMinutes()
     );
 
-    // if not active
-    if (!project.activeSession.toString().length) {
-      return { success: true, status: "notActive", payload: {} };
-    }
-
-    // if paused
-    if (project.paused) {
-      return { success: true, status: "paused", payload: {} };
-    }
-
     const starts = [];
 
     for (let i = 0; i < project.sessions.length; i++) {
@@ -136,6 +126,15 @@ export async function getElligibility(_address, _creator, _slug) {
     }
 
     const timer = end - current;
+    // if not active
+    if (!project.activeSession.toString().length) {
+      return { success: true, status: "notActive", payload: {} };
+    }
+
+    // if paused
+    if (project.paused) {
+      return { success: true, status: "paused", payload: {} };
+    }
 
     if (project.activeSession == 0) {
       return {

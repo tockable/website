@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { IPFS_GATEWAY } from "@/tock.config";
+// import { IPFS_GATEWAY } from "@/tock.config";
 import { NFT_STORAGE_GATEWAY } from "@/tock.config";
 import getChainData from "@/utils/chain-utils";
 import ImagePlaceHolder from "@/svgs/image_placeholder";
@@ -62,7 +62,7 @@ export default function ProjectPreview({ project }) {
           {loading ? (
             <Loading isLoading={loading} size={10} />
           ) : (
-            <span> Go to project</span>
+            <span>Go to project</span>
           )}
         </Button>
       </Link>

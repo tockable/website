@@ -43,6 +43,14 @@ export default function ProjectContractActionsTockable({ _project }) {
           <p className="text-zinc-400 text-sm mb-4">
             you can write the contract with available functions
           </p>
+          <a
+            className="text-xs text-blue-400 hover:text-blue-300"
+            href="/docs/contract-actions"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Learn how to start mint & interact with contracts &gt;
+          </a>
           {abiError && (
             <p className="text-tock-red text-sm">
               something wrong, please refresh the page.

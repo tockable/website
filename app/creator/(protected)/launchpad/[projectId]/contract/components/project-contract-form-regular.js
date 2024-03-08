@@ -384,7 +384,7 @@ export default function ProjectContractFormRegular({ _project }) {
 
           {chain.id != project.chainId && (
             <Button
-              className="mt-2 sm:mt-0"
+              className="mt-2 sm:mt-0 ml-2"
               variant="warning"
               type="button"
               onClick={() => switchNetwork?.(Number(project.chainId))}
@@ -406,7 +406,7 @@ export default function ProjectContractFormRegular({ _project }) {
 
           {chain.id === Number(project.chainId) && (
             <Button
-              className="xs:mt-2"
+              className="xs:mt-2 ml-2"
               variant="secondary"
               type="button"
               onClick={() => saveAndDeploy()}
@@ -415,7 +415,7 @@ export default function ProjectContractFormRegular({ _project }) {
               <div>
                 {deploying && <Loading isLoading={deploying} size={10} />}
               </div>
-              {!deploying && <div> Save & Deploy</div>}
+              {!deploying && <div>Save & Deploy</div>}
             </Button>
           )}
           {success && !updateNeeded() && (
@@ -442,9 +442,11 @@ export default function ProjectContractFormRegular({ _project }) {
             </p>
           )}
           {error && (
-            <p className="text-tock-red text-xs mt-2">
-              Switch network failed. please try again, or changing manually
-              using one of the following:
+            <div>
+              <p className="text-tock-red text-xs mt-2">
+                Switch network failed. please try again, or changing manually
+                using one of the following:
+              </p>
               <ul className="mt-2">
                 <li>
                   <a
@@ -463,7 +465,7 @@ export default function ProjectContractFormRegular({ _project }) {
                   </a>
                 </li>
               </ul>
-            </p>
+            </div>
           )}
         </div>
       </div>

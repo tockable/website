@@ -8,9 +8,11 @@ import {
   useContractRead,
 } from "wagmi";
 import { EMPTY_BYTES_32 } from "@/constants/constants";
+import { TXP } from "@/tock.config";
 import { MintContextTockable } from "@/contexts/mint-context-tockable";
 import Loading from "@/components/loading/loading";
 import Button from "@/components/design/button";
+import { storeMinted } from "@/actions/pointing/minted";
 
 const initialArgs = {
   args: [
@@ -56,13 +58,13 @@ export default function MintTockable({
               )}
               {project.slug.toLowerCase() !== "tock" && (
                 <span className="text-tock-orange">
-                  {accPrice(role, project, 1)} {project.chainData.nativeToken}
+                  {accPrice(role, project, [1])}
                 </span>
               )}
             </p>
           </div>
           <div className="text-tock-green text-xs justify-end">
-            {!show && <p className="">click to expand</p>}
+            {!show && <p className="">click to see</p>}
           </div>
         </div>
 
@@ -170,6 +172,23 @@ function MintHandler({ role, prepareMint, session }) {
 
   useEffect(() => {
     if (!uwt.isSuccess) return;
+
+    (async () => {
+      const timeStamp = new Date();
+      try {
+        await storeMinted({
+          address,
+          chainId: Number(project.chainData.chainId),
+          contract: project.contractAddress,
+          dropType: project.dropType,
+          amount: blobs.length,
+          timeStamp,
+        });
+      } catch (err) {
+        console.error("not store");
+      }
+    })();
+
     setSuccessfullyMinted(true);
     refetch?.();
     resetMint();
@@ -259,7 +278,7 @@ function MintHandler({ role, prepareMint, session }) {
               {maxMintable(data)}
             </span>
           </p>
-          <div className="flex justify-center">
+          <div className="flex flex-col justify-center items-center mt-4">
             {maxMintable(data) != 0 && (
               <Button
                 variant="primary"
@@ -282,8 +301,7 @@ function MintHandler({ role, prepareMint, session }) {
                           <p className="text-sm">
                             mint {blobs.length}{" "}
                             {blobs.length === 1 ? "token" : "tokens"} for{" "}
-                            {accPrice(role, project, blobs)}{" "}
-                            {project.chainData.nativeToken}
+                            {accPrice(role, project, blobs)}
                           </p>
                         )}
                         {project.slug.toLowerCase() === "tock" && (
@@ -305,6 +323,28 @@ function MintHandler({ role, prepareMint, session }) {
                   )}
                 </div>
               </Button>
+            )}
+            <p className="text-[12px] text-zinc-500 mt-4">
+              + {blobs.length * getBaseFee(project)}{" "}
+              {project.chainData.nativeToken} platform fee{" "}
+              <a
+                className="text-[10px] text-blue-400 hover:text-blue-300"
+                href="/docs/tockable-fees"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Learn more &gt;
+              </a>
+            </p>
+
+            {maxMintable(data) != 0 && (
+              <p className="text-sm text-zinc-400 mt-2">
+                and earn{" "}
+                <span className="text-tock-green">
+                  {blobs.length * TXP.tockable}
+                </span>{" "}
+                TXP!
+              </p>
             )}
           </div>
           {maxMintable(data) === 0 && (
@@ -375,21 +415,26 @@ function getBaseFee(project) {
   );
 }
 
-function accPrice(role, project, blobs) {
-  const BASE_FEE = getBaseFee(project);
-  return parseFloat((Number(role.price) + BASE_FEE) * blobs.length)
-    .toPrecision(2)
-    .toString()
-    .charAt(
-      parseFloat((Number(role.price) + BASE_FEE) * blobs.length)
-        .toPrecision(2)
-        .toString().length - 1
-    ) === "0"
-    ? parseFloat((Number(role.price) + BASE_FEE) * blobs.length)
-        .toPrecision(2)
-        .toString()
-        .slice(0, -1)
-    : parseFloat((Number(role.price) + BASE_FEE) * blobs.length)
-        .toPrecision(2)
-        .toString();
+function accPrice(role, project, blobs, baseFee = false) {
+  const BASE_FEE = baseFee ? getBaseFee(project) : 0;
+
+  const price =
+    parseFloat((Number(role.price) + BASE_FEE) * blobs.length)
+      .toPrecision(2)
+      .toString()
+      .charAt(
+        parseFloat((Number(role.price) + BASE_FEE) * blobs.length)
+          .toPrecision(2)
+          .toString().length - 1
+      ) === "0"
+      ? parseFloat((Number(role.price) + BASE_FEE) * blobs.length)
+          .toPrecision(2)
+          .toString()
+          .slice(0, -1)
+      : parseFloat((Number(role.price) + BASE_FEE) * blobs.length)
+          .toPrecision(2)
+          .toString();
+  return Number(price) > 0
+    ? price + " " + project.chainData.nativeToken
+    : "Free";
 }

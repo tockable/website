@@ -9,6 +9,7 @@ import SwitchNetworkButton from "@/components/design/button-switch-network";
 import Loading from "@/components/loading/loading";
 import CountDown from "@/components/design/timer";
 import NavbarMintpad from "@/components/design/navbar/navbar-mintpad";
+import { ls } from "@/utils/utils";
 
 export default function MintpadContainerRegular({ prepareMint }) {
   // Hooks and Contexts
@@ -28,6 +29,22 @@ export default function MintpadContainerRegular({ prepareMint }) {
   const [elligibility, setElligibility] = useState(null);
   const [errorGettingElligibility, setErrorGettingElligibility] =
     useState(null);
+  const [verifyFollow, setVerifyFollow] = useState(false);
+
+  const setFollowState = () => {
+    return ls()
+      ? Boolean(localStorage.getItem("tockfollow"))
+        ? Boolean(localStorage.getItem("tockfollow"))
+        : false
+      : true;
+  };
+
+  const handleFollowing = () => {
+    setVerifyFollow(true);
+    setTimeout(() => setFollow(true), 4000);
+  };
+
+  const [isFollow, setFollow] = useState(setFollowState());
 
   const { data, refetch, isError, isLoading } = useContractReads({
     contracts: [
@@ -69,6 +86,7 @@ export default function MintpadContainerRegular({ prepareMint }) {
           project.slug
         );
 
+        console.log(res);
         if (res.success === false) {
           setLoading(false);
           setErrorGettingElligibility(true);
@@ -128,12 +146,30 @@ export default function MintpadContainerRegular({ prepareMint }) {
               </p>
             </div>
           )}
+          {isConnected && chain.id !== Number(project.chainData.chainId) && (
+            <div className="my-4 flex flex-col justify-center items-center my-8">
+              <p className="text-tock-orange text-xl font-bold my-2">
+                Please switch network
+              </p>
+
+              <div className="mb-12">
+                <p className="text-tock-orange text-xs text-center mb-2">
+                  to see minting options, please switch network to the project
+                  chain
+                </p>
+                <SwitchNetworkButton
+                  forDeploy={false}
+                  project={project.chainData}
+                />
+              </div>
+            </div>
+          )}
           {isConnected && loading && (
             <div className="flex justify-center items-center h-64">
               <Loading isLoading={loading} size={20} />
             </div>
           )}
-          {isConnected && !loading && (
+          {isConnected && !loading && data && !data[0]?.error && (
             <>
               {errorGettingElligibility === true && (
                 <p className="text-tock-orange text-xs p-2 border rounded-xl mt-8 mx-4 border-tock-orange text-center">
@@ -297,31 +333,39 @@ export default function MintpadContainerRegular({ prepareMint }) {
                                       </p>
                                     </div>
                                   )}
-                                  {elligibility === true && (
-                                    <div className="w-full mt-8">
-                                      {parseInt(data[2].result) > 0 && (
-                                        <div>
-                                          {!publicSession && (
-                                            <p className="text-tock-blue mt-12 mx-4">
-                                              available roles for you:
-                                            </p>
-                                          )}
-                                          <MintpadMintSectionRegular
-                                            roles={roles}
-                                            session={session}
-                                            prepareMint={prepareMint}
-                                          />
-                                        </div>
-                                      )}
-                                      {parseInt(data[2].result) == 0 && (
-                                        <p className="mt-8 text-tock-orange text-center p-2 border rounded-xl border-zinc-400">
-                                          Current session reaches its total
-                                          supply, please wait until next
-                                          session.
-                                        </p>
-                                      )}
-                                    </div>
-                                  )}
+                                  {elligibility === true &&
+                                    isFollow === false && (
+                                      <FollowX
+                                        setFollow={handleFollowing}
+                                        verifyFollow={verifyFollow}
+                                      />
+                                    )}
+                                  {elligibility === true &&
+                                    isFollow === true && (
+                                      <div className="w-full mt-8">
+                                        {parseInt(data[2].result) > 0 && (
+                                          <div>
+                                            {!publicSession && (
+                                              <p className="text-tock-blue mt-12 mx-4">
+                                                available roles for you:
+                                              </p>
+                                            )}
+                                            <MintpadMintSectionRegular
+                                              roles={roles}
+                                              session={session}
+                                              prepareMint={prepareMint}
+                                            />
+                                          </div>
+                                        )}
+                                        {parseInt(data[2].result) == 0 && (
+                                          <p className="mt-8 text-tock-orange text-center p-2 border rounded-xl border-zinc-400">
+                                            Current session reaches its total
+                                            supply, please wait until next
+                                            session.
+                                          </p>
+                                        )}
+                                      </div>
+                                    )}
                                 </div>
                               )}
                             </div>
@@ -336,5 +380,41 @@ export default function MintpadContainerRegular({ prepareMint }) {
         </div>
       </div>
     </main>
+  );
+}
+
+function FollowX({ setFollow, verifyFollow }) {
+  return (
+    <div className="flex flex-col justify-center h-44 items-center border rounded-xl border-zinc-700 my-4 bg-tock-black">
+      <p className="text-xs mt-4 text-white">Please follow us on X to mint</p>
+      {verifyFollow === false && (
+        <button
+          className="my-4"
+          onClick={() => {
+            localStorage.getItem("tockfollow");
+            if (ls()) {
+              setFollow(true);
+              localStorage.setItem("tockfollow", "true");
+            }
+          }}
+        >
+          <a
+            href="https://twitter.com/Tockablexyz?ref_src=twsrc%5Etfw"
+            data-show-count="false"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="border px-4 py-2 rounded-2xl text-tock-green hover:bg-zinc-600 transition duration-200"
+          >
+            Follow @Tockablexyz
+          </a>
+          <script
+            async
+            src="https://platform.twitter.com/widgets.js"
+            charset="utf-8"
+          ></script>
+        </button>
+      )}
+      {verifyFollow === true && <p className="text-zinc-500">verifying...</p>}
+    </div>
   );
 }

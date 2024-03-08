@@ -18,7 +18,7 @@ export default function Navbar() {
         <div className="flex">
           <Link
             className="flex mx-1 items-center transition hover:bg-tock-black duration-200 text-zinc-300 font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline active:text-white"
-            href="https://mirror.xyz/tockable.eth"
+            href="/docs/drop-types"
             target="_blank"
             rel="noopener noreferrer"
           >

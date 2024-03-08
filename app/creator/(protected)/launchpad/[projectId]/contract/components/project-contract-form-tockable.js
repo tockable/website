@@ -507,7 +507,7 @@ export default function ProjectContractFormTockable({ _project }) {
 
         {chain.id != project.chainId && (
           <Button
-            className="mt-0 sm:mt-2"
+            className="mt-0 sm:mt-2 ml-2"
             variant="warning"
             type="button"
             onClick={() => switchNetwork?.(Number(project.chainId))}
@@ -529,7 +529,7 @@ export default function ProjectContractFormTockable({ _project }) {
 
         {chain.id === Number(project.chainId) && (
           <Button
-            className="xs:mt-2"
+            className="xs:mt-2 ml-2"
             variant="secondary"
             type="button"
             onClick={() => saveAndDeploy()}

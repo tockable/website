@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-// import { useRouter } from "next/navigation";
 import { FileUploader } from "react-drag-drop-files";
 import { fetchProjectByUUID } from "@/actions/launchpad/projects";
 import { NFT_STORAGE_GATEWAY } from "@/tock.config";
@@ -18,12 +17,11 @@ import LabeledInput from "@/components/design/labeled-input";
 import Button from "@/components/design/button";
 import Loading from "@/components/loading/loading";
 import Fade from "@/components/design/fade/fade";
-import { connectorsForWallets } from "@rainbow-me/rainbowkit";
+import { useRouter } from "next/navigation";
 
 export default function ProjectDetailsForm({ params }) {
   const session = useSession();
-  // const router = useRouter();
-
+  const router = useRouter();
   const [loadingFailed, setLoadingFailed] = useState(false);
   const [nameEditError, setNameEditError] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -293,7 +291,6 @@ export default function ProjectDetailsForm({ params }) {
         setNameEditError(true);
         return;
       } else {
-        console.log(res);
         setErrorMessage("Something wrong in our side, please try again.");
         setSaving(false);
         setSuccess(true);

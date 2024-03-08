@@ -11,6 +11,8 @@ import { EMPTY_BYTES_32 } from "@/constants/constants";
 import { MintContextRegular } from "@/contexts/mint-context-regular";
 import Loading from "@/components/loading/loading";
 import Button from "@/components/design/button";
+import { TXP } from "@/tock.config";
+import { storeMinted } from "@/actions/pointing/minted";
 
 const initialArgs = {
   args: [1, EMPTY_BYTES_32, 0],
@@ -50,7 +52,7 @@ export default function MintRegular({
               )}
               {project.slug.toLowerCase() !== "tock" && (
                 <span className="text-tock-orange">
-                  {accPrice(role, project, 1)} {project.chainData.nativeToken}
+                  {accPrice(role, project, 1)}
                 </span>
               )}
             </p>
@@ -78,7 +80,7 @@ function MintHandler({ role, prepareMint, session }) {
   const { abi, project, setSuccessfullyMinted } =
     useContext(MintContextRegular);
 
-  const [quanitity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(1);
   const [preparing, setPreparing] = useState(false);
   const [readyToMint, setReadyToMint] = useState(false);
   const [apiError, setApiError] = useState(false);
@@ -95,16 +97,16 @@ function MintHandler({ role, prepareMint, session }) {
     structuralSharing: (prev, next) => (prev === next ? prev : next),
   });
 
-  const increase = () => setQuantity(quanitity + 1);
-  const decrease = () => setQuantity(quanitity - 1);
+  const increase = () => setQuantity(quantity + 1);
+  const decrease = () => setQuantity(quantity - 1);
 
   function isIncreaseNotAvailable(d) {
-    if (quanitity + 1 <= maxMintable(d)) return false;
+    if (quantity + 1 <= maxMintable(d)) return false;
     else return true;
   }
 
   function IsDecreaseNotAvailable() {
-    if (quanitity - 1 > 0) return false;
+    if (quantity - 1 > 0) return false;
     else return true;
   }
 
@@ -177,6 +179,23 @@ function MintHandler({ role, prepareMint, session }) {
 
   useEffect(() => {
     if (!uwt.isSuccess) return;
+
+    (async () => {
+      const timeStamp = new Date();
+      try {
+        await storeMinted({
+          address,
+          chainId: Number(project.chainData.chainId),
+          contract: project.contractAddress,
+          dropType: project.dropType,
+          amount: quantity,
+          timeStamp,
+        });
+      } catch (err) {
+        console.error("not store");
+      }
+    })();
+
     setSuccessfullyMinted(true);
     refetch?.();
     resetMint();
@@ -218,7 +237,7 @@ function MintHandler({ role, prepareMint, session }) {
     setPrintedError("");
     setWarning("");
 
-    if (quanitity > maxMintable(data)) {
+    if (quantity > maxMintable(data)) {
       setPrintedError("Cannot mint more than available");
       return;
     }
@@ -226,7 +245,7 @@ function MintHandler({ role, prepareMint, session }) {
     const res = await prepareMint(address, role.id, session);
     if (res.success === true) {
       const { signature } = res;
-      const args = [quanitity, signature, Number(role.id)];
+      const args = [quantity, signature, Number(role.id)];
 
       const fee =
         project.slug === "tock"
@@ -234,7 +253,7 @@ function MintHandler({ role, prepareMint, session }) {
           : parseEther(
               (
                 (Number(role.price) + getBaseFee(project)) *
-                quanitity
+                quantity
               ).toString(),
               "wei"
             );
@@ -277,7 +296,7 @@ function MintHandler({ role, prepareMint, session }) {
                 </button>
 
                 <p className="text-zinc-500 text-xs w-12 text-center align-middle mt-4">
-                  {quanitity}
+                  {quantity}
                 </p>
                 <button
                   className="disabled:border-zinc-700 disabled:text-zinc-700 border border-zinc-500 transition ease-in-out mx-4 enabled:hover:bg-zinc-600 duration-300 bg-tock-semiblack text-zinc-400 font-bold py-2 px-4 rounded-2xl focus:outline-none focus:shadow-outline active:text-white"
@@ -289,7 +308,7 @@ function MintHandler({ role, prepareMint, session }) {
               </div>
             </div>
           </div>
-          <div className="flex justify-center">
+          <div className="flex justify-center flex-col items-center">
             {maxMintable(data) != 0 && (
               <Button
                 variant="primary"
@@ -306,15 +325,14 @@ function MintHandler({ role, prepareMint, session }) {
                     <div>
                       {project.slug.toLowerCase() !== "tock" && (
                         <p className="text-sm">
-                          mint {quanitity} {quanitity === 1 ? "NFT" : "NFTs"}{" "}
-                          for {accPrice(role, project, quanitity)}{" "}
-                          {project.chainData.nativeToken}
+                          mint {quantity} {quantity === 1 ? "NFT" : "NFTs"} for{" "}
+                          {accPrice(role, project, quantity)}
                         </p>
                       )}
                       {project.slug.toLowerCase() === "tock" && (
                         <p className="text-sm">
-                          mint {quanitity} {quanitity === 1 ? "NFT" : "NFTs"}{" "}
-                          for Free
+                          mint {quantity} {quantity === 1 ? "NFT" : "NFTs"} for
+                          Free
                         </p>
                       )}
                     </div>
@@ -330,18 +348,39 @@ function MintHandler({ role, prepareMint, session }) {
                 </div>
               </Button>
             )}
+            <p className="text-[12px] text-zinc-500 mt-4">
+              + {quantity * getBaseFee(project)} {project.chainData.nativeToken}{" "}
+              platform fee platform fee{" "}
+              <a
+                className="text-[10px] text-blue-400 hover:text-blue-300"
+                href="/docs/tockable-fees"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Learn more &gt;
+              </a>
+            </p>
+            {maxMintable(data) != 0 && (
+              <p className="text-sm text-zinc-400 mt-2">
+                and earn{" "}
+                <span className="text-tock-green">
+                  {quantity * TXP.regular}
+                </span>{" "}
+                TXP!
+              </p>
+            )}
           </div>
           {maxMintable(data) === 0 && (
             <p className="text-tock-red text-xs mt-4 border rounded-2xl border-tock-red p-4">
               currnent wallet does not have any tokens to mint on this role
             </p>
           )}
-          {quanitity > maxMintable(data) && maxMintable(data) !== 0 && (
+          {quantity > maxMintable(data) && maxMintable(data) !== 0 && (
             <p className="text-tock-red text-xs mt-2 border rounded-2xl border-zinc-400 p-4">
               you are elligible to mint {maxMintable(data)} max in this role,
-              please consider removing {quanitity - maxMintable(data)}{" "}
-              {quanitity - maxMintable(data) === 1 ? "token" : "tokens"} from
-              the basket to enable minting in this role.{" "}
+              please consider removing {quantity - maxMintable(data)}{" "}
+              {quantity - maxMintable(data) === 1 ? "token" : "tokens"} from the
+              basket to enable minting in this role.{" "}
             </p>
           )}
           {printedError.length > 0 && (
@@ -388,21 +427,26 @@ function getBaseFee(project) {
   );
 }
 
-function accPrice(role, project, quanitity) {
-  const BASE_FEE = getBaseFee(project);
-  return parseFloat((Number(role.price) + BASE_FEE) * quanitity)
-    .toPrecision(2)
-    .toString()
-    .charAt(
-      parseFloat((Number(role.price) + BASE_FEE) * quanitity)
-        .toPrecision(2)
-        .toString().length - 1
-    ) === "0"
-    ? parseFloat((Number(role.price) + BASE_FEE) * quanitity)
-        .toPrecision(2)
-        .toString()
-        .slice(0, -1)
-    : parseFloat((Number(role.price) + BASE_FEE) * quanitity)
-        .toPrecision(2)
-        .toString();
+function accPrice(role, project, quantity, baseFee = false) {
+  const BASE_FEE = baseFee ? getBaseFee(project) : 0;
+
+  const price =
+    parseFloat((Number(role.price) + BASE_FEE) * quantity)
+      .toPrecision(2)
+      .toString()
+      .charAt(
+        parseFloat((Number(role.price) + BASE_FEE) * quantity)
+          .toPrecision(2)
+          .toString().length - 1
+      ) === "0"
+      ? parseFloat((Number(role.price) + BASE_FEE) * quantity)
+          .toPrecision(2)
+          .toString()
+          .slice(0, -1)
+      : parseFloat((Number(role.price) + BASE_FEE) * quantity)
+          .toPrecision(2)
+          .toString();
+  return Number(price) > 0
+    ? price + " " + project.chainData.nativeToken
+    : "Free";
 }

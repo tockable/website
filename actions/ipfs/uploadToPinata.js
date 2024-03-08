@@ -1,27 +1,27 @@
-"use server";
+// "use server";
 
-const pinataSDK = require("@pinata/sdk");
+// const pinataSDK = require("@pinata/sdk");
 
-export async function pinToPinataIpfs(_path, _contractName) {
-  try {
-    const pinata = new pinataSDK(
-      process.env.PINATA_API_KEY,
-      process.env.PINATA_SECRET_KEY
-    );
+// export async function pinToPinataIpfs(_path, _contractName) {
+//   try {
+//     const pinata = new pinataSDK(
+//       process.env.PINATA_API_KEY,
+//       process.env.PINATA_SECRET_KEY
+//     );
 
-    const options = {
-      pinataMetadata: {
-        name: _contractName,
-      },
-      pinataOptions: {
-        cidVersion: 0,
-      },
-    };
+//     const options = {
+//       pinataMetadata: {
+//         name: _contractName,
+//       },
+//       pinataOptions: {
+//         cidVersion: 0,
+//       },
+//     };
 
-    const res = await pinata.pinFromFS(_path, options);
+//     const res = await pinata.pinFromFS(_path, options);
     
-    return { success: true, cid: res.IpfsHash };
-  } catch (err) {
-    return { success: false, cid: null };
-  }
-}
+//     return { success: true, cid: res.IpfsHash };
+//   } catch (err) {
+//     return { success: false, cid: null };
+//   }
+// }

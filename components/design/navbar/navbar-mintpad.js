@@ -5,6 +5,7 @@ import { signOut } from "next-auth/react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount, useDisconnect } from "wagmi";
 import TockableLogo from "@/svgs/logo";
+import { IoIosLogOut } from "react-icons/io";
 
 export default function NavbarMintpad() {
   const { disconnectAsync } = useDisconnect();
@@ -29,6 +30,14 @@ export default function NavbarMintpad() {
           </Link>
         </div>
         <div className="border border-zinc-800 flex bg-zinc-800/70 backdrop-blur-sm items-center rounded-2xl px-1">
+          <Link
+            className="flex mx-1 items-center transition hover:bg-tock-black duration-200 text-zinc-300 font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline active:text-white"
+            href="/dashboard/points"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            My TXPs
+          </Link>
           <div>
             <ConnectButton chainStatus={"icon"} showBalance={false} />
           </div>
@@ -38,7 +47,7 @@ export default function NavbarMintpad() {
                 onClick={() => handleSignout()}
                 className="p-8 mx-1 text-center transition text-sm duration-200 text-gray-500 hover:text-tock-red py-2 px-4 focus:outline-none focus:shadow-outline active:text-tock-red"
               >
-                sign out
+                <IoIosLogOut />
               </button>
             </div>
           )}

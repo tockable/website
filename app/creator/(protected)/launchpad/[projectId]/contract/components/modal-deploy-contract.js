@@ -12,6 +12,8 @@ import { getAddress } from "viem";
 import Modal from "@/components/design/modal";
 import Button from "@/components/design/button";
 import Loading from "@/components/loading/loading";
+import Link from "next/link";
+import { NEXT_ROUTER_PREFETCH } from "next/dist/client/components/app-router-headers";
 
 export default function DeployContractModal({
   onClose,
@@ -52,13 +54,18 @@ export default function DeployContractModal({
   }, [bytecode, project]);
 
   function closeOnSuccess() {
-    if (success) {
+    if (success.length > 0) {
       setLoadingRouter(true);
-      router.push(`/creator/launchpad/${project.uuid}/contract/`);
+      window.location.reload(true);
     } else {
       onClose();
     }
   }
+
+  const proceed = () => {
+    setLoadingRouter(true);
+    window.location.reload(true);
+  };
 
   async function deploy() {
     setCallWallet(true);
@@ -203,17 +210,17 @@ export default function DeployContractModal({
             )}
             {success.length > 0 && (
               <div className="flex flex-col justify-center items-center">
-                <p className="text-xs text-tock-grees">{success}</p>
+                <p className="text-xs text-tock-green">{success}</p>
                 <Button
                   className="mt-8"
                   variant="primary"
                   disabled={loadingRouter}
-                  onClick={closeOnSuccess}
+                  onClick={proceed}
                 >
                   {loadingRouter ? (
                     <Loading isLoading={loadingRouter} size={10} />
                   ) : (
-                    "Close"
+                    "Proceed"
                   )}
                 </Button>
               </div>

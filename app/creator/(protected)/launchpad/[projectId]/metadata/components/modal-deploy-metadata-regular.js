@@ -28,6 +28,7 @@ export default function DeployMetadataRegularDropModal({
   const [success, setSuccess] = useState(false);
   const [failed, setFailed] = useState(false);
   const [updating, setUpdating] = useState(false);
+  const [redirecting, setRedirecing] = useState(false);
 
   const { config } = usePrepareContractWrite({
     address: project.contractAddress,
@@ -36,16 +37,17 @@ export default function DeployMetadataRegularDropModal({
     args: [cid, hasExtension],
     // gas: 2_000_000n,
   });
-  console.log(config);
+
   const { data, write, isError, error, isLoading } = useContractWrite(config);
   const uwt = useWaitForTransaction({ hash: data?.hash });
 
+  const proceed = () => {
+    setRedirecing(true);
+    router.push(`/creator/launchpad/${project.uuid}/roles`);
+  };
+
   function closeOnSuccess() {
-    if (success) {
-      router.push(`/creator/launchpad/${project.uuid}/roles`);
-    } else {
-      onClose();
-    }
+    onClose();
   }
 
   useEffect(() => {
@@ -61,7 +63,6 @@ export default function DeployMetadataRegularDropModal({
         setSuccess(true);
       } catch (err) {
         setFailed(true);
-        console.error(err.message);
       }
     })();
 
@@ -121,9 +122,24 @@ export default function DeployMetadataRegularDropModal({
             )}
 
             {success && (
-              <p className="text-tock-green text-sm mt-2">
-                Metadata successfully deployed.
-              </p>
+              <div>
+                <p className="text-tock-green text-sm mt-2">
+                  Metadata successfully deployed.
+                </p>
+                <div className="flex justify-center my-6">
+                  <Button
+                    variant="primary"
+                    onClick={proceed}
+                    disabled={redirecting}
+                  >
+                    {redirecting ? (
+                      <Loading isLoading={redirecting} size={10} />
+                    ) : (
+                      "Proceed"
+                    )}
+                  </Button>
+                </div>
+              </div>
             )}
 
             {isError && (
@@ -132,7 +148,7 @@ export default function DeployMetadataRegularDropModal({
 
             {failed && (
               <p className="text-tock-red text-sm mt-2">
-                something went wrong, please try again.
+                Something went wrong, please try again.
               </p>
             )}
           </div>

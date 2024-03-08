@@ -166,14 +166,15 @@ export default function ProjectSessionsForm({ params }) {
               ) : (
                 <div>
                   <div id="modal">
-                    <DeploySessionsModal
-                      onClose={handleCloseDeployModal}
-                      isOpen={showDeployModal}
-                      writeArgs={sessionArgs}
-                      project={project}
-                      abi={abi}
-                      sessions={sessions}
-                    />
+                    {showDeployModal && (
+                      <DeploySessionsModal
+                        onClose={handleCloseDeployModal}
+                        writeArgs={sessionArgs}
+                        project={project}
+                        abi={abi}
+                        sessions={sessions}
+                      />
+                    )}
                   </div>
                   <h1 className="text-tock-green font-bold text-xl mt-4 mb-6 ">
                     add minting sessions

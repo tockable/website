@@ -1,3 +1,10 @@
+const BASE_FEE = {
+  ETH_TOCKABLE: 0.00015,
+  ETH_REGULAR: 0.000075,
+  POLYGON_TOCKABLE: 0.6,
+  POLYGON_REGULAR: 0.3,
+};
+
 export const chainData = [
   {
     chainId: 1,
@@ -5,8 +12,8 @@ export const chainData = [
     name: "Ethereum",
     scan: "Etherscan.io",
     nativeToken: "ETH",
-    base_fee: 0.00025,
-    regular_base_fee: 0.00015,
+    base_fee: BASE_FEE.ETH_TOCKABLE,
+    regular_base_fee: BASE_FEE.ETH_REGULAR,
   },
   {
     chainId: 10,
@@ -14,8 +21,8 @@ export const chainData = [
     name: "Optimism",
     scan: "Optimistic.etherscan.io",
     nativeToken: "ETH",
-    base_fee: 0.00025,
-    regular_base_fee: 0.00015,
+    base_fee: BASE_FEE.ETH_TOCKABLE,
+    regular_base_fee: BASE_FEE.ETH_REGULAR,
   },
   {
     chainId: 11155420,
@@ -23,8 +30,8 @@ export const chainData = [
     name: "Optimism Sepolia'",
     scan: "Optimism-sepolia.blockscout.com",
     nativeToken: "ETH",
-    base_fee: 0.00025,
-    regular_base_fee: 0.00015,
+    base_fee: BASE_FEE.ETH_TOCKABLE,
+    regular_base_fee: BASE_FEE.ETH_REGULAR,
   },
   {
     chainId: 137,
@@ -32,8 +39,8 @@ export const chainData = [
     name: "Polygon",
     scan: "Polygonscan.com",
     nativeToken: "MATIC",
-    base_fee: 0.5,
-    regular_base_fee: 0.35,
+    base_fee: BASE_FEE.POLYGON_TOCKABLE,
+    regular_base_fee: BASE_FEE.POLYGON_REGULAR,
   },
   {
     chainId: 80001,
@@ -41,8 +48,8 @@ export const chainData = [
     name: "Polygon mumbai",
     scan: "Mumbai.polygonscan.com",
     nativeToken: "MATIC",
-    base_fee: 0.00025,
-    regular_base_fee: 0.00015,
+    base_fee: BASE_FEE.ETH_TOCKABLE,
+    regular_base_fee: BASE_FEE.ETH_REGULAR,
   },
   {
     chainId: 8453,
@@ -50,8 +57,8 @@ export const chainData = [
     name: "Base",
     scan: "Basescan.org",
     nativeToken: "ETH",
-    base_fee: 0.00025,
-    regular_base_fee: 0.00015,
+    base_fee: BASE_FEE.ETH_TOCKABLE,
+    regular_base_fee: BASE_FEE.ETH_REGULAR,
   },
   {
     chainId: 84532,
@@ -59,8 +66,8 @@ export const chainData = [
     name: "Base Sepolia",
     scan: "Base-sepolia.blockscout.com",
     nativeToken: "ETH",
-    base_fee: 0.00025,
-    regular_base_fee: 0.00015,
+    base_fee: BASE_FEE.ETH_TOCKABLE,
+    regular_base_fee: BASE_FEE.ETH_REGULAR,
   },
   {
     chainId: 59144,
@@ -68,8 +75,8 @@ export const chainData = [
     name: "Linea Mainnet",
     scan: "Lineascan.build",
     nativeToken: "ETH",
-    base_fee: 0.00025,
-    regular_base_fee: 0.00015,
+    base_fee: BASE_FEE.ETH_TOCKABLE,
+    regular_base_fee: BASE_FEE.ETH_REGULAR,
   },
   {
     chainId: 168587773,
@@ -77,7 +84,25 @@ export const chainData = [
     name: "Blast Sepolia",
     scan: "Testnet.blastscan.io",
     nativeToken: "ETH",
-    base_fee: 0.00025,
-    regular_base_fee: 0.00015,
+    base_fee: BASE_FEE.ETH_TOCKABLE,
+    regular_base_fee: BASE_FEE.ETH_REGULAR,
+  },
+  {
+    chainId: 59140,
+    url: "https://goerli.lineascan.build",
+    name: "Linea Goerli",
+    scan: "Goerli.lineascan.build",
+    nativeToken: "ETH",
+    base_fee: BASE_FEE.ETH_TOCKABLE,
+    regular_base_fee: BASE_FEE.ETH_REGULAR,
+  },
+  {
+    chainId: 81457,
+    url: "https://blastscan.io",
+    name: "Blast",
+    scan: "Blastscan.io",
+    nativeToken: "ETH",
+    base_fee: BASE_FEE.ETH_TOCKABLE,
+    regular_base_fee: BASE_FEE.ETH_REGULAR,
   },
 ];

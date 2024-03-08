@@ -13,16 +13,27 @@ export default function ActionMintStatus({ abi, _project }) {
   const [success, setSuccess] = useState(false);
   const [isWriting, setWriting] = useState(false);
   const [key, setKey] = useState(1);
+  const [ready, setReady] = useState(false);
+
+  const [pauseState, setPauseState] = useState(
+    project.isPaused === true ? true : false
+  );
 
   const { config } = usePrepareContractWrite({
     address: project.contractAddress,
     abi: abi,
+    enabled: ready,
     functionName: "setMintIsLive",
-    args: [!project ? true : project?.paused],
+    args: [!pauseState],
   });
 
   const { data, isLoading, isError, write, error } = useContractWrite(config);
   const uwt = useWaitForTransaction({ hash: data?.hash });
+
+  useEffect(() => {
+    if (!project) return;
+    setReady(true);
+  }, [pauseState]);
 
   useEffect(() => {
     if (!uwt.isSuccess) return;

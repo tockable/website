@@ -26,7 +26,7 @@ export default function OwnerMintTockable({ prepareMint }) {
     <div className="w-full">
       <div
         onClick={handleClick}
-        className={`flex grow bg-tock-black rounded-2xl p-4 my-4 mx-4 ${
+        className={`flex grow bg-tock-black rounded-2xl py-3 px-4 my-4 mx-4 ${
           !show &&
           "hover:bg-tock-semiblack hover:ring hover:ring-zinc-600 transition ease-in-out duration-200 cursor-pointer"
         }`}
@@ -35,15 +35,16 @@ export default function OwnerMintTockable({ prepareMint }) {
           <div className="flex">
             <div className="flex-auto">
               <p className="text-zinc-400 text-xs items-center">
-                as <span className="text-tock-orange text-sm">owner</span> | Max
-                mint/wallet:{" "}
+                mint as <span className="text-tock-orange text-sm">owner</span>{" "}
+                | Max mint/wallet:{" "}
                 <span className="text-tock-orange text-xl">
                   <sub>&infin;</sub>
-                </span>
+                </span>{" "}
+                | price: <span className="text-tock-orange">Free</span>
               </p>
             </div>
             <div className="text-tock-green text-xs justify-end">
-              {!show && <span>click to expand</span>}
+              {!show && <span>click to see</span>}
             </div>
           </div>
 

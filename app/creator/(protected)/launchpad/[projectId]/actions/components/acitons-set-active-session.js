@@ -11,36 +11,38 @@ import Button from "@/components/design/button";
 export default function ActionSetActiveSession({ abi, _project }) {
   const [project, setProject] = useState(_project);
   const [key, setKey] = useState(1);
-  const [sessionToActive, setSessionToActive] = useState(
-    project.activeSession.toString().length === 0
-      ? "0"
-      : project.activeSession.toString()
-  );
+  const [ready, setReady] = useState(false);
+
+  const [sessionToActive, setSessionToActive] = useState("0");
+  const [args, setArgs] = useState(null);
   const [isWriting, setWriting] = useState(false);
   const [sessionName, setSessionName] = useState();
   const [updated, setUpdated] = useState(false);
+
+  useEffect(() => {
+    if (!project) return;
+    setSessionToActive(
+      project.activeSession.toString().length === 0
+        ? "0"
+        : project.activeSession.toString()
+    );
+    setArgs(Number(sessionToActive));
+  }, [project]);
 
   const { config } = usePrepareContractWrite({
     address: project.contractAddress,
     abi: abi,
     functionName: "setActiveSession",
-    args: [Number(sessionToActive)],
+    args: [args],
   });
 
   const { data, isLoading, isError, write, error } = useContractWrite(config);
   const uwt = useWaitForTransaction({ hash: data?.hash });
 
-  // useEffect(() => {
-  //   if (project.activeSession.length !== 0)
-  //     setSessionToActive(project.activeSession.toString());
-  //   else setSessionToActive("0");
-  // }, []);
-
   function onChangeActiveSession(e) {
     setSessionToActive(e.target.value);
   }
 
-  // useEffect(() => {if(!isError) return },[isError])
   useEffect(() => {
     if (!uwt.isSuccess) return;
     setWriting(true);
@@ -82,10 +84,12 @@ export default function ActionSetActiveSession({ abi, _project }) {
           Select a session you want to set:
         </h1>
         {project.paused === true && (
-          <p className="font-normal text-xs text-tock-orange mb-4 ">
-            Contract minting is "Paused". You should "Start" the mint on the
-            "Start/Pause" section at the moment you want.
-          </p>
+          <div className="bg-orange-500/10 p-2 rounded-xl mt-4 mb-8">
+            <p className="font-normal text-xs text-tock-orange mb-4 ">
+              Contract minting is <b>Paused</b>. You should <b>Start</b> the
+              mint on the "Pause/Unpaused" section to enable minting.
+            </p>
+          </div>
         )}
         {project.sessions.length > 0 &&
           project.sessions.map((session, i) => {
