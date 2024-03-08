@@ -1,4 +1,3 @@
-import { generateMetadata } from "@/app/page";
 import Link from "next/link";
 
 export async function generateMetadata() {
