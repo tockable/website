@@ -61,7 +61,7 @@ export default function Page() {
         </p>
         <ul className="text-sm font-bold text-zinc-200 mt-12">
           <li className="my-6 p-2 border border-zinc-600 rounded-2xl">
-            - Each mint from a Tockable drop collections (cusomizable NFTs):{" "}
+            - Each mint from a Tockable drop collections (customizable NFTs):{" "}
             <p className="mt-2 text-zinc-400 mt-4 font-normal">
               For networks with ETH native token:{" "}
               <span className="text-tock-green">0.00015 ETH</span>

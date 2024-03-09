@@ -6,14 +6,11 @@ import { createWalletClient, custom, createPublicClient, http } from "viem";
 import { TOCKABLE_ADDRESS } from "@/tock.config";
 import { TOCKABLE_CHAINS } from "@/contexts/chains";
 import { createNewSigner } from "@/actions/signature/createWallet";
-import { useRouter } from "next/navigation";
 import { updateProject } from "@/actions/launchpad/projects";
 import { getAddress } from "viem";
 import Modal from "@/components/design/modal";
 import Button from "@/components/design/button";
 import Loading from "@/components/loading/loading";
-import Link from "next/link";
-import { NEXT_ROUTER_PREFETCH } from "next/dist/client/components/app-router-headers";
 
 export default function DeployContractModal({
   onClose,
@@ -22,7 +19,6 @@ export default function DeployContractModal({
   abi,
 }) {
   const { address } = useAccount();
-  const router = useRouter();
 
   const [takeMoment, setTakeMoment] = useState(true);
   const [error, setError] = useState("");

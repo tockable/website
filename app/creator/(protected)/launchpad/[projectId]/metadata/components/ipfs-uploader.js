@@ -165,7 +165,7 @@ export default function IpfsUploader({
       setReadyToDeploy(true);
       setAbiNotFetched(false);
     } catch (err) {
-      console.error(err.message);
+      console.error("error fetching abi");
     }
     setGettingAbi(false);
   }

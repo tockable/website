@@ -68,7 +68,7 @@ export default function Page() {
         </p>
         <ul className="text-sm font-bold text-zinc-200 mt-12">
           <li className="my-6 p-2 border border-zinc-600 rounded-2xl">
-            - Each mint from a Tockable drop collections (cusomizable NFTs):{" "}
+            - Each mint from a Tockable drop collections (customizable NFTs):{" "}
             <p className="mt-2 w-24 text-center text-tock-black p-2 bg-tock-green rounded-xl">
               {TXP.tockable}TXP
             </p>

@@ -46,7 +46,7 @@ export const DROP_TYPES = [
   },
   {
     type: "regular",
-    tyoeNo: 1,
+    typeNo: 1,
     currentVersion: 1,
     title: "Regular drop",
     description:

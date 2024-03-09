@@ -37,7 +37,7 @@ export default function ProjectMetadataFormRegular({ _project }) {
         const _abi = await getContractAbi(project);
         setAbi(_abi);
       } catch (err) {
-        console.error(err.message);
+        console.error("error fetching abi");
       }
     })();
   }, [project]);
