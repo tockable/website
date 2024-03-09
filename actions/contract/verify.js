@@ -28,29 +28,36 @@ const constructorAbi = {
   type: "constructor",
 };
 
+export async function getContractVerificationArgs(_project) {
+  const cargs = encodeAbiParameters(constructorAbi.inputs, [
+    TOCKABLE_ADDRESS,
+    _project.signer,
+  ]);
+
+  const contractName = camelize(_project.name, true);
+
+  const args = cargs.slice(2);
+
+  const sourcepath = path.resolve(
+    ".",
+    DATABASE,
+    "projects",
+    _project.creator.slice(2),
+    _project.uuid,
+    `${contractName}.sol`
+  );
+
+  const source = fs.readFileSync(sourcepath, { encoding: "utf8" });
+
+  return { contractName, source, args };
+}
+
 export default async function verify(_project) {
   try {
     const chainData = await getVerifyChainData(Number(_project.chainId));
-    const contractName = camelize(_project.name, true);
-
-    const cargs = encodeAbiParameters(constructorAbi.inputs, [
-      TOCKABLE_ADDRESS,
-      _project.signer,
-    ]);
-
-    const editedcargs = cargs.slice(2);
-
-    const sourcepath = path.resolve(
-      ".",
-      DATABASE,
-      "projects",
-      _project.creator.slice(2),
-      _project.uuid,
-      `${contractName}.sol`
-    );
-
-    const source = fs.readFileSync(sourcepath, { encoding: "utf8" });
-
+    const { contractName, args, source } =
+      getContractVerificationArgs(_project);
+      
     const request = {
       apikey: chainData.apikey,
       module: "contract",
@@ -63,7 +70,7 @@ export default async function verify(_project) {
       optimizationUsed: 1,
       runs: 200,
       evmVersion: "paris",
-      constructorArguements: editedcargs,
+      constructorArguements: args,
       licenseType: 3,
     };
 
@@ -113,7 +120,6 @@ export default async function verify(_project) {
 
     formBody = formBody.join("&");
 
-
     const res1 = await fetch(chainData.endpoint, {
       method: "POST",
       headers: {
@@ -121,7 +127,6 @@ export default async function verify(_project) {
       },
       body: formBody,
     });
-
 
     const data1 = await res1.json();
 
@@ -137,7 +142,6 @@ export default async function verify(_project) {
           data2.status == "1" ||
           data2.result == "Pending in queue"
         ) {
-
           try {
             const updatedProject = await updateProject(_project.creator, {
               uuid: _project.uuid,

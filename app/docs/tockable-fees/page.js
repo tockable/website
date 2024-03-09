@@ -74,7 +74,7 @@ export default function Page() {
             - Each mint from a Regular drop collections:{" "}
             <p className="mt-2 text-zinc-400 mt-4 font-normal">
               For networks with ETH native token:{" "}
-              <span className="text-tock-green">0.00075 ETH</span>
+              <span className="text-tock-green">0.000075 ETH</span>
             </p>
             <p className="mt-2 text-zinc-400 font-normal">
               For POLYGON <span className="text-tock-green">0.3 MATIC</span>

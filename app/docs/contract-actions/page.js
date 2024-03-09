@@ -121,7 +121,7 @@ export default function Page() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              learn about claiming gas fees on Blast &gt;
+              learn about claiming gas fees on <b>Blast</b> &gt;
             </a>
           </p>
         </div>

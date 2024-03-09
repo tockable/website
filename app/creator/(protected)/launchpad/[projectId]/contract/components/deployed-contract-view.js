@@ -5,6 +5,9 @@ import getChainData from "@/utils/chain-utils";
 import verify from "@/actions/contract/verify";
 import Button from "@/components/design/button";
 import Loading from "@/components/loading/loading";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { getContractVerificationArgs } from "@/actions/contract/verify";
+import { GoCopy } from "react-icons/go";
 
 export default function DeployedContractView({ _project }) {
   const [project, setProject] = useState(_project);
@@ -17,7 +20,6 @@ export default function DeployedContractView({ _project }) {
     setVerificationError(false);
 
     const res = await verify(project);
-    console.log(res);
     if (res.success === true) setProject(res.payload);
     else setVerificationError(true);
 
@@ -83,7 +85,7 @@ export default function DeployedContractView({ _project }) {
             {project.cid && project.cid.length > 0 && (
               <div>
                 <p className="text-tock-blue font-bold text-sm">Base URI</p>
-                <p className="text-zinc-400 text-sm mt-2">
+                <p className="text-zinc-400 text-sm mt-2 break-all">
                   {`ipfs://${project.cid}/`}
                 </p>
               </div>
@@ -96,7 +98,7 @@ export default function DeployedContractView({ _project }) {
                 {project.cids.map((cid, i) => (
                   <p
                     key={"cid_" + i}
-                    className="text-zinc-400 text-sm mt-2 p-2 border-[0.5px] border-zinc-700 rounded-2xl transition duration-200 hover:bg-zinc-700"
+                    className="text-zinc-400 text-sm mt-2 p-2 border-[0.5px] border-zinc-700 rounded-2xl transition duration-200 text-xs hover:bg-zinc-700 break-all"
                   >
                     {`ipfs://${cid}/`}
                   </p>
@@ -130,7 +132,9 @@ export default function DeployedContractView({ _project }) {
                     verifying ||
                     Number(project.chainId) === 59144 ||
                     Number(project.chainId) === 84532 ||
-                    Number(project.chainId) === 11155420
+                    Number(project.chainId) === 34443 ||
+                    Number(project.chainId) === 11155420 ||
+                    Number(project.chainId) === 168587773
                   }
                 >
                   {verifying ? (
@@ -140,16 +144,29 @@ export default function DeployedContractView({ _project }) {
                   )}
                 </Button>
                 {verificationError && (
-                  <p className="text-tock-red text-sm mt-2">
-                    an error occured during verification, please try again.
-                  </p>
+                  <div>
+                    <p className="text-tock-red text-sm mt-2">
+                      an error occured during verification, please try again.
+                    </p>
+                    {Number(project.chainId) !== 168587773 && (
+                      <ManualVerify project={project} />
+                    )}
+                  </div>
                 )}
-                {(Number(project.chainId) == 59144 ||
+                {(Number(project.chainId) == 59140 ||
                   Number(project.chainId) == 84532 ||
+                  Number(project.chainId) == 34443 ||
+                  Number(project.chainId) == 168587773 ||
                   Number(project.chainId) == 11155420) && (
-                  <p className="text-tock-red text-sm mt-2">
-                    currently verification is not supported for this network
-                  </p>
+                  <div>
+                    <p className="text-tock-red text-sm mt-2">
+                      currently automatic verification is not supported for this
+                      network
+                    </p>
+                    {Number(project.chainId) !== 168587773 && (
+                      <ManualVerify project={project} />
+                    )}
+                  </div>
                 )}
               </div>
             )}
@@ -157,5 +174,160 @@ export default function DeployedContractView({ _project }) {
         </div>
       )}
     </>
+  );
+}
+
+function ManualVerify({ project }) {
+  const [error, setError] = useState(false);
+  const [verificationData, setVerificationData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [copy, setCopy] = useState({
+    address: false,
+    args: false,
+    source: false,
+  });
+
+  useEffect(() => {
+    if (copy.address === false && copy.args === false && copy.source === false)
+      return;
+    setTimeout(
+      () =>
+        setCopy({
+          address: false,
+          args: false,
+          source: false,
+        }),
+      2000
+    );
+  }, [copy]);
+
+  const handleCopy = () => setCopy({ ...copy, address: true });
+  const handleCopy1 = () => setCopy({ ...copy, args: true });
+  const handleCopy2 = () => setCopy({ ...copy, source: true });
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await getContractVerificationArgs(project);
+        setVerificationData(res);
+      } catch (err) {
+        setError(true);
+      }
+    })();
+    setLoading(false);
+  }, []);
+
+  return (
+    <div>
+      {loading ? (
+        <div className="h-24 flex justify-center">
+          <Loading isLoading={loading} size={20} />
+        </div>
+      ) : (
+        <div>
+          {error && (
+            <p className="text-xs text-rose-500">Something went wrong</p>
+          )}{" "}
+          {verificationData && (
+            <div className="text-xs">
+              <div className="bg-orange-500/10 text-tock-orange p-2 mt-6 mb-4 rounded-xl">
+                <p>You can manually verify the contract.</p>
+                <p className="text-zinc-400">
+                  visit{" "}
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-400 hover:text-blue-300"
+                    href={getChainData(Number(project.chainId)).verifyurl}
+                  >
+                    {getChainData(Number(project.chainId)).verifyurl}
+                  </a>{" "}
+                  and fill the verification form using following info:
+                </p>
+              </div>
+              <p className="text-zinc-400 my-2">
+                - <b>Contract name:</b>{" "}
+                <span className="text-tock-orange">
+                  {verificationData.contractName}
+                </span>
+              </p>
+              <div className="flex gap-2 text-zinc-400 my-2">
+                - <b>Contract address:</b>{" "}
+                <CopyToClipboard
+                  text={project.contractAddress}
+                  onCopy={handleCopy}
+                >
+                  <div className="flex text-tock-orange hover:text-orange-100 hover:cursor-pointer gap-2">
+                    {project.contractAddress} <GoCopy />{" "}
+                    {copy.address && (
+                      <span className="text-tock-green">copied!</span>
+                    )}
+                  </div>
+                </CopyToClipboard>
+              </div>
+              <p className="text-zinc-400 mt-2 mb-4">
+                - <b>Compiler Type/Verification method:</b>{" "}
+                <span className="text-tock-orange">
+                  Solidity (Flattened source code) or Solidity (Single file){" "}
+                </span>
+                <span className="text-xs text-zinc-500">
+                  (Each one is available)
+                </span>
+              </p>
+              <p className="text-zinc-400 my-2">
+                - <b>Compiler version:</b>{" "}
+                <span className="text-tock-orange">
+                  v0.8.21+commit.d9974bed
+                </span>
+              </p>
+              <p className="text-zinc-400 my-2">
+                - <b>EVM version:</b>{" "}
+                <span className="text-tock-orange">paris</span>
+              </p>
+              <p className="text-zinc-400 my-2">
+                - <b>Optimization enabled:</b>{" "}
+                <span className="text-tock-orange">yes</span>
+              </p>
+              <p className="text-zinc-400 my-2">
+                - <b>Optimization runs:</b>{" "}
+                <span className="text-tock-orange">200</span>
+              </p>
+              <p className="text-zinc-400 my-2">
+                - <b>License Type:</b>{" "}
+                <span className="text-tock-orange">3 (MIT License)</span>
+              </p>
+              <div className="flex gap-2 text-zinc-400 my-2">
+                - <b>Copy/paste the constructor arguments:</b>
+                <CopyToClipboard
+                  text={verificationData.args}
+                  onCopy={handleCopy1}
+                >
+                  <div className="flex text-tock-orange hover:text-orange-100 hover:cursor-pointer gap-2">
+                    Copy constructor args <GoCopy />{" "}
+                    {copy.args && (
+                      <span className="text-tock-green">copied!</span>
+                    )}
+                  </div>
+                </CopyToClipboard>
+              </div>
+              <div className="flex gap-2 text-zinc-400 my-2">
+                - <b>Copy/paste the source code:</b>
+                <CopyToClipboard
+                  text={verificationData.source}
+                  onCopy={handleCopy2}
+                >
+                  <div className="flex text-tock-orange hover:text-orange-100 hover:cursor-pointer gap-2 mb-2">
+                    Copy source code <GoCopy />{" "}
+                    {copy.source && (
+                      <span className="text-tock-green">copied!</span>
+                    )}
+                  </div>
+                </CopyToClipboard>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
   );
 }
