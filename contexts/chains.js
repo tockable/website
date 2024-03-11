@@ -17,13 +17,13 @@ const mode = {
   name: "Mode",
   nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
   rpcUrls: {
-    default: { http: ["https://mainnet.mode.network/"] },
-    public: { http: ["https://mainnet.mode.network/"] },
+    default: { http: ["https://1rpc.io/mode"] },
+    public: { http: ["https://mainnet.mode.network"] },
   },
   blockExplorers: {
     default: {
       name: "Explorer.mode.network",
-      url: "https://explorer.mode.network/",
+      url: "https://explorer.mode.network",
     },
   },
   contracts: {
