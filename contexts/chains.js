@@ -1,3 +1,4 @@
+import { defineChain } from "viem";
 import {
   linea,
   lineaTestnet,
@@ -12,7 +13,7 @@ import {
   // baseSepolia,
 } from "wagmi/chains";
 
-const mode = {
+const mode = defineChain({
   id: 34443,
   name: "Mode",
   nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
@@ -32,9 +33,9 @@ const mode = {
       blockCreated: 2465882,
     },
   },
-};
+});
 
-const blast = {
+const blast = defineChain({
   id: 81457,
   name: "Blast",
   nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
@@ -54,9 +55,9 @@ const blast = {
       blockCreated: 88189,
     },
   },
-};
+});
 
-const blastSepolia = {
+const blastSepolia = defineChain({
   id: 168587773,
   name: "Blast Sepolia",
   nativeCurrency: { name: "Sepolia Ether", symbol: "ETH", decimals: 18 },
@@ -76,7 +77,7 @@ const blastSepolia = {
       blockCreated: 756690,
     },
   },
-};
+});
 
 export const TOCKABLE_CHAINS = [
   mainnet,
