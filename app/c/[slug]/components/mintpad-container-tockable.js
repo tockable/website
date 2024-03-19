@@ -66,6 +66,11 @@ export default function MintpadContainerTockable({ prepareMint }) {
         functionName: "tokensLeftInSession",
         args: [Number(project.activeSession)],
       },
+      {
+        address: project.contractAddress,
+        abi,
+        functionName: "totalSupply",
+      },
     ],
   });
 
@@ -134,6 +139,10 @@ export default function MintpadContainerTockable({ prepareMint }) {
       }
     })();
   }, [isConnected]);
+
+  if (data) {
+    console.log(parseInt(data[3].result));
+  }
 
   return (
     <main>
@@ -208,7 +217,10 @@ export default function MintpadContainerTockable({ prepareMint }) {
                           to see minting options, please switch network to the
                           project chain
                         </p>
-                        <SwitchNetworkButton project={project.chainData} />
+                        <SwitchNetworkButton
+                          forDeploy={false}
+                          project={project.chainData}
+                        />
                       </div>
                     </div>
                   )}
@@ -221,22 +233,20 @@ export default function MintpadContainerTockable({ prepareMint }) {
                         </span>{" "}
                         <span className="text-tock-green">Finished</span>
                       </p>
-                      {!project.isUnlimited && project.slug !== "tock" && (
+                      {project.isUnlimited === false &&
+                        project.slug !== "tock" && (
+                          <p className="text-tock-blue text-xl font-bold my-2">
+                            <span className="font-normal text-zinc-400">
+                              Minted:
+                            </span>{" "}
+                            {Number(project.totalSupply) -
+                              parseInt(data[1].result)}{" "}
+                            / {project.totalSupply}
+                          </p>
+                        )}
+                      {project.isUnlimited === true && (
                         <p className="text-tock-blue text-xl font-bold my-2">
-                          <span className="font-normal text-zinc-400">
-                            Minted:
-                          </span>{" "}
-                          {Number(project.totalSupply) -
-                            parseInt(data[1].result)}{" "}
-                          / {project.totalSupply}
-                        </p>
-                      )}
-                      {project.isUnlimited && (
-                        <p className="text-tock-blue text-xl font-bold my-2">
-                          Supply:{" "}
-                          {Number(project.totalSupply) -
-                            parseInt(data[1].result)}
-                          / Unlimited
+                          Minted: {parseInt(data[3].result)} / Unlimited
                         </p>
                       )}
                     </div>
@@ -270,10 +280,7 @@ export default function MintpadContainerTockable({ prepareMint }) {
                         )}
                         {project.isUnlimited && (
                           <p className="text-tock-blue text-xl font-bold my-2">
-                            Supply:{" "}
-                            {Number(project.totalSupply) -
-                              parseInt(data[1].result)}
-                            / Unlimited
+                            Minted: {parseInt(data[3].result)} / Unlimited
                           </p>
                         )}
                       </div>
@@ -304,7 +311,10 @@ export default function MintpadContainerTockable({ prepareMint }) {
                     to see minting options, please switch network to the project
                     chain
                   </p>
-                  <SwitchNetworkButton project={project.chainData} />
+                  <SwitchNetworkButton
+                    forDeploy={false}
+                    project={project.chainData}
+                  />
                 </div>
               )}
 

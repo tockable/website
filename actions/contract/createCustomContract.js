@@ -13,7 +13,7 @@ function getBaseContract(_project, _chainId) {
     path.resolve(".", "contracts", constructedName),
     "utf8"
   );
-  
+
   return baseContract;
 }
 
@@ -46,10 +46,17 @@ export default async function createCostimizedContractFile(
     /string private constant TOKEN_SYMBOL = "TCKBLE";/g,
     `string private constant TOKEN_SYMBOL = "${_project.tokenSymbol}";`
   );
-  editedBaseContract = editedBaseContract.replace(
-    /uint256 public constant TOTAL_SUPPLY = 0;/g,
-    `uint256 public constant TOTAL_SUPPLY = ${Number(_project.totalSupply)};`
-  );
+  if (Number(_project.totalSupply) == 0) {
+    editedBaseContract = editedBaseContract.replace(
+      /uint256 public constant TOTAL_SUPPLY = 0;/g,
+      `uint256 public constant TOTAL_SUPPLY = 2 ** 256 - 1;`
+    );
+  } else {
+    editedBaseContract = editedBaseContract.replace(
+      /uint256 public constant TOTAL_SUPPLY = 0;/g,
+      `uint256 public constant TOTAL_SUPPLY = ${Number(_project.totalSupply)};`
+    );
+  }
 
   if (_project.slug.toLowerCase() === "tock") {
     editedBaseContract = editedBaseContract.replace(
@@ -85,6 +92,6 @@ export default async function createCostimizedContractFile(
       `bool public constant isUnlimited = true;`
     );
   }
-  
+
   return editedBaseContract;
 }

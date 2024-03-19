@@ -18,7 +18,6 @@ export default async function storeFileToIpfs(
       existance: false,
       message: err.message,
     };
-  console.log("wehre");
   try {
     const { cid, existance } = await _store(
       buffer,
