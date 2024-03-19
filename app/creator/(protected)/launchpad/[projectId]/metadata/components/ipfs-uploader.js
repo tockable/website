@@ -204,7 +204,7 @@ export default function IpfsUploader({
       {uploading && (
         <div className="border rounded-2xl bg-tock-black border-zinc-400 p-4 my-4">
           <h1 className="text-tock-green font-normal text-lg mb-2">
-            Uploadploading to ipfs...
+            Uploading to ipfs...
           </h1>
           <p className="text-tock-orange text-xs font-normal mb-6">
             Depending on files size, it may take 5 to 30 minutes, please do
