@@ -140,10 +140,6 @@ export default function MintpadContainerTockable({ prepareMint }) {
     })();
   }, [isConnected]);
 
-  if (data) {
-    console.log(parseInt(data[3].result));
-  }
-
   return (
     <main>
       <NavbarMintpad />
