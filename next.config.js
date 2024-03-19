@@ -5,6 +5,7 @@ const nextConfig = {
   // },
   experimental: {
     serverActions: true,
+    serverActionsBodySizeLimit: "10mb",
   },
   webpack: (config) => {
     config.resolve.fallback = { fs: false, net: false, tls: false };
