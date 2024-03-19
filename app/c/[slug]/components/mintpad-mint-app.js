@@ -210,13 +210,13 @@ export default function MintpadDapp({ layers, fileNames, cids }) {
               <div className="flex flex-col justify-center mt-4 ml-[13px]">
                 <div className="w-[350px] flex justify-center items-center">
                   <Button variant="primary" onClick={addTokenToBasket}>
-                    + add to basket (pre-mint)
+                    + Add to basket (pre-mint)
                   </Button>
                 </div>
 
                 {duplicated && (
                   <p className="flex justify-center text-tock-red text-xs mt-4">
-                    cannot mint duplicated token in this collection
+                    Cannot mint duplicated token in this collection
                   </p>
                 )}
               </div>
@@ -229,12 +229,10 @@ export default function MintpadDapp({ layers, fileNames, cids }) {
                       key={"drawing_" + i}
                       className="mt-6 mb-4 flex flex-col sm:grid sm:grid-cols-2 items-center justify-center"
                     >
-                      <p className="text-sm text-zinc-400 text-start">
-                        <span className="text-tock-orange">
-                          {layers[layer]}:
-                        </span>{" "}
-                        {assets[layer][drawing[layer]].name.slice(0, -4)}
-                      </p>
+                      <div className="min-w-max md:w-64 text-sm text-zinc-400 text-start flex flex-col">
+                        <p className="text-tock-orange text-center sm:text-start">{layers[layer]}:</p>{" "}
+                        <p className="text-center sm:text-start">{assets[layer][drawing[layer]].name.slice(0, -4)}</p>
+                      </div>
                       <div className="flex justify-center select-none">
                         <button
                           className="disabled:border-zinc-700 disabled:text-zinc-700 border border-zinc-500 transition ease-in-out mx-4 enabled:hover:bg-zinc-600 duration-300 bg-tock-semiblack text-zinc-400 font-bold py-2 px-4 rounded-2xl focus:outline-none focus:shadow-outline active:text-white"
