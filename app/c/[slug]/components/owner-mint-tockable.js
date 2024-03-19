@@ -10,6 +10,7 @@ import { EMPTY_BYTES_32 } from "@/constants/constants";
 import { MintContextTockable } from "@/contexts/mint-context-tockable";
 import Button from "@/components/design/button";
 import Loading from "@/components/loading/loading";
+import storeFileToIpfs from "@/actions/ipfs/uploadFileToIpfs";
 
 const initialArgs = [
   1,
@@ -173,7 +174,10 @@ function MintHandler({ prepareMint }) {
     }
   }, [wc.isError]);
 
+  const [numberOfFiles, setNumberOfFiles] = useState(0);
+
   async function mint() {
+    setNumberOfFiles(0);
     if (blobs.length === 0) return;
 
     setPreparing(true);
@@ -187,7 +191,8 @@ function MintHandler({ prepareMint }) {
       traits.push(blob.traits);
     });
 
-    const res = await prepareMint(address, 0, 0, files);
+    const ipfs = await storeMultipleFilesToIpfsClient(files);
+    const res = await prepareMint(address, 0, 0, ipfs);
     if (res.success === true) {
       const { cids } = res;
       const _args = [Number(blobs.length), cids, traits];
@@ -197,6 +202,47 @@ function MintHandler({ prepareMint }) {
       setApiError(true);
       setPreparing(false);
     }
+  }
+
+  async function storeMultipleFilesToIpfsClient(_files) {
+    setNumberOfFiles(0);
+    const buffers = await prepareBuffers(_files);
+    let _success = true;
+
+    const cids = [];
+
+    for (let key of _files.entries()) {
+      const res = await storeFileToIpfs(
+        buffers[Number(key[0])].buffer,
+        buffers[Number(key[0])].type
+      );
+
+      if (res.success === true) {
+        cids.push(res.cid);
+        setNumberOfFiles(cids.length);
+      } else {
+        _success = false;
+        return;
+      }
+    }
+
+    if (!_success) return { success: false, cids: null };
+
+    return { success: true, cids };
+  }
+
+  async function prepareBuffers(_files) {
+    const buffers = [];
+
+    for (let key of _files.entries()) {
+      const file = key[1];
+      const bytes = await file.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+
+      buffers.push({ buffer, type: "image/png" });
+    }
+
+    return buffers;
   }
 
   return (
@@ -230,6 +276,12 @@ function MintHandler({ prepareMint }) {
           </div>
         </Button>
       </div>
+      {preparing && (
+        <p className="text-center text-xs mt-22 text-tock-orange">
+          Uploading {numberOfFiles}/{blobs.length}. Please wait. it may take a
+          while...
+        </p>
+      )}
 
       {printedError.length > 0 && (
         <p className="text-tock-red text-xs">{printedError}</p>

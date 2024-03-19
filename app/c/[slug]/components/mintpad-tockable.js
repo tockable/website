@@ -1,14 +1,14 @@
 import MintpadContainerTockable from "./mintpad-container-tockable";
 import getHashAndSignature from "@/actions/signature/signature";
-import storeMultipleFilesToIpfs from "@/actions/ipfs/uploadMultipleFileToIpfs";
+// import storeMultipleFilesToIpfs from "@/actions/ipfs/uploadMultipleFileToIpfs";
 import getCidTuple from "@/actions/utils/cid-utils";
 import MintProviderTockable from "@/contexts/mint-context-tockable";
+import storeFileToIpfs from "@/actions/ipfs/uploadFileToIpfs";
 
 export default function MintpadTockable({ project, abi }) {
-  async function prepareMint(_address, _roleId, _sessionId, _files) {
+  async function prepareMint(_address, _roleId, _sessionId, ipfs) {
     "use server";
-
-    const ipfs = await storeMultipleFilesToIpfs(_files);
+    // const ipfs = await storeMultipleFilesToIpfsClient(_files);
 
     if (ipfs.success === false) {
       return {

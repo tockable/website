@@ -7,6 +7,7 @@ import {
   useWaitForTransaction,
   useContractRead,
 } from "wagmi";
+import storeFileToIpfs from "@/actions/ipfs/uploadFileToIpfs";
 import { EMPTY_BYTES_32 } from "@/constants/constants";
 import { TXP } from "@/tock.config";
 import { MintContextTockable } from "@/contexts/mint-context-tockable";
@@ -223,7 +224,10 @@ function MintHandler({ role, prepareMint, session }) {
     }
   }, [wc.isError]);
 
+  const [numberOfFiles, setNumberOfFiles] = useState(0);
+
   async function mint() {
+    setNumberOfFiles(0);
     setSuccessfullyMinted(false);
     if (blobs.length === 0) return;
 
@@ -238,7 +242,8 @@ function MintHandler({ role, prepareMint, session }) {
       traits.push(blob.traits);
     });
 
-    const res = await prepareMint(address, role.id, session, files);
+    const ipfs = await storeMultipleFilesToIpfsClient(files);
+    const res = await prepareMint(address, role.id, session, ipfs);
     if (res.success === true) {
       const { cids, signature } = res;
       const args = [
@@ -266,6 +271,47 @@ function MintHandler({ role, prepareMint, session }) {
       setApiError(true);
       setPreparing(false);
     }
+  }
+
+  async function storeMultipleFilesToIpfsClient(_files) {
+    setNumberOfFiles(0);
+    const buffers = await prepareBuffers(_files);
+    let _success = true;
+
+    const cids = [];
+
+    for (let key of _files.entries()) {
+      const res = await storeFileToIpfs(
+        buffers[Number(key[0])].buffer,
+        buffers[Number(key[0])].type
+      );
+
+      if (res.success === true) {
+        cids.push(res.cid);
+        setNumberOfFiles(cids.length);
+      } else {
+        _success = false;
+        return;
+      }
+    }
+
+    if (!_success) return { success: false, cids: null };
+
+    return { success: true, cids };
+  }
+
+  async function prepareBuffers(_files) {
+    const buffers = [];
+
+    for (let key of _files.entries()) {
+      const file = key[1];
+      const bytes = await file.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+
+      buffers.push({ buffer, type: "image/png" });
+    }
+
+    return buffers;
   }
 
   return (
@@ -325,7 +371,8 @@ function MintHandler({ role, prepareMint, session }) {
               </Button>
             )}
             <p className="text-[12px] text-zinc-500 mt-4">
-              + {blobs.length * getBaseFee(project)}{" "}
+              +{" "}
+              {Math.ceil(blobs.length * getBaseFee(project) * 100000) / 100000}{" "}
               {project.chainData.nativeToken} platform fee{" "}
               <a
                 className="text-[10px] text-blue-400 hover:text-blue-300"
@@ -364,8 +411,14 @@ function MintHandler({ role, prepareMint, session }) {
             <p className="text-tock-red text-xs mt-2">{printedError}</p>
           )}
           {preparing && (
-            <p className="text-blue-400 text-xs mt-2">
+            <p className="text-center text-blue-400 text-xs mt-2">
               preparing basket... please wait...
+            </p>
+          )}
+          {preparing && (
+            <p className="text-center text-xs mt-22 text-tock-orange">
+              Uploading {numberOfFiles}/{blobs.length} to ipfs. It may take a
+              while...
             </p>
           )}
           {warning.length > 0 && (
