@@ -12,7 +12,7 @@ export default function RootLayout({ children }) {
     <html lang="en" className={c.className}>
       <body className="bg-tock-black">
         {children}
-        <News />
+        {/* <News /> */}
       </body>
     </html>
   );

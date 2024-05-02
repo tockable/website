@@ -30,14 +30,14 @@ export default function NavbarMintpad() {
           </Link>
         </div>
         <div className="border border-zinc-800 flex bg-zinc-800/70 backdrop-blur-sm items-center rounded-2xl px-1">
-          <Link
+          {/* <Link
             className="flex mx-1 items-center transition hover:bg-tock-black duration-200 text-zinc-300 font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline active:text-white"
             href="/dashboard/points"
             target="_blank"
             rel="noopener noreferrer"
           >
             My TXPs
-          </Link>
+          </Link> */}
           <div>
             <ConnectButton chainStatus={"icon"} showBalance={false} />
           </div>

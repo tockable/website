@@ -15,7 +15,6 @@ import Button from "@/components/design/button";
 
 export default function DeployMetadataRegularDropModal({
   onClose,
-  isOpen,
   project,
   abi,
   cid,
@@ -70,7 +69,7 @@ export default function DeployMetadataRegularDropModal({
   }, [uwt.isSuccess]);
 
   return (
-    <Modal isOpen={isOpen} onClose={closeOnSuccess}>
+    <Modal isOpen={true} onClose={closeOnSuccess}>
       <div className="flex basis-3/4 px-4">
         <div className="flex flex-col w-full">
           <h1 className="text-tock-green font-bold text-xl mt-4 mb-6 ">

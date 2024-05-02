@@ -25,6 +25,7 @@ export default function MintpadContainerTockable({ prepareMint }) {
   const [untilStart, setUntilStart] = useState(0);
   const [untilEnd, setUntilEnd] = useState(0);
   const [notStarted, setNotStarted] = useState(false);
+  const [notActive, setNotActive] = useState(false);
   const [roles, setRoles] = useState();
   const [session, setSession] = useState();
   const [publicSession, setPublicSession] = useState();
@@ -105,6 +106,15 @@ export default function MintpadContainerTockable({ prepareMint }) {
             res.status === "notStartedSession"
           ) {
             setNotStarted(true);
+            setUntilStart(res.payload.timer);
+            setErrorGettingElligibility(false);
+            setLoading(false);
+            return;
+          }
+
+          if (res.status === "notActive") {
+            setNotStarted(true);
+            setNotActive(true);
             setUntilStart(res.payload.timer);
             setErrorGettingElligibility(false);
             setLoading(false);
@@ -339,7 +349,13 @@ export default function MintpadContainerTockable({ prepareMint }) {
                           minting is not available at this moment.
                         </p>
                       )}
-
+                      {notActive && (
+                        <p className="text-tock-orange mx-4 mt-10 mb-6 p-2">
+                          There is no Active mint session for this collection at
+                          this moment, Please contact the creator or come back
+                          later.
+                        </p>
+                      )}
                       {!notStarted &&
                         !mintEnded &&
                         data[0]?.result === true && (

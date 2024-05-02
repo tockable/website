@@ -23,6 +23,7 @@ export default function MintpadContainerRegular({ prepareMint }) {
   const [untilStart, setUntilStart] = useState(0);
   const [untilEnd, setUntilEnd] = useState(0);
   const [notStarted, setNotStarted] = useState(false);
+  const [notActive, setNotActive] = useState(false);
   const [roles, setRoles] = useState();
   const [session, setSession] = useState();
   const [publicSession, setPublicSession] = useState();
@@ -86,7 +87,6 @@ export default function MintpadContainerRegular({ prepareMint }) {
           project.slug
         );
 
-        console.log(res);
         if (res.success === false) {
           setLoading(false);
           setErrorGettingElligibility(true);
@@ -99,6 +99,15 @@ export default function MintpadContainerRegular({ prepareMint }) {
             res.status === "notStartedSession"
           ) {
             setNotStarted(true);
+            setUntilStart(res.payload.timer);
+            setErrorGettingElligibility(false);
+            setLoading(false);
+            return;
+          }
+
+          if (res.status === "notActive") {
+            setNotStarted(true);
+            setNotActive(true);
             setUntilStart(res.payload.timer);
             setErrorGettingElligibility(false);
             setLoading(false);
@@ -250,6 +259,15 @@ export default function MintpadContainerRegular({ prepareMint }) {
             </>
           )}
 
+          {isConnected &&
+            chain.id === project.chainData.chainId &&
+            notActive && (
+              <p className="text-tock-orange m-4 p-4">
+                There is no Active mint session for this collection at this
+                moment, Please contact the creator or come back later.
+              </p>
+            )}
+
           {!mintEnded && !notStarted && !loading && (
             <div className="rounded-2xl p-4 mt-8 bg-tock-semiblack">
               <h1 className="mx-8 mt-4 font-bold text-2xl text-tock-green">
@@ -264,26 +282,6 @@ export default function MintpadContainerRegular({ prepareMint }) {
               )}
 
               <div>
-                {isConnected &&
-                  chain.id !== Number(project.chainData.chainId) && (
-                    <div className="my-4 flex flex-col justify-center items-center my-8">
-                      <p className="text-tock-orange text-xl font-bold my-2">
-                        please switch network
-                      </p>
-
-                      <div className="mb-12">
-                        <p className="text-tock-orange text-xs text-center mb-2">
-                          to see minting options, please switch network to the
-                          project chain
-                        </p>
-                        <SwitchNetworkButton
-                          forDeploy={false}
-                          project={project.chainData}
-                        />
-                      </div>
-                    </div>
-                  )}
-
                 {isConnected && chain.id === project.chainData.chainId && (
                   <div>
                     {!data && isLoading && (

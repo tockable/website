@@ -2,13 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { useNetwork } from "wagmi";
-import { CID } from "multiformats/cid";
 import { getContractAbi } from "@/actions/contract/metadata";
 import DeployMetadataRegularDropModal from "./modal-deploy-metadata-regular";
 import SwitchNetworkButton from "@/components/design/button-switch-network";
 import Button from "@/components/design/button";
 import Loading from "@/components/loading/loading";
 import Fade from "@/components/design/fade/fade";
+import { checkExtension } from "@/actions/ipfs/checkExtension";
 
 export default function ProjectMetadataFormRegular({ _project }) {
   const { chain } = useNetwork();
@@ -20,13 +20,23 @@ export default function ProjectMetadataFormRegular({ _project }) {
   const [showModal, setShowModal] = useState(false);
   const [emptyMetadata, setEmptyMetadata] = useState(false);
   const [inorrectMetada, setIncorrectMetadata] = useState(false);
-  const [hasExtension, setHasExtension] = useState(false);
+  const [hasExtension, setHasExtension] = useState(null);
   const [error, setError] = useState(false);
   const [readyToDeploy, setReadyToDeploy] = useState(false);
 
   const onChangeCid = (e) => setCid(e.target.value);
   const showMetadataModal = () => setShowModal(true);
-  const hideMetadataModal = () => setShowModal(false);
+  const hideMetadataModal = () => {
+    setReadyToDeploy(false);
+    setDeploying(false);
+    setShowModal(false);
+  };
+
+  const onExtensionChange = (e) => {
+    if (e.target.value === "null") setHasExtension(null);
+    if (e.target.value === "true") setHasExtension(true);
+    if (e.target.value === "false") setHasExtension(false);
+  };
 
   useEffect(() => {
     if (!project) return;
@@ -63,61 +73,70 @@ export default function ProjectMetadataFormRegular({ _project }) {
 
     setDeploying(true);
 
-    if (cid.match(/^Qm/)) {
+    // if (cid.match(/^Qm/)) {
+    //   try {
+    //     const res = await fetch(`https://ipfs.io/ipfs/${cid}/1`);
+    //     const json = await res.json();
+    //     if (json) setHasExtension(false);
+    //   } catch (_) {
+    //     try {
+    //       const res = await fetch(`https://ipfs.io/ipfs/${cid}/1.json`);
+    //       const json = await res.json();
+
+    //       if (json) setHasExtension(true);
+    //     } catch (_) {
+    //       const v0 = CID.parse(cid);
+
+    //       v0.toString();
+
+    //       const cidV1 = v0.toV1().toString();
+
+    //       try {
+    //         const res = await fetch(`https://${cidV1}.ipfs.nftstorage.link/1`);
+    //         const json = await res.json();
+
+    //         if (json) setHasExtension(false);
+    //       } catch (_) {
+    //         try {
+    //           const res = await fetch(
+    //             `https://${cidV1}.ipfs.nftstorage.link/1.json`
+    //           );
+
+    //           const json = await res.json();
+
+    //           if (json) setHasExtension(true);
+    //         } catch (_) {
+    //           setHasExtension(true);
+    //           setError(true);
+    //         }
+    //       }
+    //     }
+    //   }
+    // } else {
+    //   try {
+    //     const res = await fetch(`https://${cid}.ipfs.nftstorage.link/1`);
+    //     const json = await res.json();
+    //     if (json) setHasExtension(false);
+    //   } catch (_) {
+    //     try {
+    //       const res = await fetch(`https://${cid}.ipfs.nftstorage.link/1.json`);
+    //       const json = await res.json();
+    //       if (json) setHasExtension(true);
+    //     } catch (_) {
+    //       setHasExtension(true);
+    //       setError(true);
+    //     }
+    //   }
+    // }
+    if (hasExtension !== true && hasExtension !== false) {
       try {
-        const res = await fetch(`https://ipfs.io/ipfs/${cid}/1`);
-        const json = await res.json();
-        if (json) setHasExtension(false);
+        const _hasExtension = await checkExtension(cid);
+        setHasExtension(_hasExtension);
       } catch (_) {
-        try {
-          const res = await fetch(`https://ipfs.io/ipfs/${cid}/1.json`);
-          const json = await res.json();
-
-          if (json) setHasExtension(true);
-        } catch (_) {
-          const v0 = CID.parse(cid);
-
-          v0.toString();
-
-          const cidV1 = v0.toV1().toString();
-
-          try {
-            const res = await fetch(`https://${cidV1}.ipfs.nftstorage.link/1`);
-            const json = await res.json();
-
-            if (json) setHasExtension(false);
-          } catch (_) {
-            try {
-              const res = await fetch(
-                `https://${cidV1}.ipfs.nftstorage.link/1.json`
-              );
-
-              const json = await res.json();
-
-              if (json) setHasExtension(true);
-            } catch (_) {
-              setHasExtension(true);
-              setError(true);
-            }
-          }
-        }
-      }
-    } else {
-      try {
-        const res = await fetch(`https://${cid}.ipfs.nftstorage.link/1`);
-        const json = await res.json();
-        if (json) setHasExtension(false);
-      } catch (_) {
-        try {
-          const res = await fetch(`https://${cid}.ipfs.nftstorage.link/1.json`);
-          const json = await res.json();
-          if (json) setHasExtension(true);
-        } catch (_) {
-          setHasExtension(true);
-          setError(true);
-        }
+        setHasExtension(true);
       }
     }
+
     setReadyToDeploy(true);
   };
 
@@ -128,7 +147,6 @@ export default function ProjectMetadataFormRegular({ _project }) {
           <div id="modals">
             {showModal && (
               <DeployMetadataRegularDropModal
-                isOpen={true}
                 abi={abi}
                 project={project}
                 onClose={hideMetadataModal}
@@ -173,6 +191,53 @@ export default function ProjectMetadataFormRegular({ _project }) {
                     onChange={onChangeCid}
                   />
                 </div>
+                <div className="flex flex-col">
+                  <label className="text-sm font-bold mt-6 mb-4 text-zinc-400">
+                    Do you want to add .json extension to Metadata?
+                  </label>
+                  <div className="flex items-center mb-2">
+                    <input
+                      id="auto-extension"
+                      type="radio"
+                      value="null"
+                      name="json"
+                      className="w-4 h-4 accent-tock-green text-blue-100"
+                      onChange={onExtensionChange}
+                      checked={hasExtension !== true && hasExtension !== false}
+                    />
+                    <label className="ml-2 text-sm text-gray-200 dark:text-gray-300">
+                      Who is Jason?? <span className="text-xs text-zinc-400" >(Let Tockable do it for you)</span>
+                    </label>
+                  </div>
+                  <div className="flex items-center mb-2">
+                    <input
+                      id="add-json"
+                      type="radio"
+                      value="true"
+                      name="json"
+                      className="w-4 h-4 accent-tock-green text-blue-100"
+                      onChange={onExtensionChange}
+                      checked={hasExtension === true}
+                    />
+                    <label className="ml-2 text-sm text-gray-200 dark:text-gray-300">
+                      Yes, like "69.json"
+                    </label>
+                  </div>
+                  <div className="flex items-center">
+                    <input
+                      id="dont-add-json"
+                      type="radio"
+                      value="false"
+                      name="json"
+                      className="w-4 h-4 accent-tock-green text-blue-100"
+                      onChange={onExtensionChange}
+                      checked={hasExtension === false}
+                    />
+                    <label className="ml-2 text-sm text-gray-200 dark:text-gray-300">
+                      No, Don't add .json
+                    </label>
+                  </div>
+                </div>
               </div>
             </div>
             <div className="mb-4">
@@ -181,21 +246,29 @@ export default function ProjectMetadataFormRegular({ _project }) {
               )}
 
               {chain.id === Number(project.chainId) && (
-                <Button
-                  className="xs:mt-2"
-                  variant="secondary"
-                  type="button"
-                  onClick={() => deploy()}
-                  disabled={deploying}
-                >
-                  <div>
-                    {deploying ? (
-                      <Loading isLoading={deploying} size={10} />
-                    ) : (
-                      "save & deploy"
-                    )}
-                  </div>
-                </Button>
+                <>
+                  <Button
+                    className="xs:mt-2"
+                    variant="secondary"
+                    type="button"
+                    onClick={() => deploy()}
+                    disabled={deploying}
+                  >
+                    <div>
+                      {deploying ? (
+                        <Loading isLoading={deploying} size={10} />
+                      ) : (
+                        "save & deploy"
+                      )}
+                    </div>
+                  </Button>
+                  {deploying && (
+                    <p className="text-xs text-tock-orange my-2">
+                      It may take a while due to the Metadata extension
+                      validation. please be patient...
+                    </p>
+                  )}
+                </>
               )}
             </div>
             {emptyMetadata && (

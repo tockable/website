@@ -17,7 +17,7 @@ const contents = [
   },
   { name: "Tockable metadata", route: "tockable-metadata" },
   { name: "Contract actions", route: "contract-actions" },
-  { name: "Tockable Points (TXP)", route: "tockable-xp" },
+  // { name: "Tockable Points (TXP)", route: "tockable-xp" },
   { name: "Tockable Fees", route: "tockable-fees" },
 ];
 export default function DocsNavigation() {

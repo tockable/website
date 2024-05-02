@@ -15,6 +15,7 @@ const COMPILER_VERSIONS = {
   v821: "v0.8.21+commit.d9974bed",
   v822: "v0.8.22+commit.4fc1097e",
   v823: "v0.8.23+commit.f704f362",
+  v824: "v0.8.24+commit.e11b9ed9",
 };
 
 const DATABASE = process.env.DATABASE;
@@ -57,7 +58,7 @@ export default async function verify(_project) {
     const chainData = await getVerifyChainData(Number(_project.chainId));
     const { contractName, args, source } =
       getContractVerificationArgs(_project);
-      
+
     const request = {
       apikey: chainData.apikey,
       module: "contract",
@@ -67,6 +68,22 @@ export default async function verify(_project) {
       codeformat: "solidity-single-file",
       contractname: contractName,
       compilerversion: COMPILER_VERSIONS["v821"],
+      optimizationUsed: 1,
+      runs: 200,
+      evmVersion: "paris",
+      constructorArguements: args,
+      licenseType: 3,
+    };
+
+    const request2 = {
+      apikey: chainData.apikey,
+      module: "contract",
+      action: "verifysourcecode",
+      sourceCode: source,
+      contractaddress: _project.contractAddress,
+      codeformat: "solidity-single-file",
+      contractname: contractName,
+      compilerversion: COMPILER_VERSIONS["v824"],
       optimizationUsed: 1,
       runs: 200,
       evmVersion: "paris",
@@ -120,12 +137,30 @@ export default async function verify(_project) {
 
     formBody = formBody.join("&");
 
+    let formBody2 = [];
+
+    for (let property in request2) {
+      let encodedKey = encodeURIComponent(property);
+      let encodedValue = encodeURIComponent(request[property]);
+      formBody2.push(encodedKey + "=" + encodedValue);
+    }
+
+    formBody2 = formBody2.join("&");
+
     const res1 = await fetch(chainData.endpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
       body: formBody,
+    });
+
+ await fetch(chainData.endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: formBody2,
     });
 
     const data1 = await res1.json();

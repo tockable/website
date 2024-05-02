@@ -14,6 +14,7 @@ export default function DeployedContractView({ _project }) {
   const [chainData, setChainData] = useState();
   const [verifying, setVerifying] = useState(false);
   const [verificationError, setVerificationError] = useState(false);
+  const [showManualVerify, setShowManualVerify] = useState(false);
 
   async function callVerify() {
     setVerifying(true);
@@ -118,9 +119,11 @@ export default function DeployedContractView({ _project }) {
             </a>
           </section>
           <section className="mt-2 mb-8">
-            <p className="text-tock-blue font-bold text-sm">Verification:</p>
+            <p className="text-tock-blue font-bold text-sm">
+              Verification status:
+            </p>
             {project.isVerified && (
-              <p className="text-tock-green text-sm mt-2">verified</p>
+              <p className="text-tock-green text-sm mt-2">Verified</p>
             )}
             {!project.isVerified && (
               <div>
@@ -130,7 +133,9 @@ export default function DeployedContractView({ _project }) {
                   onClick={() => callVerify()}
                   disabled={
                     verifying ||
-                    Number(project.chainId) === 59144 ||
+                    Number(project.chainId) === 59140 ||
+                    Number(project.chainId) == 80001 ||
+                    Number(project.chainId) == 420 ||
                     Number(project.chainId) === 84532 ||
                     Number(project.chainId) === 34443 ||
                     Number(project.chainId) === 11155420 ||
@@ -140,36 +145,41 @@ export default function DeployedContractView({ _project }) {
                   {verifying ? (
                     <Loading isLoading={verifying} size={10} />
                   ) : (
-                    "verify contract"
+                    "Verify contract"
                   )}
                 </Button>
                 {verificationError && (
                   <div>
                     <p className="text-tock-red text-sm mt-2">
-                      an error occured during verification, please try again.
+                      an error occured during verification, please try again or
+                      use manuall verify.
                     </p>
-                    {Number(project.chainId) !== 168587773 && (
-                      <ManualVerify project={project} />
-                    )}
                   </div>
                 )}
                 {(Number(project.chainId) == 59140 ||
+                  Number(project.chainId) == 80001 ||
+                  Number(project.chainId) == 420 ||
                   Number(project.chainId) == 84532 ||
                   Number(project.chainId) == 34443 ||
                   Number(project.chainId) == 168587773 ||
                   Number(project.chainId) == 11155420) && (
                   <div>
-                    <p className="text-tock-red text-sm mt-2">
+                    <p className="text-tock-red text-xs mt-2">
                       currently automatic verification is not supported for this
-                      network
+                      network.
                     </p>
-                    {Number(project.chainId) !== 168587773 && (
-                      <ManualVerify project={project} />
-                    )}
                   </div>
                 )}
               </div>
             )}
+
+            <button
+              onClick={() => setShowManualVerify(true)}
+              className="text-tock-orange hover:text-orange-100 text-sm mt-2"
+            >
+              I want to verify manually {">"}
+            </button>
+            {showManualVerify && <ManualVerify project={project} />}
           </section>
         </div>
       )}
@@ -226,7 +236,7 @@ function ManualVerify({ project }) {
       ) : (
         <div>
           {error && (
-            <p className="text-xs text-rose-500">Something went wrong</p>
+            <p className="text-xs text-tock-red">Something went wrong</p>
           )}{" "}
           {verificationData && (
             <div className="text-xs">
