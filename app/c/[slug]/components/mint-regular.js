@@ -350,7 +350,7 @@ function MintHandler({ role, prepareMint, session }) {
             )}
             <p className="text-[12px] text-zinc-500 mt-4">
               + {quantity * getBaseFee(project)} {project.chainData.nativeToken}{" "}
-              platform fee platform fee{" "}
+              platform fee{" "}
               <a
                 className="text-[10px] text-blue-400 hover:text-blue-300"
                 href="/docs/tockable-fees"

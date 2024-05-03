@@ -36,16 +36,15 @@ const VERIFY_CHAIN_DATA = [
     endpoint: "https://api.lineascan.build/api",
     apikey: process.env.LINEASCAN_API,
   },
-  // {
-  //   chainId: 168587773,
-  //   endpoint:
-  //     "https://api.routescan.io/v2/network/testnet/evm/168587773/etherscan/api",
-  //   apikey: "blast-sepolia",
-  // },
   {
     chainId: 81457,
     endpoint: "https://api.blastscan.io/api",
     apikey: process.env.BLASTSCAN_API,
+  },
+  {
+    chainId: 42161,
+    endpoint: "https://api.arbiscan.io/api",
+    apikey: process.env.ARBITSCAN_API,
   },
 ];
 

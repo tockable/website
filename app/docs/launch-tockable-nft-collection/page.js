@@ -95,8 +95,8 @@ export default function Page() {
             tokens. Then deploy the contract.
             <div className="mt-6 mb-2 bg-orange-500/10 p-2 rounded-lg">
               <p className="text-tock-orange text-xs my-1">
-                Please note that you can not choose Unlimied supply and the
-                Duplicate verification at the same time. It's because in an
+                Please note that you can not choose "Unlimited supply" and
+                "Duplicate verification" at the same time. Because in an
                 Unlimited supplied contract, it's possible for collectors to
                 create duplicated designs.
               </p>

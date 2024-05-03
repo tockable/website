@@ -123,7 +123,15 @@ export default function DeployedContractView({ _project }) {
               Verification status:
             </p>
             {project.isVerified && (
-              <p className="text-tock-green text-sm mt-2">Verified</p>
+              <>
+                <p className="text-tock-green text-sm mt-2">Verified</p>
+                <p className="text-zinc400 text-xs mt-1">
+                  It usually takes about 5min for a chain scanner to process the
+                  contract verification request, If the contract has not been
+                  verificated after the mentioned period, please try manual
+                  verification.
+                </p>
+              </>
             )}
             {!project.isVerified && (
               <div>
@@ -133,13 +141,7 @@ export default function DeployedContractView({ _project }) {
                   onClick={() => callVerify()}
                   disabled={
                     verifying ||
-                    Number(project.chainId) === 59140 ||
-                    Number(project.chainId) == 80001 ||
-                    Number(project.chainId) == 420 ||
-                    Number(project.chainId) === 84532 ||
-                    Number(project.chainId) === 34443 ||
-                    Number(project.chainId) === 11155420 ||
-                    Number(project.chainId) === 168587773
+                    isUnsupportedChainForVerification(Number(project.chainId))
                   }
                 >
                   {verifying ? (
@@ -156,13 +158,7 @@ export default function DeployedContractView({ _project }) {
                     </p>
                   </div>
                 )}
-                {(Number(project.chainId) == 59140 ||
-                  Number(project.chainId) == 80001 ||
-                  Number(project.chainId) == 420 ||
-                  Number(project.chainId) == 84532 ||
-                  Number(project.chainId) == 34443 ||
-                  Number(project.chainId) == 168587773 ||
-                  Number(project.chainId) == 11155420) && (
+                {isUnsupportedChainForVerification(Number(project.chainId)) && (
                   <div>
                     <p className="text-tock-red text-xs mt-2">
                       currently automatic verification is not supported for this
@@ -340,4 +336,15 @@ function ManualVerify({ project }) {
       )}
     </div>
   );
+}
+
+function isUnsupportedChainForVerification(_chainId) {
+  _chainId === 59140 ||
+    _chainId == 80001 ||
+    _chainId == 420 ||
+    _chainId === 84532 ||
+    _chainId === 34443 ||
+    _chainId === 11155420 ||
+    _chainId === 168587773 ||
+    _chainId === 7777777;
 }

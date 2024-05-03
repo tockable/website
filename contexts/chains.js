@@ -7,8 +7,8 @@ import {
   base,
   optimism,
   polygonMumbai,
-  // arbitrum,
-  // zora,
+  arbitrum,
+  zora,
   // optimismSepolia,
   // baseSepolia,
 } from "wagmi/chains";
@@ -90,8 +90,8 @@ export const TOCKABLE_CHAINS = [
   lineaTestnet,
   polygon,
   polygonMumbai,
-  // zora,
-  // arbitrum,
+  zora,
+  arbitrum,
   // optimismSepolia,
   // baseSepolia,
 ];

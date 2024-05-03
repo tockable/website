@@ -1,7 +1,7 @@
 import Link from "next/link";
 import DiscordSvg from "@/svgs/social-svgs/DiscordSvg";
 import TwitterSvg from "@/svgs/social-svgs/TwitterSvg";
-import { SOCIAL, TOCKBALE_VERSION } from "@/tock.config";
+import { SOCIAL, TOCKABLE_VERSION } from "@/tock.config";
 
 export default function Footer() {
   return (
@@ -21,7 +21,7 @@ export default function Footer() {
         </Link>
       </div>
       <p className="mt-24">&copy;2024 Tockable. All rights reserved.</p>
-      <p>v{TOCKBALE_VERSION}</p>
+      <p>v{TOCKABLE_VERSION}</p>
     </footer>
   );
 }

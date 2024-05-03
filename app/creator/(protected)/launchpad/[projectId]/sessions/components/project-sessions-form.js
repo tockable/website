@@ -195,6 +195,9 @@ export default function ProjectSessionsForm({ params }) {
                             {session.name}
                           </label>
                           <LabeledInput
+                            subtitle={
+                              "(Total NFTs that can be sold in the session)"
+                            }
                             value={session.allocation}
                             id={`session_allocation_${session.id}`}
                             type="number"
@@ -208,7 +211,7 @@ export default function ProjectSessionsForm({ params }) {
                             }
                             required={true}
                           >
-                            token allocation for{" "}
+                            Available Supply for{" "}
                             <span className="text-tock-orange">
                               {session.name}
                             </span>

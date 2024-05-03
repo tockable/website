@@ -11,7 +11,7 @@ export const SOCIAL = {
   discord: "https://discord.gg",
   mirror: "https://mirror.xyz",
 };
-export const TOCKBALE_VERSION = "0.2.6";
+export const TOCKABLE_VERSION = "0.2.7";
 
 export const SUPPORTED_CHAINS = [
   { name: "Ethereum ♦", value: "1" },
@@ -22,6 +22,8 @@ export const SUPPORTED_CHAINS = [
   { name: "Linea ⬛️", value: "59144" },
   { name: "Blast", value: "81457" },
   { name: "Mode", value: "34443" },
+  { name: "Arbitum One", value: "42161" },
+  { name: "Zora", value: "7777777" },
   { name: "Polygon 🟣", value: "137" },
   { name: "Linea Goerli ⬛️", value: "59140" },
   { name: "Polygon mumbai", value: "80001" },

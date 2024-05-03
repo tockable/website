@@ -1,8 +1,7 @@
 import { NFTStorage, File } from "nft.storage";
 
 const MAX_RETRIES = 6;
-const NFT_STORAGE_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDc4MDdmYTI0YTY5QUFmZTg4RTk0OGM1NzVkY0Y4NDU2OTY2YTFBRTEiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY5NjIwOTUxNTUxNywibmFtZSI6InRvY2thYmxleHl6In0.R_j_1Coce7xXfNfYz8y-NqSpFMQkOpt3y8s_3V6VF40";
+const NFT_STORAGE_KEY = process.env.NEXT_PUBLIC_NFT_STORAGE_KEY;
 
 export default async function storeFileToIpfs(
   buffer,

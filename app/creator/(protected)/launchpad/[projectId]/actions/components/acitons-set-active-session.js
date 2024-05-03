@@ -11,9 +11,8 @@ import Button from "@/components/design/button";
 export default function ActionSetActiveSession({ abi, _project }) {
   const [project, setProject] = useState(_project);
   const [key, setKey] = useState(1);
-  const [ready, setReady] = useState(false);
 
-  const [sessionToActive, setSessionToActive] = useState("0");
+  const [sessionToActive, setSessionToActive] = useState("");
   const [args, setArgs] = useState(null);
   const [isWriting, setWriting] = useState(false);
   const [sessionName, setSessionName] = useState();
@@ -26,9 +25,13 @@ export default function ActionSetActiveSession({ abi, _project }) {
         ? "0"
         : project.activeSession.toString()
     );
-    setArgs(Number(sessionToActive));
   }, [project]);
 
+  useEffect(() => {
+    if (sessionToActive.toString().length === 0) return;
+    setArgs(Number(sessionToActive));
+  }, [sessionToActive]);
+  console.log(args);
   const { config } = usePrepareContractWrite({
     address: project.contractAddress,
     abi: abi,
@@ -122,7 +125,13 @@ export default function ActionSetActiveSession({ abi, _project }) {
           })}
       </div>
       <Button
-        disabled={isLoading || uwt.isLoading || isWriting || !write}
+        disabled={
+          isLoading ||
+          uwt.isLoading ||
+          isWriting ||
+          !write ||
+          sessionToActive.toString() === project.activeSession.toString()
+        }
         className="mt-4"
         variant={"secondary"}
         onClick={() => write?.()}
@@ -134,9 +143,15 @@ export default function ActionSetActiveSession({ abi, _project }) {
           />
         )}
         {!isLoading && !uwt.isLoading && !isWriting && (
-          <p>
-            active "{sessionName}" session (session id: {sessionToActive})
-          </p>
+          <>
+            {sessionToActive.toString() === project.activeSession.toString() ? (
+              <p>"{sessionName}" is active </p>
+            ) : (
+              <p>
+                activate "{sessionName}" session (session id: {sessionToActive})
+              </p>
+            )}
+          </>
         )}
       </Button>
       {(isLoading || uwt.isLoading || isWriting) && (

@@ -17,11 +17,11 @@ import LabeledInput from "@/components/design/labeled-input";
 import Button from "@/components/design/button";
 import Loading from "@/components/loading/loading";
 import Fade from "@/components/design/fade/fade";
-import { useRouter } from "next/navigation";
+import storeFileToIpfs from "@/actions/ipfs/uploadFileToIpfs";
 
 export default function ProjectDetailsForm({ params }) {
   const session = useSession();
-  const router = useRouter();
+
   const [loadingFailed, setLoadingFailed] = useState(false);
   const [nameEditError, setNameEditError] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -200,6 +200,13 @@ export default function ProjectDetailsForm({ params }) {
       setProject({ ...project, slug: e.target.value });
   };
 
+  async function prepareBuffer(_file) {
+    const bytes = await _file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+
+    return { buffer, type: _file.type };
+  }
+
   async function callUpdateProjectDetail() {
     setNameEditError(false);
     setSlugError(false);
@@ -254,12 +261,47 @@ export default function ProjectDetailsForm({ params }) {
 
     let files;
 
-    if (imageChanged || coverChanged) {
-      files = new FormData();
-      if (imageChanged) files.append("image", image);
-      if (coverChanged) files.append("cover", cover);
-    } else {
-      files = null;
+    // if (imageChanged || coverChanged) {
+    //   files = new FormData();
+    //   if (imageChanged) files.append("image", image);
+    //   if (coverChanged) files.append("cover", cover);
+    // } else {
+    //   files = null;
+    // }
+
+    let imageCid = project.image;
+    let coverCid = project.cover;
+
+    if (imageChanged) {
+      const profileBuffer = await prepareBuffer(image);
+      const profileRes = await storeFileToIpfs(
+        profileBuffer.buffer,
+        profileBuffer.type
+      );
+
+      if (profileRes.success === false) {
+        setFailed(true);
+        setSaving(false);
+        setErrorMessage("Something wrong in our side, please try again.");
+      }
+
+      imageCid = profileRes.cid;
+    }
+
+    if (coverChanged) {
+      const coverBuffer = await prepareBuffer(cover);
+      const coverRes = await storeFileToIpfs(
+        coverBuffer.buffer,
+        coverBuffer.type
+      );
+
+      if (coverRes.success === false) {
+        setFailed(true);
+        setSaving(false);
+        setErrorMessage("Something wrong in our side, please try again.");
+      }
+
+      coverCid = coverRes.cid;
     }
 
     const { uuid, name, description, website, twitter, discord, slug } =
@@ -273,6 +315,8 @@ export default function ProjectDetailsForm({ params }) {
       twitter,
       discord,
       slug,
+      image: imageCid,
+      cover: coverCid,
     };
 
     const res = await updateProjectDetails(
@@ -282,20 +326,17 @@ export default function ProjectDetailsForm({ params }) {
     );
 
     if (res.success === false) {
-      setFailed(true);
       if (res.message === "forbidden") {
+        setFailed(true);
         setErrorMessage("forbiden");
-        setSaving(false);
-        return;
       } else if (res.message === "deployed") {
         setNameEditError(true);
-        return;
       } else {
+        setFailed(true);
         setErrorMessage("Something wrong in our side, please try again.");
-        setSaving(false);
-        setSuccess(true);
-        return;
       }
+      setSaving(false);
+      return;
     }
 
     setImageChanged(false);
@@ -528,7 +569,7 @@ export default function ProjectDetailsForm({ params }) {
 
                   {imageTypeError && (
                     <p className="text-tock-red text-xs">
-                      Supported file types: png, jpg, webp
+                      Supported file types: png, jpg, webp, gif
                     </p>
                   )}
 

@@ -7,6 +7,7 @@ import getVerifyChainData from "./getVerifyChainData";
 import { encodeAbiParameters } from "viem";
 import { TOCKABLE_ADDRESS } from "@/tock.config";
 import { updateProject } from "../launchpad/projects";
+const { URLSearchParams } = require("url");
 
 const COMPILER_VERSIONS = {
   v800: "v0.8.0+commit.c7dfd78e",
@@ -56,8 +57,9 @@ export async function getContractVerificationArgs(_project) {
 export default async function verify(_project) {
   try {
     const chainData = await getVerifyChainData(Number(_project.chainId));
-    const { contractName, args, source } =
-      getContractVerificationArgs(_project);
+    const { contractName, args, source } = await getContractVerificationArgs(
+      _project
+    );
 
     const request = {
       apikey: chainData.apikey,
@@ -127,38 +129,40 @@ export default async function verify(_project) {
     //   licenseType: 3,
     // };
 
-    let formBody = [];
+    // let formBody = [];
 
-    for (let property in request) {
-      let encodedKey = encodeURIComponent(property);
-      let encodedValue = encodeURIComponent(request[property]);
-      formBody.push(encodedKey + "=" + encodedValue);
-    }
+    // for (let property in request) {
+    //   let encodedKey = encodeURIComponent(property);
+    //   let encodedValue = encodeURIComponent(request[property]);
+    //   formBody.push(encodedKey + "=" + encodedValue);
+    // }
 
-    formBody = formBody.join("&");
+    // formBody = formBody.join("&");
 
-    let formBody2 = [];
+    // let formBody2 = [];
 
-    for (let property in request2) {
-      let encodedKey = encodeURIComponent(property);
-      let encodedValue = encodeURIComponent(request[property]);
-      formBody2.push(encodedKey + "=" + encodedValue);
-    }
+    // for (let property in request2) {
+    //   let encodedKey = encodeURIComponent(property);
+    //   let encodedValue = encodeURIComponent(request[property]);
+    //   formBody2.push(encodedKey + "=" + encodedValue);
+    // }
 
-    formBody2 = formBody2.join("&");
+    // formBody2 = formBody2.join("&");
 
+    let formBody = new URLSearchParams(request);
     const res1 = await fetch(chainData.endpoint, {
       method: "POST",
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
       },
       body: formBody,
     });
 
- await fetch(chainData.endpoint, {
+    let formBody2 = new URLSearchParams(request2);
+    await fetch(chainData.endpoint, {
       method: "POST",
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
       },
       body: formBody2,
     });
@@ -166,6 +170,7 @@ export default async function verify(_project) {
     const data1 = await res1.json();
 
     if (data1) {
+      console.log(data1);
       if (data1.status == 1 || data1.status == "1") {
         const checkGuid = `${chainData.endpoint}?apikey=${chainData.apikey}&guid=${data1.result}&module=contract&action=checkverifystatus`;
 

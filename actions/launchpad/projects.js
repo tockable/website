@@ -2,7 +2,7 @@
 
 import fs from "fs";
 import path from "path";
-import storeFileToIpfs from "../ipfs/uploadFileToIpfs.js";
+// import storeFileToIpfs from "../ipfs/uploadFileToIpfs.js";
 import { getProjectDirectory } from "../utils/path-utils.js";
 
 const DATABASE = process.env.DATABASE;
@@ -113,54 +113,11 @@ async function updateAllProjects(params) {
  * @param {object} _project
  */
 
-export async function updateProjectDetails(_creator, _projectDetails, _files) {
-  let image, cover;
-
-  const { uuid, name, description, website, twitter, discord, slug } =
-    _projectDetails;
-
-  if (_files !== null) {
-    image = _files.get("image");
-    cover = _files.get("cover");
-  } else {
-    image = null;
-    cover = null;
-  }
+export async function updateProjectDetails(_creator, _projectDetails) {
+  const { slug } = _projectDetails;
 
   try {
-    const params = { uuid, name, description, website, twitter, discord, slug };
-
-    if (image !== null && image !== "null") {
-      const bytes = await image.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-      const res = await storeFileToIpfs(buffer, image.type, image.name);
-      if (
-        res.success === true &&
-        res.cid &&
-        res.cid !== "" &&
-        res.cid !== undefined
-      ) {
-        params.image = res.cid;
-      } else {
-        return { success: false, message: "Something wrong with ipfs" };
-      }
-    }
-
-    if (cover !== null && cover !== "null") {
-      const bytes = await cover.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-      const res = await storeFileToIpfs(buffer, cover.type, cover.name);
-      if (
-        res.success === true &&
-        res.cid &&
-        res.cid !== "" &&
-        res.cid !== undefined
-      ) {
-        params.cover = res.cid;
-      } else {
-        return { success: false, message: "Something wrong with ipfs" };
-      }
-    }
+    const params = _projectDetails;
 
     const updatedProject = await updateProject(_creator, params);
 
@@ -195,3 +152,86 @@ export async function updateProjectDetails(_creator, _projectDetails, _files) {
     return { success: false, message: err.message };
   }
 }
+
+// export async function updateProjectDetails(_creator, _projectDetails, _files) {
+//   let image, cover;
+
+//   const { uuid, name, description, website, twitter, discord, slug } =
+//     _projectDetails;
+
+//   if (_files !== null) {
+//     image = _files.get("image");
+//     cover = _files.get("cover");
+//   } else {
+//     image = null;
+//     cover = null;
+//   }
+
+//   try {
+//     const params = { uuid, name, description, website, twitter, discord, slug };
+
+//     if (image !== null && image !== "null") {
+//       const bytes = await image.arrayBuffer();
+//       const buffer = Buffer.from(bytes);
+//       const res = await storeFileToIpfs(buffer, image.type, image.name);
+//       if (
+//         res.success === true &&
+//         res.cid &&
+//         res.cid !== "" &&
+//         res.cid !== undefined
+//       ) {
+//         params.image = res.cid;
+//       } else {
+//         return { success: false, message: "Something wrong with ipfs" };
+//       }
+//     }
+
+//     if (cover !== null && cover !== "null") {
+//       const bytes = await cover.arrayBuffer();
+//       const buffer = Buffer.from(bytes);
+//       const res = await storeFileToIpfs(buffer, cover.type, cover.name);
+//       if (
+//         res.success === true &&
+//         res.cid &&
+//         res.cid !== "" &&
+//         res.cid !== undefined
+//       ) {
+//         params.cover = res.cid;
+//       } else {
+//         return { success: false, message: "Something wrong with ipfs" };
+//       }
+//     }
+
+//     const updatedProject = await updateProject(_creator, params);
+
+//     const slugPath = path.resolve(".", `${DATABASE}/slugs.json`);
+//     const slugsJSon = fs.readFileSync(slugPath, { encoding: "utf8" });
+//     const slugs = JSON.parse(slugsJSon);
+
+//     const writedBefore = slugs.find(
+//       (s) => s.toLowerCase() === slug.toLowerCase()
+//     );
+
+//     if (!writedBefore) {
+//       await fs.promises.writeFile(
+//         slugPath,
+//         JSON.stringify([...slugs, slug], null, 2)
+//       );
+//     }
+
+//     await updateAllProjects({
+//       uuid: params.uuid,
+//       name: params.name,
+//       image: params.image,
+//       slug: params.slug,
+//     });
+
+//     return {
+//       success: true,
+//       payload: updatedProject,
+//       message: "Project details updated successfully",
+//     };
+//   } catch (err) {
+//     return { success: false, message: err.message };
+//   }
+// }
