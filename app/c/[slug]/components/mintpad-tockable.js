@@ -3,7 +3,7 @@ import getHashAndSignature from "@/actions/signature/signature";
 // import storeMultipleFilesToIpfs from "@/actions/ipfs/uploadMultipleFileToIpfs";
 import getCidTuple from "@/actions/utils/cid-utils";
 import MintProviderTockable from "@/contexts/mint-context-tockable";
-import storeFileToIpfs from "@/actions/ipfs/uploadFileToIpfs";
+// import storeFileToIpfs from "@/actions/ipfs/uploadFileToIpfs";
 
 export default function MintpadTockable({ project, abi }) {
   async function prepareMint(_address, _roleId, _sessionId, ipfs) {

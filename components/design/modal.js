@@ -28,7 +28,7 @@ export default function Modal({ isOpen, onClose, children, hasClose = true }) {
     >
       {hasClose && (
         <button
-          className="transition ease-in-out duration-300 text-zinc-500 hover:text-zinc-300 absolute right-2 mt-1"
+          className="focus:outline-none transition ease-in-out duration-300 text-zinc-500 hover:text-zinc-300 absolute right-2 mt-1"
           onClick={handleCloseModal}
         >
           &#x2715;

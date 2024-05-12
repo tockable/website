@@ -5,22 +5,41 @@ import path from "path";
 import { getPublishedProjectPath } from "../utils/path-utils";
 
 const QUERY = process.env.QUERY;
+const refPath = path.resolve(".", "referals/referals.json");
 
 /**
  *
  */
-export async function storeMinted(mintParams) {
+export async function storeMinted(mintParams, ref) {
   const dbParam = findDb(mintParams.address);
 
   const db_file = "minted-" + dbParam + ".json";
+
   const mintedPath = path.resolve(".", QUERY, "mint-db", db_file);
   const json = fs.readFileSync(mintedPath, "utf-8");
-
   const db = JSON.parse(json);
+
+  const refJSon = fs.readFileSync(refPath, "utf-8");
+  const refDb = JSON.parse(refJSon);
+
+  const referrer = refDb.find(
+    (u) => u.address.toLowerCase() === ref.toLowerCase()
+  );
+
+  if (referrer) {
+    referrer.refPoint += 1;
+  } else {
+    refDb.push({ address: ref, refPoint: 1 });
+  }
 
   await fs.promises.writeFile(
     mintedPath,
     JSON.stringify([...db, mintParams], null, 2)
+  );
+
+  await fs.promises.writeFile(
+    refPath,
+    JSON.stringify(refDb, null, 2)
   );
 }
 
@@ -66,7 +85,7 @@ export async function getTXPOf(address) {
     (item) => item.contractAddress
   );
 
-  console.log(contracts)
+  console.log(contracts);
   if (contracts.length > 0) {
     const deployedContracts = {};
 

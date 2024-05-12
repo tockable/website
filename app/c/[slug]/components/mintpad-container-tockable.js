@@ -212,25 +212,6 @@ export default function MintpadContainerTockable({ prepareMint }) {
                     </div>
                   )}
 
-                  {chain.id !== Number(project.chainData.chainId) && (
-                    <div className="my-4 flex flex-col justify-center items-center my-8">
-                      <p className="text-tock-orange text-xl font-bold my-2">
-                        please switch network
-                      </p>
-
-                      <div className="mb-12">
-                        <p className="text-tock-orange text-xs text-center mb-2">
-                          to see minting options, please switch network to the
-                          project chain
-                        </p>
-                        <SwitchNetworkButton
-                          forDeploy={false}
-                          project={project.chainData}
-                        />
-                      </div>
-                    </div>
-                  )}
-
                   {mintEnded && (
                     <div className="my-4 flex flex-col justify-center items-center my-8">
                       <p className="text-tock-blue text-xl font-bold my-2">
@@ -257,11 +238,10 @@ export default function MintpadContainerTockable({ prepareMint }) {
                       )}
                     </div>
                   )}
+
                   {!mintEnded &&
                     !notStarted &&
                     chain.id === Number(project.chainData.chainId) &&
-                    data &&
-                    !data[0]?.error &&
                     !isNaN(parseInt(data[1].result)) && (
                       <div className="my-4 flex flex-col justify-center items-center my-8">
                         <p className="text-tock-blue text-xl font-bold my-2">
@@ -344,80 +324,92 @@ export default function MintpadContainerTockable({ prepareMint }) {
 
                   {data && !data[0]?.error && !isError && (
                     <>
-                      {data[0]?.result === false && (
-                        <p className="text-tock-orange text-sm mx-4 mt-10 mb-6 text-center p-2 border rounded-xl border-tock-orange">
-                          minting is not available at this moment.
+                      {parseInt(data[1]?.result) === 0 ? (
+                        <p className="text-blue-400 text-lg mx-4 mt-10 mb-6 text-center p-2 border rounded-xl border-tock-orange">
+                          Collection sold out!
                         </p>
-                      )}
-                      {notActive && (
-                        <p className="text-tock-orange mx-4 mt-10 mb-6 p-2">
-                          There is no Active mint session for this collection at
-                          this moment, Please contact the creator or come back
-                          later.
-                        </p>
-                      )}
-                      {!notStarted &&
-                        !mintEnded &&
-                        data[0]?.result === true && (
-                          <div>
-                            {errorGettingElligibility === true && (
-                              <p className="text-tock-orange text-xs p-2 border rounded-xl mt-8 mx-4 border-tock-orange text-center">
-                                Something went wrong, please refresh the page.
-                              </p>
-                            )}
-                            {errorGettingElligibility === false && (
-                              <div className="w-full">
-                                {elligibility === false && (
-                                  <div className="mx-4 p-2 border rounded-xl border-tock-orange">
-                                    <p className="text-tock-orange">
-                                      It seems there is no mint option for this
-                                      wallet at this moment...
-                                    </p>
-                                    <p className="text-tock-orange">
-                                      Please come back later...
-                                    </p>
-                                  </div>
+                      ) : (
+                        <>
+                          {data[0]?.result === false && (
+                            <p className="text-tock-orange text-sm mx-4 mt-10 mb-6 text-center p-2 border rounded-xl border-tock-orange">
+                              minting is not available at this moment.
+                            </p>
+                          )}
+                          {notActive && (
+                            <p className="text-tock-orange mx-4 mt-10 mb-6 p-2">
+                              There is no Active mint session for this
+                              collection at this moment, Please contact the
+                              creator or come back later.
+                            </p>
+                          )}
+                          {!notStarted &&
+                            !mintEnded &&
+                            data[0]?.result === true && (
+                              <div>
+                                {errorGettingElligibility === true && (
+                                  <p className="text-tock-orange text-xs p-2 border rounded-xl mt-8 mx-4 border-tock-orange text-center">
+                                    Something went wrong, please refresh the
+                                    page.
+                                  </p>
                                 )}
-                                {elligibility === true &&
-                                  isFollow === false && (
-                                    <FollowX
-                                      setFollow={handleFollowing}
-                                      verifyFollow={verifyFollow}
-                                    />
-                                  )}
-                                {elligibility === true && isFollow === true && (
-                                  <div className="w-full mt-8">
-                                    {parseInt(data[2].result) > 0 && (
-                                      <div>
-                                        {!publicSession && (
-                                          <p className="text-tock-blue mt-12 mx-4">
-                                            available roles for you:
-                                          </p>
-                                        )}
-                                        <MintpadMintSectionTockable
-                                          roles={roles}
-                                          session={session}
-                                          prepareMint={prepareMint}
-                                        />
+                                {errorGettingElligibility === false && (
+                                  <div className="w-full">
+                                    {elligibility === false && (
+                                      <div className="mx-4 p-2 border rounded-xl border-tock-orange">
+                                        <p className="text-tock-orange">
+                                          It seems there is no mint option for
+                                          this wallet at this moment...
+                                        </p>
+                                        <p className="text-tock-orange">
+                                          Please come back later...
+                                        </p>
                                       </div>
                                     )}
-                                    {parseInt(data[2].result) == 0 && (
-                                      <p className="mt-8 text-tock-orange text-center p-2 border rounded-xl border-zinc-400">
-                                        Current session reaches its total
-                                        supply, please wait until next session.
-                                      </p>
-                                    )}
+                                    {elligibility === true &&
+                                      isFollow === false && (
+                                        <FollowX
+                                          setFollow={handleFollowing}
+                                          verifyFollow={verifyFollow}
+                                        />
+                                      )}
+                                    {elligibility === true &&
+                                      isFollow === true && (
+                                        <div className="w-full mt-8">
+                                          {parseInt(data[2].result) > 0 && (
+                                            <div>
+                                              {!publicSession && (
+                                                <p className="text-tock-blue mt-12 mx-4">
+                                                  available roles for you:
+                                                </p>
+                                              )}
+                                              <MintpadMintSectionTockable
+                                                roles={roles}
+                                                session={session}
+                                                prepareMint={prepareMint}
+                                              />
+                                            </div>
+                                          )}
+                                          {parseInt(data[2].result) == 0 && (
+                                            <p className="mt-8 text-tock-orange text-center p-2 border rounded-xl border-zinc-400">
+                                              Current session reaches its total
+                                              supply, please wait until next
+                                              session.
+                                            </p>
+                                          )}
+                                        </div>
+                                      )}
                                   </div>
                                 )}
                               </div>
                             )}
-                          </div>
-                        )}
+                        </>
+                      )}
                     </>
                   )}
-                  {address === project.creator && (
-                    <OwnerMintTockable prepareMint={prepareMint} />
-                  )}
+                  {address === project.creator &&
+                    parseInt(data[1]?.result > 0)(
+                      <OwnerMintTockable prepareMint={prepareMint} />
+                    )}
                 </div>
               )}
             </div>

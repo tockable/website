@@ -151,7 +151,7 @@ export default function MintpadContainerRegular({ prepareMint }) {
           {!isConnected && (
             <div className="my-4 flex flex-col justify-center items-center my-8">
               <p className="text-tock-orange text-xl font-bold my-2">
-                please connect wallet to mint.
+                Please connect wallet to mint.
               </p>
             </div>
           )}
@@ -163,7 +163,7 @@ export default function MintpadContainerRegular({ prepareMint }) {
 
               <div className="mb-12">
                 <p className="text-tock-orange text-xs text-center mb-2">
-                  to see minting options, please switch network to the project
+                  To see minting options, please switch network to the project
                   chain
                 </p>
                 <SwitchNetworkButton
@@ -228,8 +228,6 @@ export default function MintpadContainerRegular({ prepareMint }) {
                   {!mintEnded &&
                     !notStarted &&
                     chain.id === Number(project.chainData.chainId) &&
-                    data &&
-                    !data[0]?.error &&
                     !isNaN(parseInt(data[1].result)) && (
                       <div className="my-4 flex flex-col justify-center items-center my-8">
                         <p className="text-tock-blue text-xl font-bold my-2">
@@ -260,7 +258,7 @@ export default function MintpadContainerRegular({ prepareMint }) {
           )}
 
           {isConnected &&
-            chain.id === project.chainData.chainId &&
+            chain.id === Number(project.chainData.chainId) &&
             notActive && (
               <p className="text-tock-orange m-4 p-4">
                 There is no Active mint session for this collection at this
@@ -292,7 +290,7 @@ export default function MintpadContainerRegular({ prepareMint }) {
 
                     {!isLoading && (isError || (data && data[0]?.error)) && (
                       <p className="mx-4 my-4 text-tock-red p-2 border rounded-xl mt-8 border-tock-red text-center text-xs">
-                        cannot fetch data form blockchain at this moment. please
+                        Cannot fetch data form blockchain at this moment. please
                         refresh the page or try with another proxy/vpn setting.
                         <br />
                         <br />
@@ -302,72 +300,81 @@ export default function MintpadContainerRegular({ prepareMint }) {
 
                     {!loading && data && !data[0]?.error && !isError && (
                       <>
-                        {data[0]?.result === false && (
-                          <p className="text-tock-orange text-sm mx-4 mt-10 mb-6 text-center p-2 border rounded-xl border-tock-orange">
-                            minting is not available at this moment.
+                        {parseInt(data[1]?.result) === 0 ? (
+                          <p className="text-blue-400 text-lg mx-4 mt-10 mb-6 text-center p-2 border rounded-xl border-tock-orange">
+                            Collection sold out!
                           </p>
-                        )}
+                        ) : (
+                          <>
+                            {data[0]?.result === false && (
+                              <p className="text-tock-orange text-sm mx-4 mt-10 mb-6 text-center p-2 border rounded-xl border-tock-orange">
+                                minting is not available at this moment.
+                              </p>
+                            )}
 
-                        {!loading &&
-                          !notStarted &&
-                          !mintEnded &&
-                          data[0]?.result === true && (
-                            <div>
-                              {errorGettingElligibility === true && (
-                                <p className="text-tock-orange text-xs p-2 border rounded-xl mt-8 mx-4 border-tock-orange text-center">
-                                  Something went wrong, please refresh the page.
-                                </p>
-                              )}
-                              {errorGettingElligibility === false && (
-                                <div className="w-full">
-                                  {elligibility === false && (
-                                    <div className="mx-4 p-2 mt-2 border rounded-xl border-tock-orange text-xs">
-                                      <p className="text-tock-orange">
-                                        It seems there is no mint option for
-                                        this wallet at this moment...
-                                      </p>
-                                      <p className="text-tock-orange">
-                                        Please come back later...
-                                      </p>
-                                    </div>
+                            {!loading &&
+                              !notStarted &&
+                              !mintEnded &&
+                              data[0]?.result === true && (
+                                <div>
+                                  {errorGettingElligibility === true && (
+                                    <p className="text-tock-orange text-xs p-2 border rounded-xl mt-8 mx-4 border-tock-orange text-center">
+                                      Something went wrong, please refresh the
+                                      page.
+                                    </p>
                                   )}
-                                  {elligibility === true &&
-                                    isFollow === false && (
-                                      <FollowX
-                                        setFollow={handleFollowing}
-                                        verifyFollow={verifyFollow}
-                                      />
-                                    )}
-                                  {elligibility === true &&
-                                    isFollow === true && (
-                                      <div className="w-full mt-8">
-                                        {parseInt(data[2].result) > 0 && (
-                                          <div>
-                                            {!publicSession && (
-                                              <p className="text-tock-blue mt-12 mx-4">
-                                                available roles for you:
+                                  {errorGettingElligibility === false && (
+                                    <div className="w-full">
+                                      {elligibility === false && (
+                                        <div className="mx-4 p-2 mt-2 border rounded-xl border-tock-orange text-xs">
+                                          <p className="text-tock-orange">
+                                            It seems there is no mint option for
+                                            this wallet at this moment...
+                                          </p>
+                                          <p className="text-tock-orange">
+                                            Please come back later...
+                                          </p>
+                                        </div>
+                                      )}
+                                      {elligibility === true &&
+                                        isFollow === false && (
+                                          <FollowX
+                                            setFollow={handleFollowing}
+                                            verifyFollow={verifyFollow}
+                                          />
+                                        )}
+                                      {elligibility === true &&
+                                        isFollow === true && (
+                                          <div className="w-full mt-8">
+                                            {parseInt(data[2].result) > 0 && (
+                                              <div>
+                                                {!publicSession && (
+                                                  <p className="text-tock-blue mt-12 mx-4">
+                                                    available roles for you:
+                                                  </p>
+                                                )}
+                                                <MintpadMintSectionRegular
+                                                  roles={roles}
+                                                  session={session}
+                                                  prepareMint={prepareMint}
+                                                />
+                                              </div>
+                                            )}
+                                            {parseInt(data[2].result) == 0 && (
+                                              <p className="mt-8 text-tock-orange text-center p-2 border rounded-xl border-zinc-400">
+                                                Current session reaches its
+                                                total supply, please wait until
+                                                next session.
                                               </p>
                                             )}
-                                            <MintpadMintSectionRegular
-                                              roles={roles}
-                                              session={session}
-                                              prepareMint={prepareMint}
-                                            />
                                           </div>
                                         )}
-                                        {parseInt(data[2].result) == 0 && (
-                                          <p className="mt-8 text-tock-orange text-center p-2 border rounded-xl border-zinc-400">
-                                            Current session reaches its total
-                                            supply, please wait until next
-                                            session.
-                                          </p>
-                                        )}
-                                      </div>
-                                    )}
+                                    </div>
+                                  )}
                                 </div>
                               )}
-                            </div>
-                          )}
+                          </>
+                        )}
                       </>
                     )}
                   </div>

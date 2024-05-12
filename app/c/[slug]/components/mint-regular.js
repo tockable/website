@@ -77,7 +77,7 @@ export default function MintRegular({
 
 function MintHandler({ role, prepareMint, session }) {
   const { address } = useAccount();
-  const { abi, project, setSuccessfullyMinted } =
+  const { abi, project, setSuccessfullyMinted, setMintData, ref } =
     useContext(MintContextRegular);
 
   const [quantity, setQuantity] = useState(1);
@@ -183,19 +183,22 @@ function MintHandler({ role, prepareMint, session }) {
     (async () => {
       const timeStamp = new Date();
       try {
-        await storeMinted({
-          address,
-          chainId: Number(project.chainData.chainId),
-          contract: project.contractAddress,
-          dropType: project.dropType,
-          amount: quantity,
-          timeStamp,
-        });
+        await storeMinted(
+          {
+            address,
+            chainId: Number(project.chainData.chainId),
+            contract: project.contractAddress,
+            dropType: project.dropType,
+            amount: quantity,
+            timeStamp,
+          },
+          ref
+        );
       } catch (err) {
         console.error("not store");
       }
     })();
-
+    setMintData({ quantity, address });
     setSuccessfullyMinted(true);
     refetch?.();
     resetMint();

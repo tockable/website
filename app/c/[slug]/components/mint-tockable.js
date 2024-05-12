@@ -83,8 +83,15 @@ export default function MintTockable({
 
 function MintHandler({ role, prepareMint, session }) {
   const { address } = useAccount();
-  const { abi, project, blobs, setDuplicatedIndexes, setSuccessfullyMinted } =
-    useContext(MintContextTockable);
+  const {
+    abi,
+    project,
+    blobs,
+    setDuplicatedIndexes,
+    setSuccessfullyMinted,
+    setMintData,
+    ref,
+  } = useContext(MintContextTockable);
 
   const [preparing, setPreparing] = useState(false);
   const [readyToMint, setReadyToMint] = useState(false);
@@ -177,20 +184,24 @@ function MintHandler({ role, prepareMint, session }) {
     (async () => {
       const timeStamp = new Date();
       try {
-        await storeMinted({
-          address,
-          chainId: Number(project.chainData.chainId),
-          contract: project.contractAddress,
-          dropType: project.dropType,
-          amount: blobs.length,
-          timeStamp,
-        });
+        await storeMinted(
+          {
+            address,
+            chainId: Number(project.chainData.chainId),
+            contract: project.contractAddress,
+            dropType: project.dropType,
+            amount: blobs.length,
+            timeStamp,
+          },
+          ref
+        );
       } catch (err) {
         console.error("not store");
       }
     })();
 
     setSuccessfullyMinted(true);
+    setMintData({ quantity: blobs.length, address });
     refetch?.();
     resetMint();
     setWarning("");

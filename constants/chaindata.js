@@ -2,7 +2,7 @@ const BASE_FEE = {
   ETH_TOCKABLE: 0.00015,
   ETH_REGULAR: 0.000075,
   POLYGON_TOCKABLE: 0.6,
-  POLYGON_REGULAR: 0.3,
+  POLYGON_REGULAR: 0.000075,
 };
 
 export const chainData = [
