@@ -20,7 +20,7 @@ export default function MintProviderRegular({ project, abi, children }) {
   const searchParams = useSearchParams();
   const ref = searchParams.get("ref");
   const [mintData, setMintData] = useState({ quantity: 0, address: "0x0" });
-  const [successfullyMinted, setSuccessfullyMinted] = useState(true);
+  const [successfullyMinted, setSuccessfullyMinted] = useState(false);
   // const [isFollow, setFollow] = useState(setFollowState());
 
   // useEffect(() => {
