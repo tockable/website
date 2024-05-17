@@ -24,6 +24,7 @@ export default function MintProviderTockable({ project, abi, children }) {
   const [blobs, setBlobs] = useState([]);
   const [duplicatedIndexes, setDuplicatedIndexes] = useState([]);
   const [successfullyMinted, setSuccessfullyMinted] = useState(false);
+  const [mintData, setMintData] = useState({ quantity: 0, address: "0x0" });
   // const [isFollow, setFollow] = useState(setFollowState());
 
   const addToBasket = (blob) => {
@@ -98,6 +99,7 @@ export default function MintProviderTockable({ project, abi, children }) {
         duplicatedIndexes,
         setSuccessfullyMinted,
         ref,
+        setMintData,
       }}
     >
       {successfullyMinted && (
