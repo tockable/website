@@ -391,7 +391,7 @@ export default function MintpadContainerTockable({ prepareMint }) {
                                           )}
                                           {parseInt(data[2].result) == 0 && (
                                             <p className="mt-8 text-tock-orange text-center p-2 border rounded-xl border-zinc-400">
-                                              Current session reaches its total
+                                              Current session reached its total
                                               supply, please wait until next
                                               session.
                                             </p>
@@ -407,7 +407,7 @@ export default function MintpadContainerTockable({ prepareMint }) {
                     </>
                   )}
                   {address === project.creator &&
-                    parseInt(data[1]?.result > 0)(
+                    parseInt(data[1]?.result) > 0 && (
                       <OwnerMintTockable prepareMint={prepareMint} />
                     )}
                 </div>

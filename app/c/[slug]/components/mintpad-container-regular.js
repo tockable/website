@@ -302,7 +302,7 @@ export default function MintpadContainerRegular({ prepareMint }) {
                       <>
                         {parseInt(data[1]?.result) === 0 ? (
                           <p className="text-blue-400 text-lg mx-4 mt-10 mb-6 text-center p-2 border rounded-xl border-tock-orange">
-                            Collection sold out!
+                            Sold out!
                           </p>
                         ) : (
                           <>
