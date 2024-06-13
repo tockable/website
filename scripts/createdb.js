@@ -9,12 +9,13 @@ const fs = require("fs");
 // const dbp = "../sql/published_projects_db.db";
 const base = process.cwd();
 const dbp = `${base}/sql/published_projects_db.db`;
+console.log(dbp);
 const db = new sqlite3.Database(
   dbp,
   sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE,
   (err) => {
     if (err) {
-      return console.error(err.message);
+      return console.error(err);
     }
     console.log("Connected to the SQlite database.");
   }
