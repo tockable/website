@@ -6,7 +6,9 @@ const fs = require("fs");
 // const dbp = path.resolve(".", db_path, "published_projects_db.db");
 // console.log(dbp);
 
-const dbp = "../sql/published_projects_db.db";
+// const dbp = "../sql/published_projects_db.db";
+const base = process.cwd();
+const dbp = `${base}/sql/published_projects_db.db`;
 const db = new sqlite3.Database(
   dbp,
   sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE,
