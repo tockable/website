@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { signOut } from "next-auth/react";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import TockConnectButton from "@/components/tockConnectButton";
 import { useAccount, useDisconnect } from "wagmi";
 import TockableLogo from "@/svgs/logo";
 import { IoIosLogOut } from "react-icons/io";
@@ -39,7 +39,7 @@ export default function NavbarMintpad() {
             My TXPs
           </Link> */}
           <div>
-            <ConnectButton chainStatus={"icon"} showBalance={false} />
+            <TockConnectButton />
           </div>
           {isConnected && (
             <div className="flex items-center">

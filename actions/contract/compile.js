@@ -53,25 +53,15 @@ function compile(_contractName, _project, _buildDirectory) {
       },
     },
   };
-  // const solc_version = "0.8.21+commit.d9974bed";
-  // const solc_version = "v0.8.20+commit.a1b79de6";
 
-  // solc.loadRemoteVersion("v0.8.20+commit.a1b79de6", function (err, solcSnapshot) {
-  // if (err) {
-  //   console.log(err, "err");
-  // } else {
   const output = solc.compile(JSON.stringify(input));
 
   const contract = JSON.parse(output);
 
   const metadata = {
-    // abi: contract.contracts[`${_contractName}.sol`][_contractName].abi,
     bytecode:
       contract.contracts[`${_contractName}.sol`][_contractName].evm.bytecode
         .object,
-    // deployedBytecode:
-    //   contract.contracts[`${_contractName}.sol`][_contractName].evm
-    //     .deployedBytecode.object,
   };
 
   return metadata;

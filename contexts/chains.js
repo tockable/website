@@ -2,15 +2,12 @@ import { defineChain } from "viem";
 import {
   mainnet,
   linea,
-  lineaTestnet,
   polygon,
   base,
   optimism,
   polygonMumbai,
   arbitrum,
   zora,
-  // optimismSepolia,
-  // baseSepolia,
 } from "wagmi/chains";
 
 const mode = defineChain({
@@ -57,24 +54,90 @@ const blast = defineChain({
   },
 });
 
-const blastSepolia = defineChain({
-  id: 168587773,
-  name: "Blast Sepolia",
-  nativeCurrency: { name: "Sepolia Ether", symbol: "ETH", decimals: 18 },
+// const blastSepolia = defineChain({
+//   id: 168587773,
+//   name: "Blast Sepolia",
+//   nativeCurrency: { name: "Sepolia Ether", symbol: "ETH", decimals: 18 },
+//   rpcUrls: {
+//     default: { http: ["https://sepolia.blast.io"] },
+//     public: { http: ["https://sepolia.blast.io"] },
+//   },
+//   blockExplorers: {
+//     default: {
+//       name: "Testnet.blastscan.io",
+//       url: "https://testnet.blastscan.io",
+//     },
+//   },
+//   contracts: {
+//     multicall3: {
+//       address: "0xcA11bde05977b3631167028862bE2a173976CA11",
+//       blockCreated: 756690,
+//     },
+//   },
+// });
+
+const bevm = defineChain({
+  id: 11501,
+  name: "BEVM",
+  nativeCurrency: { name: "Bitcoin", symbol: "BTC", decimals: 18 },
   rpcUrls: {
-    default: { http: ["https://sepolia.blast.io"] },
-    public: { http: ["https://sepolia.blast.io"] },
+    default: { http: ["https://rpc-mainnet-1.bevm.io"] },
+    public: { http: ["https://rpc-mainnet-1.bevm.io"] },
   },
   blockExplorers: {
     default: {
-      name: "Testnet.blastscan.io",
-      url: "https://testnet.blastscan.io",
+      name: "Scan-mainnet.bevm.io",
+      url: "https://scan-mainnet.bevm.io",
+    },
+  },
+  contracts: {
+    // multicall3: {
+    //   address: "0xcA11bde05977b3631167028862bE2a173976CA11",
+    //   blockCreated: 756690,
+    // },
+  },
+});
+
+const bob = defineChain({
+  id: 60808,
+  name: "BOB",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://rpc.gobob.xyz"] },
+    public: { http: ["https://rpc.gobob.xyz"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Explorer.gobob.xyz",
+      url: "https://explorer.gobob.xyz",
+    },
+  },
+  contracts: {
+    // multicall3: {
+    //   address: "0xcA11bde05977b3631167028862bE2a173976CA11",
+    //   blockCreated: 756690,
+    // },
+  },
+});
+
+const taiko = defineChain({
+  id: 167000,
+  name: "Taiko",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://rpc.mainnet.taiko.xyz"] },
+    public: { http: ["https://rpc.mainnet.taiko.xyz"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Taikoscan.io",
+      url: "https://taikoscan.io",
     },
   },
   contracts: {
     multicall3: {
       address: "0xcA11bde05977b3631167028862bE2a173976CA11",
-      blockCreated: 756690,
+      blockCreated: 11269,
     },
   },
 });
@@ -83,15 +146,14 @@ export const TOCKABLE_CHAINS = [
   mainnet,
   optimism,
   base,
-  mode,
+  zora,
+  taiko,
+  bob,
+  arbitrum,
   blast,
-  blastSepolia,
   linea,
-  lineaTestnet,
+  bevm,
+  mode,
   polygon,
   polygonMumbai,
-  zora,
-  arbitrum,
-  // optimismSepolia,
-  // baseSepolia,
 ];

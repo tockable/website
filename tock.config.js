@@ -11,23 +11,24 @@ export const SOCIAL = {
   discord: "https://discord.gg",
   mirror: "https://mirror.xyz",
 };
-export const TOCKABLE_VERSION = "0.2.9";
+export const TOCKABLE_VERSION = "0.3.0";
 
 export const SUPPORTED_CHAINS = [
   { name: "Ethereum ♦", value: "1" },
-  { name: "Optimism 🔴", value: "10" },
-  // { name: "Optimism goerli", value: "420" },
-  { name: "Base 🔵", value: "8453" },
-  // { name: "Base goerli", value: "84531" },
-  { name: "Linea ⬛️", value: "59144" },
+  { name: "BEVM🔥", value: "11501" },
+  { name: "BOB🔥", value: "60808" },
+  { name: "Taiko🔥", value: "167000" },
+  { name: "Base", value: "8453" },
+  { name: "Zora", value: "7777777" },
+  { name: "Arbitum One", value: "42161" },
+  { name: "Optimism", value: "10" },
+  { name: "Linea ", value: "59144" },
   { name: "Blast", value: "81457" },
   { name: "Mode", value: "34443" },
-  { name: "Arbitum One", value: "42161" },
-  { name: "Zora", value: "7777777" },
-  { name: "Polygon 🟣", value: "137" },
-  { name: "Linea Goerli ⬛️", value: "59140" },
-  { name: "Polygon mumbai", value: "80001" },
-  { name: "Blast Sepolia", value: "168587773" },
+  { name: "Polygon", value: "137" },
+  // { name: "Linea Goerli ⬛️", value: "59140" },
+  // { name: "Polygon mumbai", value: "80001" },
+  // { name: "Blast Sepolia", value: "168587773" },
 ];
 
 export const TXP = {
@@ -56,9 +57,4 @@ export const DROP_TYPES = [
   },
 ];
 
-{
-  /* <option value="7777777">Zora</option> */
-}
-{
-  /* <option value="42161">Arbitrum One</option> */
-}
+export const db_path = "sql";

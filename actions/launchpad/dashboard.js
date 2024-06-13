@@ -5,9 +5,14 @@ import path from "path";
 import * as Init from "@/actions/launchpad/drop-models.js";
 import { DROP_TYPES } from "@/tock.config.js";
 import { getProjectDirectory } from "../utils/path-utils.js";
+import sqlite3 from "sqlite3";
+import { open } from "sqlite";
+import { db_path } from "@/tock.config";
+
+const dbp = path.resolve(".", db_path, "published_projects_db.db");
+let db = null;
 
 const DATABASE = process.env.DATABASE;
-const QUERY = process.env.QUERY;
 
 /**
  *
@@ -133,24 +138,40 @@ async function addEntryToAllProjects({
   chainId,
   dropType,
 }) {
-  const allProjectsPath = path.resolve(".", QUERY, "allProjects.json");
-  const json = fs.readFileSync(allProjectsPath, { encoding: "utf8" });
-  const allProjects = JSON.parse(json);
+  if (!db) {
+    db = await open({
+      filename: dbp,
+      driver: sqlite3.Database,
+    });
+  }
 
-  const newProject = {
+  const query = `INSERT INTO published_projects (
     uuid,
     name,
     creator,
     chain,
     chainId,
     dropType,
-    image: "",
-    contractAddress: "",
-    slug: "",
-    isPublished: false,
-  };
+    image,
+    contractAddress,
+    slug,
+    isPublished,
+    minted
+) VALUES (?,?,?,?,?,?,?,?,?,?,?)`;
 
-  allProjects.push(newProject);
+  const vals = [
+    uuid,
+    name,
+    creator.toLowerCase(),
+    chain,
+    chainId,
+    dropType,
+    "",
+    "",
+    "",
+    0,
+    0,
+  ];
 
-  fs.writeFileSync(allProjectsPath, JSON.stringify(allProjects, null, 2));
+  await db.run(query, vals);
 }

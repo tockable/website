@@ -1,126 +1,85 @@
 "use server";
 
-import fs from "fs";
 import path from "path";
-import { getPublishedProjectPath } from "../utils/path-utils";
+import sqlite3 from "sqlite3";
+import { open } from "sqlite";
+import { db_path } from "@/tock.config";
 
-const QUERY = process.env.QUERY;
-const refPath = path.resolve(".", "referals/referals.json");
+const dbp = path.resolve(".", db_path, "published_projects_db.db");
+let db = null;
 
-/**
- *
- */
 export async function storeMinted(mintParams, ref) {
-  const dbParam = findDb(mintParams.address);
-
-  const db_file = "minted-" + dbParam + ".json";
-
-  const mintedPath = path.resolve(".", QUERY, "mint-db", db_file);
-  const json = fs.readFileSync(mintedPath, "utf-8");
-  const db = JSON.parse(json);
-
-  const refJSon = fs.readFileSync(refPath, "utf-8");
-  const refDb = JSON.parse(refJSon);
-
-  const referrer = refDb.find(
-    (u) => u.address.toLowerCase() === ref.toLowerCase()
-  );
-
-  if (referrer) {
-    referrer.refPoint += 1;
-  } else {
-    refDb.push({ address: ref, refPoint: 1 });
+  if (!db) {
+    db = await open({
+      filename: dbp,
+      driver: sqlite3.Database,
+    });
   }
 
-  await fs.promises.writeFile(
-    mintedPath,
-    JSON.stringify([...db, mintParams], null, 2)
-  );
+  const insertMinted = `INSERT INTO minted (
+    address,
+    chainId,
+    contract,
+    dropType,
+    amount,
+    timeStamp
+) VALUES(?, ?, ?, ?, ?, ?)`;
 
-  await fs.promises.writeFile(
-    refPath,
-    JSON.stringify(refDb, null, 2)
-  );
+  const vals = [
+    mintParams.address.toLowerCase(),
+    mintParams.chainId.toString(),
+    mintParams.contract,
+    mintParams.dropType,
+    mintParams.amount,
+    mintParams.timeStamp,
+  ];
+
+  await db.run(insertMinted, vals);
+
+  const insertProjectMinted = `UPDATE published_projects SET minted = minted + ${mintParams.amount} WHERE contractAddress = '${mintParams.contract}'`;
+
+  await db.run(insertProjectMinted);
+
+  if (ref) {
+    const refl = ref.toLowerCase();
+    const query = `INSERT INTO referrals (address, refPoint) VALUES ('${refl}',${mintParams.amount})`;
+    await db.run(query);
+  }
 }
 
-/**
- *
- */
 export async function getTXPOf(address) {
-  const dbParam = findDb(address);
-
-  const db_file = "minted-" + dbParam + ".json";
-  const mintedPath = path.resolve(".", QUERY, "mint-db", db_file);
-  const json = fs.readFileSync(mintedPath, "utf-8");
-
-  const db = JSON.parse(json);
-
-  const allMinted = db.filter(
-    (item) => item.address.toLowerCase() === address.toLowerCase()
-  );
-
-  let regularMinted = 0;
-  let tockableMinted = 0;
-  let elligibleTockableContracts = [];
-  let elligibleRegularContracts = [];
-
-  allMinted.forEach((minted) => {
-    if (minted.dropType === "regular") regularMinted += minted.amount;
-  });
-
-  allMinted.forEach((minted) => {
-    if (minted.dropType === "tockable") tockableMinted += minted.amount;
-  });
-
-  const allProjectsPath = getPublishedProjectPath();
-
-  const allDeployedContractsJson = fs.readFileSync(allProjectsPath, "utf8");
-  const allDeployedContracts = JSON.parse(allDeployedContractsJson);
-
-  const deployedContractsByWallet = allDeployedContracts.filter(
-    (d) => d.creator.toLowerCase() === address.toLowerCase()
-  );
-
-  const contracts = deployedContractsByWallet.map(
-    (item) => item.contractAddress
-  );
-
-  console.log(contracts);
-  if (contracts.length > 0) {
-    const deployedContracts = {};
-
-    for (let i = 0; i < 4; i++) {
-      const db_file = "minted-" + i + ".json";
-      const mintedPath = path.resolve(".", QUERY, "mint-db", db_file);
-      const json = fs.readFileSync(mintedPath, "utf-8");
-
-      const db = JSON.parse(json);
-
-      deployedContractsByWallet.forEach((c) => {
-        deployedContracts[c.contractAddress] = {
-          amount: 0,
-          dropType: c.dropType || "regular",
-        };
-      });
-
-      db.forEach((item) => {
-        if (contracts.includes(item.contractAddress)) {
-          deployedContracts[item.contractAddress].amount +=
-            deployedContracts[item.contractAddress].amount;
-        }
-      });
-    }
-
-    const deployedContractsArray = Object.values(deployedContracts);
-
-    elligibleTockableContracts = deployedContractsArray.filter(
-      (d) => d.amount >= 5 && d.dropType === "tockable"
-    );
-
-    elligibleRegularContracts = deployedContractsArray.filter(
-      (d) => d.amount >= 5 && d.dropType === "regular"
-    );
+  if (!db) {
+    db = await open({
+      filename: dbp,
+      driver: sqlite3.Database,
+    });
   }
+
+  const adl = address.toLowerCase();
+
+  const tockableMinted = (
+    await db.get(
+      `SELECT SUM(amount) FROM minted WHERE address = '${adl}' AND dropType = 'tockable'`
+    )
+  )["SUM(amount)"];
+
+  const regularMinted = (
+    await db.get(
+      `SELECT SUM(amount) FROM minted WHERE address = '${adl}' AND dropType = 'regular'`
+    )
+  )["SUM(amount)"];
+
+  const elligibleTockableContracts = (
+    await db.get(
+      `SELECT COUNT(*) FROM published_projects WHERE creator = '${adl}' AND minted >= 5 AND dropType ='tockable'`
+    )
+  )["COUNT(*)"];
+
+  const elligibleRegularContracts = (
+    await db.all(
+      `SELECT COUNT(*) FROM published_projects WHERE creator = '${adl}' AND minted >= 5 AND dropType ='regular'`
+    )
+  )["COUNT(*)"];
 
   return {
     tockableMinted,
@@ -128,16 +87,4 @@ export async function getTXPOf(address) {
     elligibleRegularContracts,
     elligibleTockableContracts,
   };
-}
-
-/**
- *
- */
-function findDb(address) {
-  const char_0 = address.charAt(2).charCodeAt(0);
-
-  if (char_0 >= 97 && char_0 <= 102) return 0;
-  if (char_0 >= 65 && char_0 <= 70) return 1;
-  if (char_0 >= 48 && char_0 <= 52) return 2;
-  if (char_0 >= 53 && char_0 <= 57) return 3;
 }

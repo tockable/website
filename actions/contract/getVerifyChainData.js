@@ -12,11 +12,6 @@ const VERIFY_CHAIN_DATA = [
     apikey: process.env.OPTIMISTICSCAN_API,
   },
   {
-    chainId: 420,
-    endpoint: "https://api-optimistic.etherscan.io/api",
-    apikey: process.env.OPTIMISTIC_GOERLI_SCAN_API,
-  },
-  {
     chainId: 137,
     endpoint: "https://api.polygonscan.com/api",
     apikey: process.env.POLYGONSCAN_API,
@@ -45,6 +40,21 @@ const VERIFY_CHAIN_DATA = [
     chainId: 42161,
     endpoint: "https://api.arbiscan.io/api",
     apikey: process.env.ARBITSCAN_API,
+  },
+  {
+    chainId: 11501,
+    endpoint: "",
+    apikey: "",
+  },
+  {
+    chainId: 60808,
+    endpoint: "",
+    apikey: "",
+  },
+  {
+    chainId: 167000,
+    endpoint: "https://api.taikoscan.io/api",
+    apikey: process.env.TAIKOSCAN_API,
   },
 ];
 

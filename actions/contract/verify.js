@@ -93,62 +93,6 @@ export default async function verify(_project) {
       licenseType: 3,
     };
 
-    /// for json-input
-
-    // const json = {
-    //   language: "Solidity",
-    //   sources: {},
-    //   settings: {
-    //     optimizer: {
-    //       enabled: true,
-    //       runs: 200,
-    //     },
-    //     evmVersion: "paris",
-    //     outputSelection: {
-    //       "*": {
-    //         "*": ["*"],
-    //       },
-    //     },
-    //   },
-    // };
-
-    // json.sources[`${contractName}.sol`] = {
-    //   content: source,
-    // };
-
-    // const request = {
-    //   apikey: chainData.apikey,
-    //   module: "contract",
-    //   action: "verifysourcecode",
-    //   sourceCode: JSON.stringify(json),
-    //   contractaddress: _project.contractAddress,
-    //   codeformat: "solidity-standard-json-input",
-    //   contractname: `${contractName}.sol:${contractName}`,
-    //   compilerversion: "v0.8.21+commit.d9974bed",
-    //   constructorArguements: editedcargs,
-    //   licenseType: 3,
-    // };
-
-    // let formBody = [];
-
-    // for (let property in request) {
-    //   let encodedKey = encodeURIComponent(property);
-    //   let encodedValue = encodeURIComponent(request[property]);
-    //   formBody.push(encodedKey + "=" + encodedValue);
-    // }
-
-    // formBody = formBody.join("&");
-
-    // let formBody2 = [];
-
-    // for (let property in request2) {
-    //   let encodedKey = encodeURIComponent(property);
-    //   let encodedValue = encodeURIComponent(request[property]);
-    //   formBody2.push(encodedKey + "=" + encodedValue);
-    // }
-
-    // formBody2 = formBody2.join("&");
-
     let formBody = new URLSearchParams(request);
     const res1 = await fetch(chainData.endpoint, {
       method: "POST",

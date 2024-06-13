@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { SiweMessage } from "siwe";
 import { useAccount, useSignMessage } from "wagmi";
 import { getCsrfToken, signIn } from "next-auth/react";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import TockConnectButton from "@/components/tockConnectButton";
 import Button from "@/components/design/button";
 import Loading from "@/components/loading/loading";
 import { useNetwork } from "wagmi";
@@ -122,7 +122,7 @@ export default function SignInWithEthereum() {
                   please connect your wallet
                 </p>
                 <div className="my-4 flex justify-center">
-                  <ConnectButton />
+                  <TockConnectButton />
                 </div>
                 {addressChanged && (
                   <div className="flex flex-col justify-center items-center">

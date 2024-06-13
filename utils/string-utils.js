@@ -33,32 +33,3 @@ export function extractSlug(_str) {
   let str = _str.split("/");
   return `${str[str.length - 1]}`;
 }
-
-// /**
-//  *
-//  * @param {*} description
-//  * @returns
-//  */
-// export function descriptionShortener(description) {
-//   let words = [];
-//   let currentLength = 0;
-//   let shortened = false;
-//   const MAX_LENGTH = 200;
-
-//   for (const word of description.split(" ")) {
-//     // +1 for the space
-//     if (currentLength + word.length + 1 > MAX_LENGTH) {
-//       shortened = true;
-//       break;
-//     }
-
-//     words.push(word);
-//     currentLength += word.length + 1;
-//   }
-
-//   if (words[words.length - 1].length < 4) words = words.slice(0, -1);
-//   if (words[words.length - 1].endsWith(".")) return words.join(" ");
-//   if (!shortened) return words.join(" ");
-
-//   return `${words.join(" ")} ...`;
-// }

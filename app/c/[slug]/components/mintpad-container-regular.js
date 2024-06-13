@@ -282,6 +282,7 @@ export default function MintpadContainerRegular({ prepareMint }) {
               <div>
                 {isConnected && chain.id === project.chainData.chainId && (
                   <div>
+                    
                     {!data && isLoading && (
                       <div className="text-tock-orange text-center p-6 border rounded-xl mt-8 border-zinc-400 text-centerr">
                         <Loading isLoading={isLoading && !data} size={20} />
@@ -317,6 +318,7 @@ export default function MintpadContainerRegular({ prepareMint }) {
                               !mintEnded &&
                               data[0]?.result === true && (
                                 <div>
+                                  
                                   {errorGettingElligibility === true && (
                                     <p className="text-tock-orange text-xs p-2 border rounded-xl mt-8 mx-4 border-tock-orange text-center">
                                       Something went wrong, please refresh the
@@ -325,6 +327,7 @@ export default function MintpadContainerRegular({ prepareMint }) {
                                   )}
                                   {errorGettingElligibility === false && (
                                     <div className="w-full">
+                                      
                                       {elligibility === false && (
                                         <div className="mx-4 p-2 mt-2 border rounded-xl border-tock-orange text-xs">
                                           <p className="text-tock-orange">
@@ -342,10 +345,12 @@ export default function MintpadContainerRegular({ prepareMint }) {
                                             setFollow={handleFollowing}
                                             verifyFollow={verifyFollow}
                                           />
+                                   
                                         )}
                                       {elligibility === true &&
                                         isFollow === true && (
                                           <div className="w-full mt-8">
+                                            
                                             {parseInt(data[2].result) > 0 && (
                                               <div>
                                                 {!publicSession && (

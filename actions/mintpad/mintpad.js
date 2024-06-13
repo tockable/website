@@ -132,9 +132,9 @@ export async function getElligibility(_address, _creator, _slug) {
     }
 
     // if paused
-    if (project.paused) {
-      return { success: true, status: "paused", payload: {} };
-    }
+    // if (project.paused) {
+    //   return { success: true, status: "paused", payload: {} };
+    // }
 
     if (project.activeSession == 0) {
       return {

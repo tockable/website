@@ -352,71 +352,6 @@ export default function ProjectContractFormTockable({ _project }) {
         </div>
         <div className="rounded-2xl bg-zinc-800 p-3 mt-8 mb-4">
           <h1 className="text-zinc-500 font-bold text-md pb-1">Supply info</h1>
-          <div className="mt-4 mb-12 border border-zinc-700 rounded-xl p-4">
-            <label
-              className={`block ${
-                duplicateVerificationDisable
-                  ? "text-zinc-600"
-                  : "text-tock-blue"
-              }  text-sm font-bold mb-2`}
-            >
-              With customizable NFTs, there is a chance that collectors may
-              create similar (non-unique) NFTs, do you want to enforce
-              uniqueness?
-              <div>
-                <p
-                  className={`${
-                    duplicateVerificationDisable
-                      ? "text-zinc-600"
-                      : "text-zinc-400"
-                  } text-xs mt-1 mb-1 font-normal`}
-                >
-                  Uniqueness verification will be handled on-chain.
-                </p>
-                <p
-                  className={`${
-                    duplicateVerificationDisable
-                      ? "text-zinc-600"
-                      : "text-zinc-400"
-                  } text-xs mb-6 font-normal`}
-                >
-                  Uniqueness verification cannot be used with unlimited-supply
-                  option.
-                </p>
-              </div>
-            </label>
-            <div className="flex items-center mb-2">
-              <input
-                id="duplicate-0"
-                type="radio"
-                value="false"
-                name="duplication"
-                className="w-4 h-4 accent-tock-green text-blue-100"
-                onChange={onChangeDuplicateVerifiction}
-                checked={!project.duplicateVerification}
-                disabled={duplicateVerificationDisable}
-              />
-              <label className="ml-2 text-sm text-gray-200 dark:text-gray-300">
-                No
-              </label>
-            </div>
-            <div className="flex items-center">
-              <input
-                id="duplicate-1"
-                type="radio"
-                value="true"
-                name="duplication"
-                className="w-4 h-4 accent-tock-green text-blue-100"
-                onChange={onChangeDuplicateVerifiction}
-                checked={project.duplicateVerification}
-                disabled={duplicateVerificationDisable}
-              />
-              <label className="ml-2 text-sm text-gray-200 dark:text-gray-300">
-                Yes
-              </label>
-            </div>
-          </div>
-
           <div className="mb-12 border border-zinc-700 p-4 rounded-xl">
             <label
               className={`block ${
@@ -484,6 +419,78 @@ export default function ProjectContractFormTockable({ _project }) {
               (Max: 10000, required if not unlimited)
             </span>
           </LabeledInput>
+          <div className="mt-4 mb-12 border border-zinc-700 rounded-xl p-4">
+            <label
+              className={`block ${
+                duplicateVerificationDisable
+                  ? "text-zinc-600"
+                  : "text-tock-blue"
+              }  text-sm font-bold mb-2`}
+            >
+              Do you want to enforce collectors to mint only unique NFTs?{" "}
+              <span
+                className={`${
+                  duplicateVerificationDisable
+                    ? "text-zinc-600"
+                    : "text-zinc-400"
+                } text-xs mt-1 mb-1 font-normal`}
+              >
+                With customizable NFTs, there is a chance that collectors may
+                create similar (non-unique) NFTs.{" "}
+              </span>
+              <div>
+                <p
+                  className={`${
+                    duplicateVerificationDisable
+                      ? "text-zinc-600"
+                      : "text-zinc-400"
+                  } text-xs mt-1 mb-1 font-normal`}
+                >
+                  Uniqueness verification will be handled on-chain.
+                </p>
+                <p
+                  className={`${
+                    duplicateVerificationDisable
+                      ? "text-zinc-600"
+                      : "text-zinc-400"
+                  } text-xs mb-6 font-normal`}
+                >
+                  Uniqueness verification cannot be used with unlimited-supply
+                  option.
+                </p>
+              </div>
+            </label>
+            <div className="flex items-center mb-2">
+              <input
+                id="duplicate-0"
+                type="radio"
+                value="false"
+                name="duplication"
+                className="w-4 h-4 accent-tock-green text-blue-100"
+                onChange={onChangeDuplicateVerifiction}
+                checked={!project.duplicateVerification}
+                disabled={duplicateVerificationDisable}
+              />
+              <label className="ml-2 text-sm text-gray-200 dark:text-gray-300">
+                No
+              </label>
+            </div>
+            <div className="flex items-center">
+              <input
+                id="duplicate-1"
+                type="radio"
+                value="true"
+                name="duplication"
+                className="w-4 h-4 accent-tock-green text-blue-100"
+                onChange={onChangeDuplicateVerifiction}
+                checked={project.duplicateVerification}
+                disabled={duplicateVerificationDisable}
+              />
+              <label className="ml-2 text-sm text-gray-200 dark:text-gray-300">
+                Yes
+              </label>
+            </div>
+          </div>
         </div>
         <div className="mb-10">
           <label>

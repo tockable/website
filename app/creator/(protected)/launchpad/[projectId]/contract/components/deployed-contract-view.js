@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import getChainData from "@/utils/chain-utils";
+import { GoCopy } from "react-icons/go";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import verify from "@/actions/contract/verify";
+import { getContractVerificationArgs } from "@/actions/contract/verify";
+import getChainData from "@/utils/chain-utils";
 import Button from "@/components/design/button";
 import Loading from "@/components/loading/loading";
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import { getContractVerificationArgs } from "@/actions/contract/verify";
-import { GoCopy } from "react-icons/go";
 
 export default function DeployedContractView({ _project }) {
   const [project, setProject] = useState(_project);
@@ -346,5 +346,7 @@ function isUnsupportedChainForVerification(_chainId) {
     _chainId === 34443 ||
     _chainId === 11155420 ||
     _chainId === 168587773 ||
-    _chainId === 7777777;
+    _chainId === 7777777 ||
+    _chainId === 11501 ||
+    _chainId === 60808;
 }
