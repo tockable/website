@@ -4,7 +4,7 @@ const fs = require("fs");
 
 const db_path = "sql";
 const dbp = path.resolve(".", db_path, "published_projects_db.db");
-
+console.log(dbp);
 const db = new sqlite3.Database(
   dbp,
   sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE,
@@ -48,10 +48,7 @@ db.serialize(() => {
         console.log("All rows deleted from published_projects");
 
         const res = JSON.parse(
-          fs.readFileSync(
-            path.resolve(".", "query/allProjects.json"),
-            "utf8"
-          )
+          fs.readFileSync(path.resolve(".", "query/allProjects.json"), "utf8")
         );
 
         const insertSql = `INSERT INTO published_projects (
