@@ -2,9 +2,11 @@ const sqlite3 = require("sqlite3").verbose();
 const path = require("path");
 const fs = require("fs");
 
-const db_path = "sql";
-const dbp = path.resolve(".", db_path, "published_projects_db.db");
-console.log(dbp);
+// const db_path = "sql";
+// const dbp = path.resolve(".", db_path, "published_projects_db.db");
+// console.log(dbp);
+
+const dbp = "../sql/published_projects_db.db";
 const db = new sqlite3.Database(
   dbp,
   sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE,
