@@ -1,3 +1,4 @@
+"use client";
 import { createDb } from "@/scripts/createdb";
 
 export default function Page() {
