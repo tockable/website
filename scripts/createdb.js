@@ -11,6 +11,11 @@ const dbp = path.resolve(".", db_path, "published_projects_db.db");
 // const base = process.cwd();
 // const dbp = `${base}/sql/published_projects_db.db`;
 export async function createDb() {
+  const p = path.resolve(".", db_path);
+  if (!fs.existsSync(p)) {
+    fs.mkdirSync(p);
+  }
+
   const db = new sqlite3.Database(
     dbp,
     sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE,
