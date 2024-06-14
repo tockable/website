@@ -1,4 +1,3 @@
-import * as React from "react";
 const Linea_wordmark = (props) => (
   <svg
     width={135.498}

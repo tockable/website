@@ -68,11 +68,11 @@ export default async function Page({ params }) {
     abi = await getContractAbi(project);
   }
 
-  if (abi.length) {
-    return <MintpadLanding abi={abi} project={project} />;
+  if (!project || project.isPublished === false) {
+    return <NotFound />;
   }
 
-  if (!project) {
-    return <NotFound />;
+  if (abi.length) {
+    return <MintpadLanding abi={abi} project={project} />;
   }
 }

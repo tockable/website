@@ -1,4 +1,3 @@
-import * as React from "react";
 const BlastWordmark = (props) => (
   <svg
     width={329}

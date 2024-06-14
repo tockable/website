@@ -1,4 +1,3 @@
-import * as React from "react";
 const Mode_wordmark = (props) => (
   <svg
     id="Layer_1"

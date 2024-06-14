@@ -1,4 +1,3 @@
-import * as React from "react";
 const Mode_logo = (props) => (
   <svg
     width={68}

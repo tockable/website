@@ -1,4 +1,3 @@
-import * as React from "react";
 const Base_wordmark = (props) => (
   <svg
     width={254.847}

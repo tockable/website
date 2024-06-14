@@ -1,4 +1,3 @@
-import * as React from "react";
 const Op_logo = (props) => (
   <svg
     width={68}

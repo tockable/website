@@ -1,4 +1,3 @@
-import * as React from "react";
 const Ethereum_logo = (props) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
