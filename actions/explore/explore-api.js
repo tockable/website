@@ -16,7 +16,7 @@ export async function getCollectionlistByChainId(_chainId) {
     });
   }
 
-  const query = `SELECT * FROM published_projects WHERE chainId = ${_chainId.toString()}`;
+  const query = `SELECT * FROM published_projects WHERE chainId = ${_chainId.toString()} AND isPublished=1`;
   const projects = await db.all(query);
   return projects;
 }
