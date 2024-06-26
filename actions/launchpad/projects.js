@@ -88,6 +88,19 @@ export async function updateProject(_creator, params) {
     });
   }
 
+  if (params.hasOwnProperty("activeSession")) {
+    const session = project.sessions.find(
+      (s) => Number(s.id) === Number(params.activeSession)
+    );
+    const roleId = session.roles[0];
+    const role = project.roles.find((role) => role.id === roleId);
+    const price = role.price.toString();
+    await updateAllProjects({
+      uuid: params.uuid,
+      price,
+    });
+  }
+
   if (params.hasOwnProperty("isPublished")) {
     await updateAllProjects({
       uuid: params.uuid,
@@ -127,6 +140,11 @@ async function updateAllProjects(params) {
   if (params.hasOwnProperty("isPublished")) {
     query = `UPDATE published_projects
              SET isPublished = ${params.isPublished === true ? 1 : 0}
+             WHERE uuid = '${params.uuid}'`;
+  }
+  if (params.hasOwnProperty("price")) {
+    query = `UPDATE published_projects
+             SET price = ${params.price}
              WHERE uuid = '${params.uuid}'`;
   }
 
