@@ -11,7 +11,7 @@ import {
 import Footer from "@/components/design/footer";
 import { Bebas_Neue } from "next/font/google";
 import Link from "next/link";
-
+import Scroller from "./scroller";
 const dela = Bebas_Neue({ subsets: ["latin"], weight: ["400"] });
 
 export default function FirstPage() {
@@ -24,6 +24,7 @@ export default function FirstPage() {
         <div id="banner" className="mt-20">
           <div className="flex justify-center items-center">
             <TockBanner scrollToRef={myref} />
+            {/* <Scroller /> */}
           </div>
         </div>
         <div className="mb-32">

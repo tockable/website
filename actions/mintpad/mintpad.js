@@ -7,20 +7,24 @@ import {
 } from "../utils/path-utils";
 import getChainData from "@/utils/chain-utils";
 import * as mintpadData from "./payload-models";
+import { db_path } from "@/tock.config.js";
+import sqlite3 from "sqlite3";
+import { open } from "sqlite";
+const dbp = path.resolve(".", db_path, "published_projects_db.db");
 
+let db;
 export async function fetchProjectMintData(slug) {
-  const allProjectsPath = getPublishedProjectPath();
+  // const allProjectsPath = getPublishedProjectPath();
+  if (!db) {
+    db = await open({
+      filename: dbp,
+      driver: sqlite3.Database,
+    });
+  }
 
   try {
-    const json = fs.readFileSync(allProjectsPath, {
-      encoding: "utf8",
-    });
-
-    const publishedProjects = JSON.parse(json);
-
-    const projectBySlug = publishedProjects.find(
-      (p) => p.slug.toLowerCase() === slug.toLowerCase()
-    );
+    const query = `SELECT * FROM published_projects WHERE slug = ${slug}`;
+    const projectBySlug = await db.get(query);
 
     if (!projectBySlug) return { success: false, notFound: true };
 

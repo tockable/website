@@ -33,3 +33,10 @@ export function extractSlug(_str) {
   let str = _str.split("/");
   return `${str[str.length - 1]}`;
 }
+
+export function capitalize(_str) {
+  const fl = _str.charAt(0);
+  const flc = fl.toUpperCase();
+  const rl = _str.slice(1);
+  return flc + rl;
+}
