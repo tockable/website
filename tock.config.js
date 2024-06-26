@@ -11,7 +11,7 @@ export const SOCIAL = {
   discord: "https://discord.gg",
   mirror: "https://mirror.xyz",
 };
-export const TOCKABLE_VERSION = "0.3.7";
+export const TOCKABLE_VERSION = "0.3.8";
 
 export const SUPPORTED_CHAINS = [
   { name: "Ethereum ♦", value: "1", cleanName: "ethereum" },
@@ -60,7 +60,7 @@ export const DROP_TYPES = [
     currentVersion: 2,
     title: "Tockable drop",
     description:
-      "Create an NFT collection where collectors can make their own NFT during the mint, unlimited or fixed supply, ",
+      "Create an NFT collection where collectors can make their own NFT during the mint, unlimited or fixed supply.",
   },
   {
     type: "regular",
@@ -72,4 +72,4 @@ export const DROP_TYPES = [
   },
 ];
 
-export const db_path = process.env.DB_PATH;
+export const db_path = process.env.SQL_PATH;
