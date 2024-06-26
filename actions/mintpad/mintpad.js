@@ -1,15 +1,13 @@
 "use server";
 
 import fs from "fs";
-import {
-  getPublishedProjectPath,
-  getProjectDirectory,
-} from "../utils/path-utils";
+import { getProjectDirectory } from "../utils/path-utils";
 import getChainData from "@/utils/chain-utils";
 import * as mintpadData from "./payload-models";
 import { db_path } from "@/tock.config.js";
 import sqlite3 from "sqlite3";
 import { open } from "sqlite";
+import path from "path";
 const dbp = path.resolve(".", db_path, "published_projects_db.db");
 
 let db;
