@@ -1,5 +1,3 @@
-import { arbitrum } from "viem/chains";
-
 export const BASEURL = "http://tockable.xyz";
 export const IPFS_GATEWAY = "https://ipfs.io/ipfs";
 export const NFT_STORAGE_GATEWAY = "ipfs.nftstorage.link";
@@ -13,7 +11,7 @@ export const SOCIAL = {
   discord: "https://discord.gg",
   mirror: "https://mirror.xyz",
 };
-export const TOCKABLE_VERSION = "0.3.5";
+export const TOCKABLE_VERSION = "0.3.6";
 
 export const SUPPORTED_CHAINS = [
   { name: "Ethereum ♦", value: "1", cleanName: "ethereum" },

@@ -21,12 +21,12 @@ export async function fetchProjectMintData(slug) {
   }
 
   try {
-    const query = `SELECT * FROM published_projects WHERE slug = ${slug}`;
-    const projectBySlug = await db.get(query);
+    const query = `SELECT * FROM published_projects WHERE slug = ${slug.toLowerCase()}`;
+    const projectBySlugs = await db.all(query);
 
-    if (!projectBySlug) return { success: false, notFound: true };
+    if (projectBySlugs.length) return { success: false, notFound: true };
 
-    const creatorProjectsDir = getProjectDirectory(projectBySlug.creator);
+    const creatorProjectsDir = getProjectDirectory(projectBySlugs[0].creator);
     const creatorProjectsJson = fs.readFileSync(creatorProjectsDir, {
       encoding: "utf8",
     });
