@@ -21,7 +21,7 @@ export async function fetchProjectMintData(slug) {
   }
 
   try {
-    const query = `SELECT * FROM published_projects WHERE slug="${slug}"`;
+    const query = `SELECT * FROM published_projects WHERE slug='${slug}'`;
 
     const projectBySlug = await db.get(query);
     if (!projectBySlug) return { success: false, notFound: true };
@@ -33,7 +33,7 @@ export async function fetchProjectMintData(slug) {
 
     const creatorProjects = JSON.parse(creatorProjectsJson);
 
-    const project = creatorProjects.find((p) => projectBySlug.slug === p.slug);
+    const project = creatorProjects.find((p) => slug === p.slug);
 
     const chainData = getChainData(project.chainId);
 
