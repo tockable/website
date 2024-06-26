@@ -3,7 +3,7 @@ import path from "path";
 import getChainData from "@/utils/chain-utils";
 
 function getBaseContract(_project, _chainId) {
-  const isBlast = _chainId === 168587773 || _chainId === 81457 ? "Blast" : "";
+  const isBlast = _chainId == 168587773 || _chainId == 81457 ? "Blast" : "";
   const dropType = _project.dropType === "tockable" ? "Tockable" : "Regular";
   const version = _project.version;
 

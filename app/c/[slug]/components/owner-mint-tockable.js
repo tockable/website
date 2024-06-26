@@ -7,6 +7,7 @@ import {
   useWaitForTransaction,
 } from "wagmi";
 import { EMPTY_BYTES_32 } from "@/constants/constants";
+import { updateAllProjects } from "@/actions/launchpad/projects";
 import { MintContextTockable } from "@/contexts/mint-context-tockable";
 import Button from "@/components/design/button";
 import Loading from "@/components/loading/loading";
@@ -141,6 +142,11 @@ function MintHandler({ prepareMint }) {
 
   useEffect(() => {
     if (!uwt.isSuccess) return;
+    (async () =>
+      await updateAllProjects({
+        uuid: project.uuid,
+        amount: blobs.length,
+      }))();
     setSuccessfullyMinted(true);
     resetMint();
     setWarning("");

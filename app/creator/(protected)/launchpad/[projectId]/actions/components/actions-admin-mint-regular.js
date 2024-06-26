@@ -5,6 +5,7 @@ import {
   usePrepareContractWrite,
   useWaitForTransaction,
 } from "wagmi";
+import { updateAllProjects } from "@/actions/launchpad/projects";
 import { regex } from "@/constants/regex";
 import Loading from "@/components/loading/loading";
 import LabeledInput from "@/components/design/labeled-input";
@@ -49,6 +50,15 @@ export default function ActionAdminMintRegular({ abi, _project }) {
 
   const { data, isLoading, isError, write, error } = useContractWrite(config);
   const uwt = useWaitForTransaction({ hash: data?.hash });
+
+  useEffect(() => {
+    if (!uwt.isSuccess) return;
+    (async () =>
+      await updateAllProjects({
+        uuid: project.uuid,
+        amount: quantity,
+      }))();
+  }, [uwt.isSuccess]);
 
   return (
     <section>

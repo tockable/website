@@ -266,127 +266,128 @@ export default function MintpadContainerRegular({ prepareMint }) {
               </p>
             )}
 
-          {!mintEnded && !notStarted && !loading && (
-            <div className="rounded-2xl p-4 mt-8 bg-tock-semiblack">
-              <h1 className="mx-8 mt-4 font-bold text-2xl text-tock-green">
-                Mint!
-              </h1>
-              {!isConnected && (
-                <div className="p-4">
-                  <p className="text-tock-orange p-2 border rounded-xl mt-8 border-tock-orange text-center text-xs">
-                    please connect wallet to mint.
-                  </p>
-                </div>
-              )}
-
-              <div>
-                {isConnected && chain.id === project.chainData.chainId && (
-                  <div>
-                    
-                    {!data && isLoading && (
-                      <div className="text-tock-orange text-center p-6 border rounded-xl mt-8 border-zinc-400 text-centerr">
-                        <Loading isLoading={isLoading && !data} size={20} />
-                      </div>
-                    )}
-
-                    {!isLoading && (isError || (data && data[0]?.error)) && (
-                      <p className="mx-4 my-4 text-tock-red p-2 border rounded-xl mt-8 border-tock-red text-center text-xs">
-                        Cannot fetch data form blockchain at this moment. please
-                        refresh the page or try with another proxy/vpn setting.
-                        <br />
-                        <br />
-                        If the problem persists, please come back later.
-                      </p>
-                    )}
-
-                    {!loading && data && !data[0]?.error && !isError && (
-                      <>
-                        {parseInt(data[1]?.result) === 0 ? (
-                          <p className="text-blue-400 text-lg mx-4 mt-10 mb-6 text-center p-2 border rounded-xl border-tock-orange">
-                            Sold out!
-                          </p>
-                        ) : (
-                          <>
-                            {data[0]?.result === false && (
-                              <p className="text-tock-orange text-sm mx-4 mt-10 mb-6 text-center p-2 border rounded-xl border-tock-orange">
-                                minting is not available at this moment.
-                              </p>
-                            )}
-
-                            {!loading &&
-                              !notStarted &&
-                              !mintEnded &&
-                              data[0]?.result === true && (
-                                <div>
-                                  
-                                  {errorGettingElligibility === true && (
-                                    <p className="text-tock-orange text-xs p-2 border rounded-xl mt-8 mx-4 border-tock-orange text-center">
-                                      Something went wrong, please refresh the
-                                      page.
-                                    </p>
-                                  )}
-                                  {errorGettingElligibility === false && (
-                                    <div className="w-full">
-                                      
-                                      {elligibility === false && (
-                                        <div className="mx-4 p-2 mt-2 border rounded-xl border-tock-orange text-xs">
-                                          <p className="text-tock-orange">
-                                            It seems there is no mint option for
-                                            this wallet at this moment...
-                                          </p>
-                                          <p className="text-tock-orange">
-                                            Please come back later...
-                                          </p>
-                                        </div>
-                                      )}
-                                      {elligibility === true &&
-                                        isFollow === false && (
-                                          <FollowX
-                                            setFollow={handleFollowing}
-                                            verifyFollow={verifyFollow}
-                                          />
-                                   
-                                        )}
-                                      {elligibility === true &&
-                                        isFollow === true && (
-                                          <div className="w-full mt-8">
-                                            
-                                            {parseInt(data[2].result) > 0 && (
-                                              <div>
-                                                {!publicSession && (
-                                                  <p className="text-tock-blue mt-12 mx-4">
-                                                    available roles for you:
-                                                  </p>
-                                                )}
-                                                <MintpadMintSectionRegular
-                                                  roles={roles}
-                                                  session={session}
-                                                  prepareMint={prepareMint}
-                                                />
-                                              </div>
-                                            )}
-                                            {parseInt(data[2].result) == 0 && (
-                                              <p className="mt-8 text-tock-orange text-center p-2 border rounded-xl border-zinc-400">
-                                                Current session reaches its
-                                                total supply, please wait until
-                                                next session.
-                                              </p>
-                                            )}
-                                          </div>
-                                        )}
-                                    </div>
-                                  )}
-                                </div>
-                              )}
-                          </>
-                        )}
-                      </>
-                    )}
+          {!mintEnded &&
+            !notStarted &&
+            !loading &&
+            isConnected &&
+            chain.id === Number(project.chainData.chainId) && (
+              <div className="rounded-2xl p-4 mt-8 bg-tock-semiblack">
+                <h1 className="mx-8 mt-4 font-bold text-2xl text-tock-green">
+                  Mint!
+                </h1>
+                {!isConnected && (
+                  <div className="p-4">
+                    <p className="text-tock-orange p-2 border rounded-xl mt-8 border-tock-orange text-center text-xs">
+                      please connect wallet to mint.
+                    </p>
                   </div>
                 )}
+
+                <div>
+                  {isConnected && chain.id === project.chainData.chainId && (
+                    <div>
+                      {!data && isLoading && (
+                        <div className="text-tock-orange text-center p-6 border rounded-xl mt-8 border-zinc-400 text-centerr">
+                          <Loading isLoading={isLoading && !data} size={20} />
+                        </div>
+                      )}
+
+                      {!isLoading && (isError || (data && data[0]?.error)) && (
+                        <p className="mx-4 my-4 text-tock-red p-2 border rounded-xl mt-8 border-tock-red text-center text-xs">
+                          Cannot fetch data form blockchain at this moment.
+                          please refresh the page or try with another proxy/vpn
+                          setting.
+                          <br />
+                          <br />
+                          If the problem persists, please come back later.
+                        </p>
+                      )}
+
+                      {!loading && data && !data[0]?.error && !isError && (
+                        <>
+                          {parseInt(data[1]?.result) === 0 ? (
+                            <p className="text-blue-400 text-lg mx-4 mt-10 mb-6 text-center p-2 border rounded-xl border-tock-orange">
+                              Sold out!
+                            </p>
+                          ) : (
+                            <>
+                              {data[0]?.result === false && (
+                                <p className="text-tock-orange text-sm mx-4 mt-10 mb-6 text-center p-2 border rounded-xl border-tock-orange">
+                                  minting is not available at this moment.
+                                </p>
+                              )}
+
+                              {!loading &&
+                                !notStarted &&
+                                !mintEnded &&
+                                data[0]?.result === true && (
+                                  <div>
+                                    {errorGettingElligibility === true && (
+                                      <p className="text-tock-orange text-xs p-2 border rounded-xl mt-8 mx-4 border-tock-orange text-center">
+                                        Something went wrong, please refresh the
+                                        page.
+                                      </p>
+                                    )}
+                                    {errorGettingElligibility === false && (
+                                      <div className="w-full">
+                                        {elligibility === false && (
+                                          <div className="mx-4 p-2 mt-2 border rounded-xl border-tock-orange text-xs">
+                                            <p className="text-tock-orange">
+                                              It seems there is no mint option
+                                              for this wallet at this moment...
+                                            </p>
+                                            <p className="text-tock-orange">
+                                              Please come back later...
+                                            </p>
+                                          </div>
+                                        )}
+                                        {elligibility === true &&
+                                          isFollow === false && (
+                                            <FollowX
+                                              setFollow={handleFollowing}
+                                              verifyFollow={verifyFollow}
+                                            />
+                                          )}
+                                        {elligibility === true &&
+                                          isFollow === true && (
+                                            <div className="w-full mt-8">
+                                              {parseInt(data[2].result) > 0 && (
+                                                <div>
+                                                  {!publicSession && (
+                                                    <p className="text-tock-blue mt-12 mx-4">
+                                                      available roles for you:
+                                                    </p>
+                                                  )}
+                                                  <MintpadMintSectionRegular
+                                                    roles={roles}
+                                                    session={session}
+                                                    prepareMint={prepareMint}
+                                                  />
+                                                </div>
+                                              )}
+                                              {parseInt(data[2].result) ==
+                                                0 && (
+                                                <p className="mt-8 text-tock-orange text-center p-2 border rounded-xl border-zinc-400">
+                                                  Current session reaches its
+                                                  total supply, please wait
+                                                  until next session.
+                                                </p>
+                                              )}
+                                            </div>
+                                          )}
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                            </>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          )}
+            )}
         </div>
       </div>
     </main>

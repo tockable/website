@@ -111,7 +111,7 @@ export async function updateProject(_creator, params) {
   return project;
 }
 
-async function updateAllProjects(params) {
+export async function updateAllProjects(params) {
   if (!db) {
     db = await open({
       filename: dbp,
@@ -145,6 +145,12 @@ async function updateAllProjects(params) {
   if (params.hasOwnProperty("price")) {
     query = `UPDATE published_projects
              SET price = ${params.price}
+             WHERE uuid = '${params.uuid}'`;
+  }
+
+  if (params.hasOwnProperty("amount")) {
+    query = `UPDATE published_projects
+             SET minted = minted + ${params.amount}
              WHERE uuid = '${params.uuid}'`;
   }
 
