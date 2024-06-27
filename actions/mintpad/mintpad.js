@@ -8,6 +8,7 @@ import { db_path } from "@/tock.config.js";
 import sqlite3 from "sqlite3";
 import { open } from "sqlite";
 import path from "path";
+import { getAddress } from "viem";
 
 const dbp = path.resolve(".", db_path, "published_projects_db.db");
 
@@ -27,7 +28,8 @@ export async function fetchProjectMintData(slug) {
     const projectBySlug = await db.get(query);
     if (!projectBySlug) return { success: false, notFound: true };
 
-    const creatorProjectsDir = getProjectDirectory(projectBySlug.creator);
+    const creatorAddress = getAddress(projectBySlug.creator);
+    const creatorProjectsDir = getProjectDirectory(creatorAddress);
     const creatorProjectsJson = fs.readFileSync(creatorProjectsDir, {
       encoding: "utf8",
     });
