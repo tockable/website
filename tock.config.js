@@ -1,4 +1,4 @@
-export const BASEURL = "http://tockable.xyz";
+export const BASEURL = "https://tockable.xyz";
 export const IPFS_GATEWAY = "https://ipfs.io/ipfs";
 export const NFT_STORAGE_GATEWAY = "ipfs.nftstorage.link";
 export const MAX_LAYERS = 6;
@@ -11,7 +11,7 @@ export const SOCIAL = {
   discord: "https://discord.gg",
   mirror: "https://mirror.xyz",
 };
-export const TOCKABLE_VERSION = "0.3.8";
+export const TOCKABLE_VERSION = "0.3.9";
 
 export const SUPPORTED_CHAINS = [
   { name: "Ethereum ♦", value: "1", cleanName: "ethereum" },

@@ -62,16 +62,20 @@ export default async function Page({ params }) {
   let abi = [];
 
   const res = await fetchProjectMintData(params.slug);
-  console.log(res);
+
   if (res.success === true) {
     project = res.payload;
     abi = await getContractAbi(project);
   }
 
+  if (res.success === false) {
+    return <p>{res.message}</p>;
+  }
+
   if (
-    res.success === false ||
     res.notFound === true ||
-    project.isPublished === false
+    project.isPublished === false ||
+    project.isPublished === 0
   ) {
     return <NotFound />;
   }
