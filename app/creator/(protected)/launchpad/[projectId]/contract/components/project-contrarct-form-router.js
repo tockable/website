@@ -60,7 +60,8 @@ export default function ProjectContractRouter({ params }) {
               {project.dropType === "tockable" && (
                 <ProjectContractFormTockable _project={project} />
               )}
-              {project.dropType === "regular" && (
+              {(project.dropType === "regular" ||
+                project.dropType === "mono") && (
                 <ProjectContractFormRegular _project={project} />
               )}
             </>

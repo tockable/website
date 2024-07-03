@@ -11,7 +11,7 @@ import {
 import Footer from "@/components/design/footer";
 import { Bebas_Neue } from "next/font/google";
 import Link from "next/link";
-import Scroller from "./scroller";
+// import Scroller from "./scroller";
 const dela = Bebas_Neue({ subsets: ["latin"], weight: ["400"] });
 
 export default function FirstPage() {

@@ -1,12 +1,10 @@
 import path from "path";
 import { camelize } from "@/utils/string-utils";
+import { getAddress } from "viem";
 
 const DATABASE = process.env.DATABASE;
-const QUERY = process.env.QUERY
-const publishedProjectPath = path.resolve(
-  ".",
-  `${QUERY}/allProjects.json`
-);
+const QUERY = process.env.QUERY;
+const publishedProjectPath = path.resolve(".", `${QUERY}/allProjects.json`);
 
 /**
  *
@@ -14,7 +12,8 @@ const publishedProjectPath = path.resolve(
  * @returns
  */
 export function getProjectDirectory(_creator) {
-  const dir = _creator.slice(2, 42);
+  const creator = getAddress(_creator);
+  const dir = creator.slice(2, 42);
   return path.resolve(".", DATABASE, "projects", dir, "projects.json");
 }
 
@@ -33,9 +32,9 @@ export function getPublishedProjectPath() {
  * @returns
  */
 export function getProjectFilesDirectory(_creator, _uuid) {
-  const dir = _creator.slice(2, 42);
-  const filesPath = path.resolve(".", DATABASE, "projects", dir, _uuid);
-  return filesPath;
+  const creator = getAddress(_creator);
+  const dir = creator.slice(2, 42);
+  return path.resolve(".", DATABASE, "projects", dir, _uuid);
 }
 
 /**
@@ -46,8 +45,10 @@ export function getProjectFilesDirectory(_creator, _uuid) {
  * @returns
  */
 export function getProjectMetadataPath(_creator, _uuid, _projectName) {
+  const creator = getAddress(_creator);
   const contractName = camelize(_projectName, true);
-  const dir = _creator.slice(2, 42);
+  const dir = creator.slice(2, 42);
+
   return path.resolve(
     ".",
     DATABASE,
@@ -64,7 +65,8 @@ export function getProjectMetadataPath(_creator, _uuid, _projectName) {
  * @returns
  */
 export function getProjectDataDirectory(_creator) {
-  const dir = _creator.slice(2, 42);
+  const creator = getAddress(_creator);
+  const dir = creator.slice(2, 42);
   return path.resolve(".", DATABASE, "projects", dir, "projectsData.json");
 }
 
@@ -74,6 +76,7 @@ export function getProjectDataDirectory(_creator) {
  * @returns
  */
 export function getBuildDirectory(_project) {
-  const dir = _project.creator.slice(2, 42);
+  const creator = getAddress(_project.creator);
+  const dir = creator.slice(2, 42);
   return path.resolve(".", DATABASE, "projects", dir, _project.uuid);
 }

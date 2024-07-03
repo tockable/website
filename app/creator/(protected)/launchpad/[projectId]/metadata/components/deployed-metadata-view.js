@@ -7,8 +7,8 @@ export default function DeployedMetadataView({ project }) {
       </h1>
       <div className="p-4 border border-zinc-600 rounded-2xl mb-4 bg-zinc-800">
         <section className="mt-2 mb-8">
-          {((project.cid && project.cid.length === 0) ||
-            (project.cids && project.cids.length === 0)) && (
+          {((project.hasOwnProperty("cid") && project.cid.length === 0) ||
+            (project.hasOwnProperty("cids") && project.cids.length === 0)) && (
             <div>
               <p className="text-tock-blue font-bold text-sm">
                 {project.cid ? "Base URI" : "URI directories"}
@@ -18,15 +18,27 @@ export default function DeployedMetadataView({ project }) {
               </p>
             </div>
           )}
-          {project.cid && project.cid.length > 0 && (
-            <div>
-              <p className="text-tock-blue font-bold text-sm">Base URI</p>
-              <p className="text-zinc-400 text-sm mt-2">
-                {`ipfs://${project.cid}/`}
-              </p>
-            </div>
+          {project.hasOwnProperty("cid") && project.cid.length > 0 && (
+            <>
+              {project.dropType === "regular" && (
+                <div>
+                  <p className="text-tock-blue font-bold text-sm">Base URI</p>
+                  <p className="text-zinc-400 text-sm mt-2">
+                    {`ipfs://${project.cid}/`}
+                  </p>
+                </div>
+              )}
+              {project.dropType === "mono" && (
+                <div>
+                  <p className="text-tock-blue font-bold text-sm">Image URI</p>
+                  <p className="text-zinc-400 text-sm mt-2">
+                    {`ipfs://${project.cid}`}
+                  </p>
+                </div>
+              )}
+            </>
           )}
-          {project.cids && project.cids.length > 0 && (
+          {project.hasOwnProperty("cids") && project.cids.length > 0 && (
             <div>
               <p className="text-tock-blue font-bold text-sm">
                 URI directories

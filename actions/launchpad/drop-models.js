@@ -1,6 +1,8 @@
 import { v4 as uuidv4 } from "uuid";
+import { getAddress } from "viem";
 
-export function tockableDrop(creator, name, chain, chainId, dropType) {
+export function tockableDrop(_creator, name, chain, chainId, dropType) {
+  const creator = getAddress(_creator);
   const uuid = uuidv4();
   return {
     uuid,
@@ -37,7 +39,44 @@ export function tockableDrop(creator, name, chain, chainId, dropType) {
   };
 }
 
-export function regularDrop(creator, name, chain, chainId, dropType) {
+export function regularDrop(_creator, name, chain, chainId, dropType) {
+  const creator = getAddress(_creator);
+  const uuid = uuidv4();
+  return {
+    uuid,
+    version: 2,
+    creator,
+    chain,
+    chainId,
+    dropType,
+    name,
+    description: "",
+    cid: "",
+    hasExtension: true,
+    website: "",
+    twitter: "",
+    discord: "",
+    slug: "",
+    image: null,
+    cover: null,
+    tokenName: "",
+    tokenSymbol: "",
+    firstTokenId: 1,
+    roles: [],
+    sessions: [],
+    signer: "",
+    contractAddress: "",
+    paused: true,
+    activeSession: "",
+    isDeployed: false,
+    isPublished: false,
+    isVerified: false,
+    isFrozen: false,
+  };
+}
+
+export function monoDrop(_creator, name, chain, chainId, dropType) {
+  const creator = getAddress(_creator);
   const uuid = uuidv4();
   return {
     uuid,
@@ -49,7 +88,6 @@ export function regularDrop(creator, name, chain, chainId, dropType) {
     name,
     description: "",
     cid: "",
-    hasExtension: true,
     website: "",
     twitter: "",
     discord: "",

@@ -108,7 +108,7 @@ export default function DeployContractModal({
       if (!reciept) {
         setTakeMoment(false);
         setSuccess("");
-        setError("deployment tx failed, please try again.");
+        setError("Deployment tx failed, please try again.");
         return;
       }
 
@@ -130,12 +130,12 @@ export default function DeployContractModal({
         });
 
         setError("");
-        setSuccess("contract deployed successfully!");
+        setSuccess("Contract deployed successfully!");
         setTakeMoment(false);
       } else {
         setTakeMoment(false);
         setSuccess("");
-        setError("deployment tx failed, please try again.");
+        setError("Deployment tx failed, please try again.");
         return;
       }
     } catch (err) {

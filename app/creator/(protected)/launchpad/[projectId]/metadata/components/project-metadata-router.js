@@ -66,7 +66,8 @@ export default function ProjectMetadataRouter({ params }) {
                 {project.dropType === "tockable" && (
                   <ProjectMetadataFormTockable _project={project} />
                 )}
-                {project.dropType === "regular" && (
+                {(project.dropType === "regular" ||
+                  project.dropType === "mono") && (
                   <ProjectMetadataFormRegular _project={project} />
                 )}
               </>

@@ -7,7 +7,7 @@ export default function Scroller() {
   const [margin, setMargin] = useState(0);
   const cns = [0, -86, -172];
 
-  const changeMargin = () => {
+  const nextSlide = () => {
     if (margin == cns.length - 1) {
       setMargin(0);
     } else {
@@ -15,8 +15,16 @@ export default function Scroller() {
     }
   };
 
+  const prevSlide = () => {
+    if (margin == 0) {
+      setMargin(cns.length - 1);
+    } else {
+      setMargin(margin - 1);
+    }
+  };
+
   useEffect(() => {
-    const timer = setTimeout(() => changeMargin(), 2500);
+    const timer = setTimeout(() => nextSlide(), 2500);
     return () => clearTimeout(timer);
   }, [margin]);
 
@@ -40,7 +48,7 @@ export default function Scroller() {
                   <h1>Tockable now supports BOB🔥</h1>
                   <Link
                     className="text-center transition hover:bg-tock-darkgreen duration-200 bg-tock-green text-tock-semiblack font-bold p-4 rounded-xl focus:outline-none focus:shadow-outline active:text-white"
-                    href="/creator/dashboard"
+                    href="/c/bobxtockable"
                   >
                     Free mint on BOB🔥
                   </Link>
@@ -61,7 +69,12 @@ export default function Scroller() {
         </div>
       </div>
       <div className="flex justify-center items-center gap-2">
-        <button className="text-zinc-500 hover:text-zinc-300">{"<"}</button>
+        <button
+          className="text-zinc-500 hover:text-zinc-300"
+          onClick={prevSlide}
+        >
+          {"<"}
+        </button>
         <div className="flex gap-2">
           {cns.map((c, i) => (
             <span
@@ -74,7 +87,7 @@ export default function Scroller() {
         </div>
         <button
           className="text-zinc-500 hover:text-zinc-300"
-          onClick={changeMargin}
+          onClick={nextSlide}
         >
           {">"}
         </button>

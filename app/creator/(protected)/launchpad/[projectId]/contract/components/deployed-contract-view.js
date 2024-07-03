@@ -84,12 +84,26 @@ export default function DeployedContractView({ _project }) {
               </div>
             )}
             {project.cid && project.cid.length > 0 && (
-              <div>
-                <p className="text-tock-blue font-bold text-sm">Base URI</p>
-                <p className="text-zinc-400 text-sm mt-2 break-all">
-                  {`ipfs://${project.cid}/`}
-                </p>
-              </div>
+              <>
+                {project.dropType === "regular" && (
+                  <div>
+                    <p className="text-tock-blue font-bold text-sm">Base URI</p>
+                    <p className="text-zinc-400 text-sm mt-2 break-all">
+                      {`ipfs://${project.cid}/`}
+                    </p>
+                  </div>
+                )}
+                {project.dropType === "mono" && (
+                  <div>
+                    <p className="text-tock-blue font-bold text-sm">
+                      Image URI
+                    </p>
+                    <p className="text-zinc-400 text-sm mt-2 break-all">
+                      {`ipfs://${project.cid}`}
+                    </p>
+                  </div>
+                )}
+              </>
             )}
             {project.cids && project.cids.length > 0 && (
               <div>
@@ -126,9 +140,9 @@ export default function DeployedContractView({ _project }) {
               <>
                 <p className="text-tock-green text-sm mt-2">Verified</p>
                 <p className="text-zinc400 text-xs mt-1">
-                  It usually takes about 5min for a chain scanner to process the
-                  contract verification request, If the contract has not been
-                  verificated after the mentioned period, please try manual
+                  It usually takes about 5min for a chain explorer to process
+                  the contract verification request, If the contract has not
+                  been verificated after the mentioned period, please try manual
                   verification.
                 </p>
               </>

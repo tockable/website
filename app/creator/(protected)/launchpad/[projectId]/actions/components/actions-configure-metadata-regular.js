@@ -7,10 +7,10 @@ import {
   useWaitForTransaction,
 } from "wagmi";
 import { updateProject } from "@/actions/launchpad/projects";
-import { CID } from "multiformats/cid";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import Button from "@/components/design/button";
 import Loading from "@/components/loading/loading";
+import { checkExtension } from "@/actions/ipfs/checkExtension";
 
 export default function ActionConfigureMetadataRegular({ abi, _project }) {
   const [states, setStates] = useState({
@@ -42,7 +42,9 @@ export default function ActionConfigureMetadataRegular({ abi, _project }) {
       >
         <div className="flex text-zinc-400 text-sm font-bold">
           <div className="flex-auto">
-            <p>Set New Base URI</p>
+            <p>
+              Set New {_project.dropType === "regular" ? "Base" : "Image"} URI
+            </p>
           </div>
           <div>{states.setBaseURI ? <IoIosArrowUp /> : <IoIosArrowDown />}</div>
         </div>
@@ -70,27 +72,29 @@ export default function ActionConfigureMetadataRegular({ abi, _project }) {
           <FreezeMetadata _project={_project} abi={abi} />
         )}
       </div>
-      <div
-        onClick={showSetExtension}
-        className={`bg-tock-black rounded-2xl p-4 my-4 mx-4 ${
-          !states.setExtension &&
-          "hover:bg-tock-semiblack hover:ring hover:ring-zinc-600 transition ease-in-out duration-200 cursor-pointer"
-        }`}
-      >
-        <p className="text-zinc-400 text-sm font-bold">
-          <div className="flex text-zinc-400 text-sm font-bold">
-            <div className="flex-auto">
-              <p>Change Metadata extension</p>
-            </div>
-            <div>
-              {states.setExtension ? <IoIosArrowUp /> : <IoIosArrowDown />}
+      {_project.dropType === "regular" && (
+        <div
+          onClick={showSetExtension}
+          className={`bg-tock-black rounded-2xl p-4 my-4 mx-4 ${
+            !states.setExtension &&
+            "hover:bg-tock-semiblack hover:ring hover:ring-zinc-600 transition ease-in-out duration-200 cursor-pointer"
+          }`}
+        >
+          <div className="text-zinc-400 text-sm font-bold">
+            <div className="flex text-zinc-400 text-sm font-bold">
+              <div className="flex-auto">
+                <p>Change Metadata extension</p>
+              </div>
+              <div>
+                {states.setExtension ? <IoIosArrowUp /> : <IoIosArrowDown />}
+              </div>
             </div>
           </div>
-        </p>
-        {states.setExtension && (
-          <ChangeExtension _project={_project} abi={abi} />
-        )}
-      </div>
+          {states.setExtension && (
+            <ChangeExtension _project={_project} abi={abi} />
+          )}
+        </div>
+      )}
     </section>
   );
 }
@@ -118,8 +122,9 @@ function DeployNewBaseURI({ _project, abi }) {
   const { config } = usePrepareContractWrite({
     address: project.contractAddress,
     abi: abi,
-    functionName: "setBaseURI",
-    args: [cid, hasExtension],
+    functionName:
+      _project.dropType === "regular" ? "setBaseURI" : "setImageURI",
+    args: _project.dropType === "regular" ? [cid, hasExtension] : [cid],
     enabled: enableState,
     onSuccess(_) {
       setReadyToDeploy(true);
@@ -152,7 +157,6 @@ function DeployNewBaseURI({ _project, abi }) {
 
   useEffect(() => {
     if (!isError && !uwt.isError) return;
-
     setCheking(false);
   }, [isError, uwt.isError]);
 
@@ -192,59 +196,19 @@ function DeployNewBaseURI({ _project, abi }) {
 
     setCheking(true);
 
-    if (cid.match(/^Qm/)) {
+    if (project.dropType === "regular") {
       try {
-        const res = await fetch(`https://ipfs.io/ipfs/${cid}/1`);
-        const json = await res.json();
-        if (json) setHasExtension(false);
+        const _hasExtension = await checkExtension(cid);
+        setHasExtension(_hasExtension);
       } catch (_) {
-        try {
-          const res = await fetch(`https://ipfs.io/ipfs/${cid}/1.json`);
-          const json = await res.json();
-
-          if (json) setHasExtension(true);
-        } catch (_) {
-          const v0 = CID.parse(cid);
-
-          v0.toString();
-
-          const cidV1 = v0.toV1().toString();
-
-          try {
-            const res = await fetch(`https://${cidV1}.ipfs.nftstorage.link/1`);
-            const json = await res.json();
-
-            if (json) setHasExtension(false);
-          } catch (_) {
-            try {
-              const res = await fetch(
-                `https://${cidV1}.ipfs.nftstorage.link/1.json`
-              );
-
-              const json = await res.json();
-
-              if (json) setHasExtension(true);
-            } catch (_) {
-              setHasExtension(true);
-            }
-          }
-        }
-      }
-    } else {
-      try {
-        const res = await fetch(`https://${cid}.ipfs.nftstorage.link/1`);
-        const json = await res.json();
-        if (json) setHasExtension(false);
-      } catch (_) {
-        try {
-          const res = await fetch(`https://${cid}.ipfs.nftstorage.link/1.json`);
-          const json = await res.json();
-          if (json) setHasExtension(true);
-        } catch (_) {
-          setHasExtension(true);
-        }
+        setHasExtension(true);
       }
     }
+
+    if (project.dropType === "mono") {
+      setHasExtension === false;
+    }
+
     setEnabled(true);
   };
 
@@ -299,7 +263,7 @@ function DeployNewBaseURI({ _project, abi }) {
       </Button>
       {(isLoading || uwt.isLoading || isWriting || isChecking) && (
         <p className="text-tock-orange mt-2 text-xs">
-          do not close this window, or change the tab...
+          DO NOT close this window, or change the tab...
         </p>
       )}
       {printedError.length > 0 && (
@@ -404,7 +368,7 @@ function ChangeExtension({ _project, abi }) {
       </div>
       {(isLoading || uwt.isLoading || isWriting) && (
         <p className="text-tock-orange mt-2 text-xs">
-          do not close this window, or change tabs...
+          DO NOT close this window, or change the tabs...
         </p>
       )}
       {isError && <p className="text-tock-red mt-2 text-xs">{error.name}</p>}

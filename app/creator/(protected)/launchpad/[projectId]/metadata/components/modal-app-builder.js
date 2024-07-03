@@ -76,7 +76,7 @@ export default function AppBuilderModal({
                   choose your deploying method:
                 </h1>
                 <p className="text-zinc-400 text-xs my-2">
-                  if you are happy with your app, use one of following options
+                  If you are happy with your dapp, use one of following options
                   to deploy traits on contract.
                 </p>
                 <p className="text-xs text-tock-orange mt-2 mb-4">

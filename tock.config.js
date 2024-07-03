@@ -11,7 +11,7 @@ export const SOCIAL = {
   discord: "https://discord.gg",
   mirror: "https://mirror.xyz",
 };
-export const TOCKABLE_VERSION = "0.3.9";
+export const TOCKABLE_VERSION = "0.3.10";
 
 export const SUPPORTED_CHAINS = [
   { name: "Ethereum ♦", value: "1", cleanName: "ethereum" },
@@ -20,7 +20,7 @@ export const SUPPORTED_CHAINS = [
   { name: "Taiko🔥", value: "167000", cleanName: "taiko" },
   { name: "Base", value: "8453", cleanName: "base" },
   { name: "Zora", value: "7777777", cleanName: "zora" },
-  { name: "Arbitum One", value: "42161", cleanName: "arbitrum" },
+  { name: "Arbitrum One", value: "42161", cleanName: "arbitrum" },
   { name: "Optimism", value: "10", cleanName: "optimism" },
   { name: "Linea ", value: "59144", cleanName: "linea" },
   { name: "Blast", value: "81457", cleanName: "blast" },
@@ -65,10 +65,18 @@ export const DROP_TYPES = [
   {
     type: "regular",
     typeNo: 1,
-    currentVersion: 1,
+    currentVersion: 2,
     title: "Regular drop",
     description:
       "Create a traditional NFT collection with fixed total supply and pre-uploaded IPFS metadata",
+  },
+  {
+    type: "mono",
+    typeNo: 2,
+    currentVersion: 1,
+    title: "Edition",
+    description:
+      "All tokens share a similar image, Useful for Editions, erc721 OATs, Tickets, and subscriptions.",
   },
 ];
 

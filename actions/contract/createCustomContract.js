@@ -4,7 +4,12 @@ import getChainData from "@/utils/chain-utils";
 
 function getBaseContract(_project, _chainId) {
   const isBlast = _chainId == 168587773 || _chainId == 81457 ? "Blast" : "";
-  const dropType = _project.dropType === "tockable" ? "Tockable" : "Regular";
+  const dropType = (() => {
+    if (_project.dropType === "tockable") return "Tockable";
+    if (_project.dropType === "regular") return "Regular";
+    if (_project.dropType === "mono") return "Mono";
+  })();
+
   const version = _project.version;
 
   const constructedName = `Flatten${isBlast}${dropType}DropV${version}.sol`;

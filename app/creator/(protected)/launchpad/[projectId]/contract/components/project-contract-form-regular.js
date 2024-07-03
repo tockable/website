@@ -127,9 +127,9 @@ export default function ProjectContractFormRegular({ _project }) {
       setFailed(true);
 
       if (err.message === "forbidden") {
-        setErrorMessage("Something wrong in our side, please try again.");
+        setErrorMessage("It seems you are not the dashboard owner.");
       } else {
-        setErrorMessage("Something wrong in our side, please try again.");
+        setErrorMessage("Something is wrong in our side, please try again.");
       }
     }
 

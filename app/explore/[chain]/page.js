@@ -1,11 +1,14 @@
 import { EXPLORE_CHAINS } from "@/tock.config";
 import { getCollectionlistByChainId } from "@/actions/explore/explore-api";
 import CollectionPreview from "./components/collection-preview";
+import CollectionSkletton from "./components/collection-skletton";
 import NoCollectionFound from "./components/no-collection-found";
 
 export default async function Page({ params }) {
   const chainId = EXPLORE_CHAINS[params.chain.toLowerCase()];
   const collectionList = await getCollectionlistByChainId(chainId);
+
+
 
   return (
     <div className="flex justify-center">

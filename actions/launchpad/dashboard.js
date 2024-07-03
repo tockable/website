@@ -8,6 +8,7 @@ import { getProjectDirectory } from "../utils/path-utils.js";
 import sqlite3 from "sqlite3";
 import { open } from "sqlite";
 import { db_path } from "@/tock.config";
+import { getAddress } from "viem";
 
 const dbp = path.resolve(".", db_path, "published_projects_db.db");
 let db = null;
@@ -26,12 +27,18 @@ const DATABASE = process.env.DATABASE;
 
 function initProject(_creator, _name, _chain, _chainId, _dropType) {
   // Tockable drop
+  const creator = getAddress(_creator);
+
   if (_dropType === DROP_TYPES[0].type)
-    return Init.tockableDrop(_creator, _name, _chain, _chainId, _dropType);
+    return Init.tockableDrop(creator, _name, _chain, _chainId, _dropType);
 
   // Regular drop
   if (_dropType === DROP_TYPES[1].type)
-    return Init.regularDrop(_creator, _name, _chain, _chainId, _dropType);
+    return Init.regularDrop(creator, _name, _chain, _chainId, _dropType);
+
+  // Mono Drop
+  if (_dropType === DROP_TYPES[2].type)
+    return Init.monoDrop(creator, _name, _chain, _chainId, _dropType);
 }
 
 /**
@@ -119,17 +126,20 @@ export async function createNewProject(_creator, _project) {
   }
 }
 
+/**
+ *
+ * @param {*} _creator
+ */
 function initCreatorDir(_creator) {
-  const dirPath = path.resolve(
-    ".",
-    DATABASE,
-    "projects",
-    _creator.slice(2, 42)
-  );
-
+  const creator = getAddress(_creator);
+  const dirPath = path.resolve(".", DATABASE, "projects", creator.slice(2, 42));
   fs.mkdirSync(dirPath);
 }
 
+/**
+ *
+ * @param {*} param0
+ */
 async function addEntryToAllProjects({
   uuid,
   name,

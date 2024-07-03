@@ -1,6 +1,5 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
 import ImagePlaceHolder from "@/svgs/image_placeholder";
 import { NFT_STORAGE_GATEWAY } from "@/tock.config";
 import Button from "@/components/design/button";
@@ -12,7 +11,6 @@ export default function CollectionPreview({ collection }) {
         <div className="h-[300px] object-cover mt-[2px]">
           <img
             className="rounded-xl"
-            // src={`${IPFS_GATEWAY}/${project.image}`}
             src={`https://${collection.image}.${NFT_STORAGE_GATEWAY}`}
             width="297"
             height="297"
@@ -26,8 +24,21 @@ export default function CollectionPreview({ collection }) {
       )}
 
       <p className="mt-4 text-sm text-zinc-300 font-bold">{collection.name}</p>
-      <p className="mt-1 text-sm text-zinc-300">Price</p>
-      <p className="mt-1 text-sm text-zinc-300">Status</p>
+      <p className="mt-1 text-xs text-zinc-400">
+        Price: {collection.price == 0 ? "Free" : collection.price}
+      </p>
+      <p className="mt-1 text-xs text-zinc-400">
+        Minted: {collection.minted}/
+        {collection.totalSupply == 0 ? "Unlimited" : collection.totalSupply}
+      </p>
+      <p className="mt-1 text-xs text-zinc-400">
+        Status:{" "}
+        {collection.minted === collection.totalSupply
+          ? "Finished"
+          : collection.paused == 1
+          ? "Paused"
+          : "Live"}
+      </p>
 
       <div className=""></div>
       <Link

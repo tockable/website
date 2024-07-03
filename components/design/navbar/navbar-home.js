@@ -17,20 +17,20 @@ export default function Navbar() {
         </div>
         <div className="flex">
           <Link
-            className="flex mx-1 items-center transition hover:bg-tock-black duration-200 text-zinc-300 font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline active:text-white"
+            className="flex mx-1 text-sm items-center transition hover:bg-tock-black duration-200 text-zinc-300 font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline active:text-white"
             href="/docs/drop-types"
             target="_blank"
             rel="noopener noreferrer"
           >
-            docs
+            Docs
           </Link>
           <Link
-            className="flex mx-1 items-center transition hover:bg-tock-black duration-200 text-zinc-300 font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline active:text-white"
-            href="https://mirror.xyz/tockable.eth"
+            className="flex mx-1 text-sm items-center transition hover:bg-tock-black duration-200 text-zinc-300 font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline active:text-white"
             target="_blank"
             rel="noopener noreferrer"
+            href="/explore/base"
           >
-            mirror
+            Explore
           </Link>
           <Link
             className="flex my-1 mx-1 text-center transition hover:bg-tock-darkgreen duration-200 bg-tock-green text-tock-semiblack font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline active:text-white"

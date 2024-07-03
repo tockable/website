@@ -32,8 +32,8 @@ export default function DeployMetadataRegularDropModal({
   const { config } = usePrepareContractWrite({
     address: project.contractAddress,
     abi: abi,
-    functionName: "setBaseURI",
-    args: [cid, hasExtension],
+    functionName: project.dropType === "regular" ? "setBaseURI" : "setImageURI",
+    args: project.dropType === "regular" ? [cid, hasExtension] : [cid],
     // gas: 2_000_000n,
   });
 
@@ -45,9 +45,7 @@ export default function DeployMetadataRegularDropModal({
     router.push(`/creator/launchpad/${project.uuid}/roles`);
   };
 
-  function closeOnSuccess() {
-    onClose();
-  }
+  const closeOnSuccess = () => onClose();
 
   useEffect(() => {
     if (!uwt.isSuccess) {
@@ -76,16 +74,25 @@ export default function DeployMetadataRegularDropModal({
             Deploy metadata
           </h1>
           <div className="mb-6">
-            <p className="text-xs text-zinc-400">
-              You are deploying{" "}
-              <span className="text-blue-400 break-all">"ipfs://{cid}/</span>{" "}
-              for token base URI
-            </p>
+            {project.dropType === "regular" && (
+              <p className="text-xs text-zinc-400">
+                You are deploying{" "}
+                <span className="text-blue-400 break-all">"ipfs://{cid}/</span>{" "}
+                for token base URI
+              </p>
+            )}
+            {project.dropType === "mono" && (
+              <p className="text-xs text-zinc-400">
+                You are deploying{" "}
+                <span className="text-blue-400 break-all">"ipfs://{cid}</span>{" "}
+                for token image URI
+              </p>
+            )}
             {notSpecify && (
               <p className="text-xs text-zinc-400">
                 {"("}in case of empty image on nfts, you may need to update
-                metadata later{")"}, you can change contract base url until you
-                freeze it.
+                metadata setting later{")"}, you can edit URI until you freeze
+                it.
               </p>
             )}
           </div>

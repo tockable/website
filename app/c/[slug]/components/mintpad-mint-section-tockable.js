@@ -12,8 +12,12 @@ export default function MintpadMintSectionTockable({
     if (!roles || roles.length === 0) return;
     const newStates = {};
 
-    for (let i = 0; i < roles.length; i++) {
-      newStates[roles[i].id] = false;
+    if (roles.length === 1) {
+      newStates[roles[i].id] = true;
+    } else {
+      for (let i = 0; i < roles.length; i++) {
+        newStates[roles[i].id] = false;
+      }
     }
 
     setStates(newStates);
