@@ -1,7 +1,6 @@
 import "./globals.css";
 import { TOCKABLE_METADATA } from "@/constants/metadata";
 import { Comfortaa } from "next/font/google";
-import Support from "@/app/support";
 
 const c = Comfortaa({ subsets: ["latin"], weight: ["300", "700"] });
 
@@ -12,7 +11,6 @@ export default function RootLayout({ children }) {
     <html lang="en" className={c.className}>
       <body className="bg-tock-black">
         {children}
-        <Support />
       </body>
     </html>
   );

@@ -3,6 +3,7 @@ import MintpadHeader from "./mintpad-project-header";
 import MintpadProjectDetails from "./mintpad-project-details";
 import MintpadMainRouter from "./mintpad-main-router";
 import Footer from "@/components/design/footer";
+import Support from "@/app/support";
 
 export default async function MintpadLanding({ project, abi }) {
   return (
@@ -14,6 +15,7 @@ export default async function MintpadLanding({ project, abi }) {
           <WagmiProvider>
             <MintpadMainRouter project={project} abi={abi} />
           </WagmiProvider>
+          <Support />
           <Footer />
         </div>
       </div>

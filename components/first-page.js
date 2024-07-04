@@ -69,12 +69,12 @@ export default function FirstPage() {
                   With Tockable, collectors can{" "}
                   <span className="text-tock-green">choose</span> their NFT
                   traits from among available traits provided by the creator to
-                  design and mint their favourite asset.
+                  design and mint their favorite asset.
                 </p>
               </Card>
               <Card>
                 <h1 className="text-tock-green font-bold text-xl mb-2">
-                  <span className="text-tock-red">Create</span> your own app
+                  <span className="text-tock-red">Create</span> your own minter dApp
                 </h1>
                 <p className="text-zinc-200 text-sm">
                   Create, manage and publish your own Dynamic-NFT minter app
@@ -98,8 +98,7 @@ export default function FirstPage() {
                 </h1>
                 <p className="text-zinc-200 text-sm">
                   Customizable or random NFTs? Or maybe thinking about{" "}
-                  <span className="text-tock-green">unlimited supply</span> (you
-                  heard right!). Do you need uniqueness verification? or
+                  <span className="text-tock-green">unlimited supply</span>. Do you need uniqueness verification? or
                   Different roles, different prices? create the contract with
                   your rules.
                 </p>
@@ -147,7 +146,7 @@ export default function FirstPage() {
 
 function Card({ children }) {
   return (
-    <div className="border-2 border-zinc-400 rounded-xl p-4 w-11/12 md:w-1/2 h-48 transition duration-200 bg-tock-semiblack bg-opacity-70 hover:bg-opacity-100">
+    <div className="border-2 border-zinc-400 rounded-xl p-4 w-11/12 md:w-1/2 h-48 transition duration-200 bg-zinc-800/70 backdrop-blur-sm">
       {children}
     </div>
   );

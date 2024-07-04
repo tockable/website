@@ -18,17 +18,15 @@ export default function Protected({ children }) {
       router.push("/creator/auth");
     }
 
-    if (
-      isConnected &&
-      session.data &&
-      session.data?.user.address.toLowerCase() !== address.toLowerCase()
-    ) {
-      sessionStorage.setItem("tock", `/dashboard`);
-      router.push("/creator/auth");
-    } else {
-      setLoading(false);
+    if (isConnected && session.data) {
+      if (session.data?.user.address.toLowerCase() !== address.toLowerCase()) {
+        sessionStorage.setItem("tock", `/dashboard`);
+        router.push("/creator/auth");
+      } else {
+        setLoading(false);
+      }
     }
-  }, [address]);
+  }, [address, session]);
 
   return (
     <>

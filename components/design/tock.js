@@ -187,22 +187,35 @@ export default function TockBanner({ scrollToRef }) {
             </button>
           </div>
 
-          <div className="flex grow justify-center mt-12">
-            <Link href="/creator/dashboard">
-              <button className="m-4 w-56 transition ease-in-out hover:bg-tock-darkgreen duration-300 bg-tock-green text-tock-semiblack font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline active:text-white">
-                Launch project now!
+          <div className="flex grow justify-center mt-2">
+            <Link
+              href="/explore/base"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <button className="mt-14 w-56 transition bg-blue-600 duration-200 text-tock-blue hover:bg-blue-300 font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline active:text-white">
+                Explore
               </button>
             </Link>
           </div>
-          <div className="flex grow justify-center mt-2">
+          <div className="flex grow justify-center mt-4 text-sm text-zinc-400">
+            OR
+          </div>
+          <div className="flex grow justify-center">
             <Link href="/creator/dashboard">
-              <button
-                onClick={scrollTo}
-                className="w-56 transition ease-in-out hover:bg-tock-semiblack duration-300 text-zinc-400 border border-zinc-400 hover:border-zonc-400 font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline active:text-white"
-              >
-                how?
+              <button className="mt-4 mx-4 w-56 transition hover:bg-tock-darkgreen duration-200 bg-tock-green text-tock-semiblack font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline active:text-white">
+                Launch yours!
               </button>
             </Link>
+          </div>
+
+          <div className="flex grow justify-center mt-2">
+            <button
+              onClick={scrollTo}
+              className="w-56 transition duration-200 hover:text-orange-300 text-tock-orange text-sm rounded-xl focus:outline-none focus:shadow-outline active:text-white"
+            >
+              Learn more {">"}
+            </button>
           </div>
         </div>
       </div>
