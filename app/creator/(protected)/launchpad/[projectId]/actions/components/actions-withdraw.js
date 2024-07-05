@@ -11,12 +11,12 @@ export default function ActionWithdraw({ abi, _project }) {
   return (
     <>
       <Withdraw _project={_project} abi={abi} />
-      {(_project?.chainId === 168587773 || _project?.chainId === 81457) && (
+      {/* {(_project?.chainId === 168587773 || _project?.chainId === 81457) && (
         <div>
           <ClaimAllGas _project={_project} abi={abi} />
           <ClaimMaxGas _project={_project} abi={abi} />
         </div>
-      )}
+      )} */}
     </>
   );
 }
