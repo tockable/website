@@ -16,10 +16,25 @@ export async function getAllChats() {
     });
   }
 
-  const query = `SELECT * FROM chats GROUP BY opener`;
-  const res = await db.all(query);
+  const query1 = `SELECT DISTINCT opener FROM chats`;
+  const users = await db.all(query1);
 
-  return res;
+  const query2 = `SELECT * FROM chats`;
+  const chats = await db.all(query2);
+
+  return { users, chats };
+}
+
+export async function readMessage(_wallet, _reader) {
+  if (!db) {
+    db = await open({
+      filename: dbp,
+      driver: sqlite3.Database,
+    });
+  }
+  const col = _reader === "user" ? "readbyuser" : "readbyadmin";
+  const query = `UPDATE chats SET ${col} = 1 WHERE opener = '${_wallet}'`;
+  await db.run(query);
 }
 
 export async function getChats(_wallet) {

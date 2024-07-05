@@ -2,10 +2,11 @@
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import TockConnectButton from "@/components/tockConnectButton";
-import { getChats, sendMessage } from "@/actions/support/support";
+import { getChats, sendMessage, readMessage } from "@/actions/support/support";
 import Loading from "@/components/loading/loading";
 import Button from "@/components/design/button";
 import Footer from "@/components/design/footer";
+import Message from "@/components/design/message";
 
 export default function Page() {
   const { isConnected, address } = useAccount();
@@ -27,6 +28,11 @@ export default function Page() {
     })();
   }, []);
 
+  useEffect(() => {
+    if (newChats.length === 0) return;
+    (async () => await readMessage(address, "user"))();
+  }, [newChats]);
+
   const onChangeContent = (e) => setContent(e.target.value);
 
   const send = async () => {
@@ -35,6 +41,7 @@ export default function Page() {
       setError(false);
       const res = await sendMessage(address, "user", content);
       setOldChats(res);
+      setNewChats([]);
       setContent("");
     } catch (e) {
       setError(true);
@@ -67,8 +74,9 @@ export default function Page() {
                     ))}
                     {newChats.length > 0 && (
                       <>
-                        <p className="border-b border-zinc-400">New!</p>
-                        {newChats.map((c) => (
+                        <p className="border-b border-blue-400 text-xs text-blue-400">
+                          New!</p>
+                        {newChats.map((c, i) => (
                           <div key={"new-msg-" + i}>
                             <Message data={c} />
                           </div>
@@ -93,8 +101,8 @@ export default function Page() {
             <label className="block text-tock-blue text-sm font-bold mb-2 mt-8">
               Describe your issue:
               <p className="font-normal text-xs text-zinc-500">
-                Providing collection link or contract address could help admins
-                to solve the problem faster.
+                Providing collection link, tx hash or contract address can help admins
+                to solve your problem faster.
               </p>
             </label>
             <textarea
@@ -120,43 +128,4 @@ export default function Page() {
       )}
     </div>
   );
-}
-
-const Message = ({ data }) => {
-  return (
-    <div className="hover:bg-zinc-800 p-2">
-      {data.sender === "user" && (
-        <p className="text-tock-green font-bold text-xs">
-          You:{" "}
-          <span className="text-end text-xs text-zinc-500">
-            {getDate(data.date)}
-          </span>
-        </p>
-      )}
-      {data.sender === "admin" && (
-        <p className="text-tock-orange font-bold text-xs">
-          Mod:{" "}
-          <span className="text-end text-xs text-zinc-500">
-            {getDate(data.date)}
-          </span>
-        </p>
-      )}
-      <div className="p-2">
-        <p className="text-sm text-zinc-300">{data.content}</p>
-      </div>
-    </div>
-  );
-};
-
-function getDate(_timestamp) {
-  const date = new Date(Number(_timestamp));
-  const year = date.getFullYear();
-  const month = date.getMonth();
-  const day = date.getDay();
-  const hours = date.getHours();
-  const minutes = "0" + date.getMinutes();
-
-  const formattedTime =
-    year + "/" + month + "/" + day + " " + hours + ":" + minutes.slice(-2);
-  return formattedTime;
 }

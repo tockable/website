@@ -11,7 +11,7 @@ export const SOCIAL = {
   discord: "https://discord.gg",
   mirror: "https://mirror.xyz",
 };
-export const TOCKABLE_VERSION = "0.3.11";
+export const TOCKABLE_VERSION = "0.3.12";
 
 export const SUPPORTED_CHAINS = [
   { name: "Ethereum ♦", value: "1", cleanName: "ethereum" },

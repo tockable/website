@@ -35,7 +35,6 @@ export async function checkExtension(cid) {
             if (json) return true;
           } catch (_) {
             return true;
-            // setError(true);
           }
         }
       }
@@ -52,7 +51,6 @@ export async function checkExtension(cid) {
         if (json) return true;
       } catch (_) {
         return true;
-        // setError(true);
       }
     }
   }

@@ -40,3 +40,16 @@ export function capitalize(_str) {
   const rl = _str.slice(1);
   return flc + rl;
 }
+
+export function getDate(_timestamp) {
+  const date = new Date(Number(_timestamp));
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const day = date.getDay();
+  const hours = date.getHours();
+  const minutes = "0" + date.getMinutes();
+
+  const formattedTime =
+    year + "/" + month + "/" + day + " " + hours + ":" + minutes.slice(-2);
+  return formattedTime;
+}
