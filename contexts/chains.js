@@ -80,7 +80,7 @@ const blast = defineChain({
 
 const lineasepolia = defineChain({
   id: 59141,
-  name: "BEVM",
+  name: "Linea Sepolia",
   nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
   rpcUrls: {
     default: { http: ["https://rpc.sepolia.linea.build"] },

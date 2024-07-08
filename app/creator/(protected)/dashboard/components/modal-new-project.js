@@ -42,7 +42,7 @@ export default function NewProjectModal({ isOpen, onClose }) {
     };
 
     const res = await createNewProject(address, project);
-    console.log(res);
+
     if (res.success === true) {
       const launchpadSlug = res.uuid;
       router.push(`/creator/launchpad/${launchpadSlug}/details`);
