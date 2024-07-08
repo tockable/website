@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { signOut } from "next-auth/react";
-// import { ConnectButton } from "@rainbow-me/rainbowkit";
 import TockConnectButton from "@/components/tockConnectButton";
 import { useAccount, useDisconnect } from "wagmi";
 import TockableLogo from "@/svgs/logo";

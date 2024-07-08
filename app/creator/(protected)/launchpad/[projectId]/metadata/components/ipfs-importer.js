@@ -8,6 +8,7 @@ import {
   useNetwork,
   useWaitForTransaction,
 } from "wagmi";
+import { getContractAbi } from "@/actions/contract/metadata";
 import SwitchNetworkButton from "@/components/design/button-switch-network";
 import { createTaits } from "@/utils/crypto-utils";
 import { updateProject } from "@/actions/launchpad/projects";
@@ -104,6 +105,7 @@ export default function IpfsImporter({
       setReadyToDeploy(true);
       setAbiNotFetched(false);
     } catch (err) {
+      console.log(err);
       console.error("error fetching abi");
     }
     setGettingAbi(false);
@@ -143,22 +145,22 @@ export default function IpfsImporter({
       {!hideRest && (
         <div>
           <h1 className="text-tock-green font-bold text-xl mt-4 mb-6">
-            import ipfs cids
+            Import IPFS cids
           </h1>
           <p className="text-zinc-400 text-sm mt-2 mb-4">
-            copy/pase your layer cids into correlated fields.
+            copy/paste your layer cids into correlated fields.
           </p>
           <p className="text-zinc-400 text-sm mt-2 mb-4">
-            please make sure that you input correct cid for each directory,
+            Please make sure that you input correct cid for each directory,
             since this action is IRREVERSIBLE after deploying.{" "}
-            <a
+            {/* <a
               href="#"
               target="_blank"
               rel="noopener noreferer"
               className="text-blue-400 hover:text-blue-200"
             >
               learn how do this correctly
-            </a>
+            </a> */}
           </p>
           <section className="mt-2 mb-4">
             {layers?.map((layer, i) => (

@@ -27,7 +27,8 @@ export default function ProjectPreview({ project }) {
           <img
             className="rounded-xl"
             // src={`${IPFS_GATEWAY}/${project.image}`}
-            src={`https://${project.image}.${NFT_STORAGE_GATEWAY}`}
+            // src={`https://${project.image}.${NFT_STORAGE_GATEWAY}`}
+            src={`https://ipfs.io/ipfs/${project.image}`}
             width="206"
             height="206"
           ></img>

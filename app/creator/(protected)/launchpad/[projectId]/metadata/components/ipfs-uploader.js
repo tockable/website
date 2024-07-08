@@ -207,8 +207,8 @@ export default function IpfsUploader({
             Uploading to ipfs...
           </h1>
           <p className="text-tock-orange text-xs font-normal mb-6">
-            Depending on files size, it may take 5 to 30 minutes, please do
-            not close this window ...
+            Depending on files size, it may take 5 to 30 minutes, please DO NOT
+            close this window ...
           </p>
           <p className="text-center text-tock-green mb-2 text-xs font-normal">
             {Math.ceil((uploaded * 100) / layers.length)}%

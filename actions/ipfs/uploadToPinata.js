@@ -1,5 +1,3 @@
-// "use server";
-
 // const pinataSDK = require("@pinata/sdk");
 
 // export async function pinToPinataIpfs(_path, _contractName) {

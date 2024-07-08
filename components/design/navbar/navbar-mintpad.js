@@ -40,7 +40,7 @@ export default function NavbarMintpad() {
           </Link> */}
           <Link
             className="flex mx-1 text-sm items-center transition hover:bg-tock-black duration-200 text-zinc-300 font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline active:text-white"
-            href="/explore/base"
+            href={`/explore/${process.env.NEXT_PUBLIC_EXPLORE}`}
             target="_blank"
             rel="noopener noreferrer"
           >

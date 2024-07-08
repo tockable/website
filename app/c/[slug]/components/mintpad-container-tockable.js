@@ -5,6 +5,7 @@ import { MintContextTockable } from "@/contexts/mint-context-tockable";
 import { useAccount, useNetwork, useContractReads } from "wagmi";
 import { getElligibility } from "@/actions/mintpad/mintpad";
 import MintpadMintSectionTockable from "./mintpad-mint-section-tockable";
+import MintpadMintSectionTemp from "./mintpad-mint-section-temp";
 import OwnerMintTockable from "./owner-mint-tockable";
 import MintpadDapp from "./mintpad-mint-app";
 import MintBasket from "./mint-basket";
@@ -13,6 +14,7 @@ import Loading from "@/components/loading/loading";
 import CountDown from "@/components/design/timer";
 import NavbarMintpad from "@/components/design/navbar/navbar-mintpad";
 import { ls } from "@/utils/utils";
+import OwnerMintTemp from "./owner-mint-temp";
 
 export default function MintpadContainerTockable({ prepareMint }) {
   // Hooks and Contexts
@@ -55,6 +57,7 @@ export default function MintpadContainerTockable({ prepareMint }) {
         address: project.contractAddress,
         abi,
         functionName: "isMintLive",
+        cacheTime: 0,
       },
       {
         address: project.contractAddress,
@@ -75,6 +78,7 @@ export default function MintpadContainerTockable({ prepareMint }) {
     ],
   });
 
+  console.log(data);
   const [fetch, updateFetch] = useState(0);
 
   useEffect(() => {
@@ -277,6 +281,7 @@ export default function MintpadContainerTockable({ prepareMint }) {
           )}
           <div className="rounded-2xl p-4 mt-8 bg-tock-semiblack">
             <MintpadDapp
+              project={project}
               layers={project.layers}
               fileNames={project.fileNames}
               cids={project.cids}
@@ -382,11 +387,20 @@ export default function MintpadContainerTockable({ prepareMint }) {
                                                   available roles for you:
                                                 </p>
                                               )}
-                                              <MintpadMintSectionTockable
-                                                roles={roles}
-                                                session={session}
-                                                prepareMint={prepareMint}
-                                              />
+                                              {project.dropType ===
+                                              "tockable" ? (
+                                                <MintpadMintSectionTockable
+                                                  roles={roles}
+                                                  session={session}
+                                                  prepareMint={prepareMint}
+                                                />
+                                              ) : (
+                                                <MintpadMintSectionTemp
+                                                  roles={roles}
+                                                  session={session}
+                                                  prepareMint={prepareMint}
+                                                />
+                                              )}
                                             </div>
                                           )}
                                           {parseInt(data[2].result) == 0 && (
@@ -406,10 +420,15 @@ export default function MintpadContainerTockable({ prepareMint }) {
                       )}
                     </>
                   )}
-                  {address === project.creator &&
-                    parseInt(data[1]?.result) > 0 && (
-                      <OwnerMintTockable prepareMint={prepareMint} />
-                    )}
+                  {address === project.creator && (
+                    <>
+                      {project.dropType === "tockable" ? (
+                        <OwnerMintTockable prepareMint={prepareMint} />
+                      ) : (
+                        <OwnerMintTemp prepareMint={prepareMint} />
+                      )}
+                    </>
+                  )}
                 </div>
               )}
             </div>

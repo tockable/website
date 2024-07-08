@@ -5,16 +5,14 @@ import { NFT_STORAGE_GATEWAY } from "@/tock.config";
 import Button from "@/components/design/button";
 
 export default function CollectionPreview({ collection }) {
+  const src = !collection.ipfs
+    ? `https://${collection.image}.${NFT_STORAGE_GATEWAY}`
+    : `https://ipfs.io/ipfs/${collection.image}`;
   return (
     <div className="flex flex-col items-center w-[300px] bg-tock-semiblack rounded-2xl">
       {collection.image && (
         <div className="h-[300px] object-cover mt-[2px]">
-          <img
-            className="rounded-xl"
-            src={`https://${collection.image}.${NFT_STORAGE_GATEWAY}`}
-            width="297"
-            height="297"
-          ></img>
+          <img className="rounded-xl" src={src} width="297" height="297"></img>
         </div>
       )}
       {!collection.image && (

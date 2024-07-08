@@ -100,6 +100,7 @@ export async function createAndCompile(_creator, _uuid) {
     writeOutput(metadata, project, buildDirectory, contractName);
     return { success: true };
   } catch (err) {
+    console.log(err);
     return { success: false };
   }
 }

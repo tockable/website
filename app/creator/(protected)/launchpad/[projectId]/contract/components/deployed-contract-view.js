@@ -362,5 +362,6 @@ function isUnsupportedChainForVerification(_chainId) {
     _chainId === 168587773 ||
     _chainId === 7777777 ||
     _chainId === 11501 ||
-    _chainId === 60808;
+    _chainId === 60808 ||
+    _chainId === 11155111;
 }

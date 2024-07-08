@@ -11,10 +11,11 @@ export const SOCIAL = {
   discord: "https://discord.gg",
   mirror: "https://mirror.xyz",
 };
-export const TOCKABLE_VERSION = "0.3.13";
+export const TOCKABLE_VERSION = "0.3.14";
 
 export const SUPPORTED_CHAINS = [
   { name: "Ethereum ♦", value: "1", cleanName: "ethereum" },
+  { name: "Linea🔥", value: "59144", cleanName: "linea" },
   { name: "BEVM🔥", value: "11501", cleanName: "bevm" },
   { name: "BOB🔥", value: "60808", cleanName: "bob" },
   { name: "Taiko🔥", value: "167000", cleanName: "taiko" },
@@ -22,10 +23,10 @@ export const SUPPORTED_CHAINS = [
   { name: "Zora", value: "7777777", cleanName: "zora" },
   { name: "Arbitrum One", value: "42161", cleanName: "arbitrum" },
   { name: "Optimism", value: "10", cleanName: "optimism" },
-  { name: "Linea ", value: "59144", cleanName: "linea" },
   { name: "Blast", value: "81457", cleanName: "blast" },
   { name: "Mode", value: "34443", cleanName: "mode" },
   { name: "Polygon", value: "137", cleanName: "polygon" },
+  { name: "Sepolia", value: "11155111", cleanName: "sepolia" },
   // { name: "Linea Goerli ⬛️", value: "59140" },
   // { name: "Polygon mumbai", value: "80001" },
   // { name: "Blast Sepolia", value: "168587773" },
@@ -44,6 +45,8 @@ export const EXPLORE_CHAINS = {
   blast: 81457,
   mode: 34443,
   polygon: 137,
+  sepolia: 11155111,
+  holesky: 17000,
 };
 
 export const TXP = {
@@ -54,15 +57,17 @@ export const TXP = {
 };
 
 export const DROP_TYPES = [
+  // {
+  //   supported: true,
+  //   type: "tockable",
+  //   typeNo: 0,
+  //   currentVersion: 2,
+  //   title: "Tockable drop",
+  //   description:
+  //     "Create an NFT collection where collectors can make their own NFT during the mint, unlimited or fixed supply.",
+  // },
   {
-    type: "tockable",
-    typeNo: 0,
-    currentVersion: 2,
-    title: "Tockable drop",
-    description:
-      "Create an NFT collection where collectors can make their own NFT during the mint, unlimited or fixed supply.",
-  },
-  {
+    supported: true,
     type: "regular",
     typeNo: 1,
     currentVersion: 2,
@@ -71,10 +76,20 @@ export const DROP_TYPES = [
       "Create a traditional NFT collection with fixed total supply and pre-uploaded IPFS metadata",
   },
   {
+    supported: true,
     type: "mono",
     typeNo: 2,
-    currentVersion: 1,
+    currentVersion: 2,
     title: "Edition",
+    description:
+      "All tokens share a similar metadata like an Image/Html/json, Useful for Editions, erc721 OATs, Tickets, and subscriptions.",
+  },
+  {
+    supported: true,
+    type: "temp",
+    typeNo: 3,
+    currentVersion: 2,
+    title: "Tock-Temp",
     description:
       "All tokens share a similar image, Useful for Editions, erc721 OATs, Tickets, and subscriptions.",
   },

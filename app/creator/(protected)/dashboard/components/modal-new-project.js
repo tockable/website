@@ -22,6 +22,7 @@ export default function NewProjectModal({ isOpen, onClose }) {
   const [chainId, setChainId] = useState("1");
   const [dropType, setDropType] = useState(DROP_TYPES[0].type);
   const [creating, setCreating] = useState(false);
+  const [error, setError] = useState(false);
 
   const onChangeName = (e) => setName(e.target.value);
   const onChangeChain = (e) => setChainId(e.target.value);
@@ -30,6 +31,7 @@ export default function NewProjectModal({ isOpen, onClose }) {
     if (name.length == 0) return;
 
     setCreating(true);
+    setError(false);
 
     const chain = getChainData(Number(chainId)).name;
     const project = {
@@ -40,7 +42,7 @@ export default function NewProjectModal({ isOpen, onClose }) {
     };
 
     const res = await createNewProject(address, project);
-
+    console.log(res);
     if (res.success === true) {
       const launchpadSlug = res.uuid;
       router.push(`/creator/launchpad/${launchpadSlug}/details`);
@@ -127,6 +129,11 @@ export default function NewProjectModal({ isOpen, onClose }) {
                 ))}
               </select>
             </div>
+            {error && (
+              <p className="text-rose-400 text-xs mt-2 text-center">
+                An error occured.
+              </p>
+            )}
             <div className="flex justify-center">
               <Button
                 variant="primary"

@@ -52,6 +52,11 @@ const VERIFY_CHAIN_DATA = [
     apikey: "",
   },
   {
+    chainId: 11155111,
+    endpoint: "",
+    apikey: "",
+  },
+  {
     chainId: 167000,
     endpoint: "https://api.taikoscan.io/api",
     apikey: process.env.TAIKOSCAN_API,

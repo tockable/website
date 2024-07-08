@@ -32,7 +32,11 @@ export default function DeployMetadataRegularDropModal({
   const { config } = usePrepareContractWrite({
     address: project.contractAddress,
     abi: abi,
-    functionName: project.dropType === "regular" ? "setBaseURI" : "setImageURI",
+    functionName: (() => {
+      if (project.dropType === "regular") return "setBaseURI";
+      if (project.dropType === "mono") return "setImageURI";
+    })(),
+
     args: project.dropType === "regular" ? [cid, hasExtension] : [cid],
     // gas: 2_000_000n,
   });

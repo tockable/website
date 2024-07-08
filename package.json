@@ -1,6 +1,6 @@
 {
   "name": "tockable",
-  "version": "0.3.13",
+  "version": "0.3.14",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -19,6 +19,7 @@
     "cbor": "^9.0.1",
     "erc721a": "^4.2.3",
     "ethers": "^6.8.0",
+    "helia": "^4.2.4",
     "ipfs-only-hash": "^4.0.0",
     "mime": "^3.0.0",
     "multiformats": "^12.1.3",

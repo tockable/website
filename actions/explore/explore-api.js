@@ -9,6 +9,7 @@ let db = null;
 const dbp = path.resolve(".", db_path, "published_projects_db.db");
 
 export async function getCollectionlistByChainId(_chainId) {
+  
   if (!db) {
     db = await open({
       filename: dbp,

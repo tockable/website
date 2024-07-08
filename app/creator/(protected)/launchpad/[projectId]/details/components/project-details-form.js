@@ -17,7 +17,7 @@ import LabeledInput from "@/components/design/labeled-input";
 import Button from "@/components/design/button";
 import Loading from "@/components/loading/loading";
 import Fade from "@/components/design/fade/fade";
-import storeFileToIpfs from "@/actions/ipfs/uploadFileToIpfs";
+import { getJWT } from "@/actions/ipfs/getPinataJWT";
 
 export default function ProjectDetailsForm({ params }) {
   const session = useSession();
@@ -72,12 +72,23 @@ export default function ProjectDetailsForm({ params }) {
     if (!project) return;
 
     if (project.image) {
-      setImageToShow(`https://${project.image}.${NFT_STORAGE_GATEWAY}`);
+      const _imageToShow =
+        project.hasOwnProperty("ipfsProvider") &&
+        project.ipfsProvider == "pinata"
+          ? `https://ipfs.io/ipfs/${project.image}`
+          : `https://${project.image}.${NFT_STORAGE_GATEWAY}`;
+
+      setImageToShow(_imageToShow);
       setShowImage(true);
     }
 
     if (project.cover) {
-      setCoverToShow(`https://${project.cover}.${NFT_STORAGE_GATEWAY}`);
+      const _coverToShow =
+        project.hasOwnProperty("ipfsProvider") &&
+        project.ipfsProvider == "pinata"
+          ? `https://ipfs.io/ipfs/${project.cover}`
+          : `https://${project.cover}.${NFT_STORAGE_GATEWAY}`;
+      setCoverToShow(_coverToShow);
       setShowCover(true);
     }
   }, [project]);
@@ -200,12 +211,12 @@ export default function ProjectDetailsForm({ params }) {
       setProject({ ...project, slug: e.target.value });
   };
 
-  async function prepareBuffer(_file) {
-    const bytes = await _file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
+  // async function prepareBuffer(_file) {
+  //   const bytes = await _file.arrayBuffer();
+  //   const buffer = Buffer.from(bytes);
 
-    return { buffer, type: _file.type };
-  }
+  //   return { buffer, type: _file.type };
+  // }
 
   async function callUpdateProjectDetail() {
     setNameEditError(false);
@@ -259,8 +270,6 @@ export default function ProjectDetailsForm({ params }) {
       }
     }
 
-    let files;
-
     // if (imageChanged || coverChanged) {
     //   files = new FormData();
     //   if (imageChanged) files.append("image", image);
@@ -272,36 +281,77 @@ export default function ProjectDetailsForm({ params }) {
     let imageCid = project.image;
     let coverCid = project.cover;
 
-    if (imageChanged) {
-      const profileBuffer = await prepareBuffer(image);
-      const profileRes = await storeFileToIpfs(
-        profileBuffer.buffer,
-        profileBuffer.type
-      );
-
-      if (profileRes.success === false) {
+    let maxUses = 0;
+    if (imageChanged) maxUses++;
+    if (coverChanged) maxUses++;
+    let JWT;
+    if (maxUses > 0) {
+      let res = await getJWT(maxUses);
+      if (res.success === true) {
+        JWT = res.JWT;
+      } else {
         setFailed(true);
         setSaving(false);
         setErrorMessage("Something wrong in our side, please try again.");
+        return;
       }
+    }
 
-      imageCid = profileRes.cid;
+    if (imageChanged) {
+      try {
+        // const profileBuffer = await prepareBuffer(image);
+        // const profileRes = await storeFileToIpfs(
+        //   profileBuffer.buffer,
+        //   profileBuffer.type
+        // );
+        const formData = new FormData();
+        formData.append("file", image, { filename: image.name });
+        const profileRes = await fetch(
+          "https://api.pinata.cloud/pinning/pinFileToIPFS",
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${JWT}`,
+            },
+            body: formData,
+          }
+        );
+
+        const json = await profileRes.json();
+        const { IpfsHash: _imageCid } = json;
+        imageCid = _imageCid;
+      } catch (e) {
+        setFailed(true);
+        setSaving(false);
+        setErrorMessage("Something wrong in our side, please try again.");
+        return;
+      }
     }
 
     if (coverChanged) {
-      const coverBuffer = await prepareBuffer(cover);
-      const coverRes = await storeFileToIpfs(
-        coverBuffer.buffer,
-        coverBuffer.type
-      );
+      try {
+        const formData = new FormData();
+        formData.append("file", image, { filename: image.name });
+        const coverRes = await fetch(
+          "https://api.pinata.cloud/pinning/pinFileToIPFS",
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${JWT}`,
+            },
+            body: formData,
+          }
+        );
 
-      if (coverRes.success === false) {
+        const json = await coverRes.json();
+        const { IpfsHash: _coverCid } = json;
+        coverCid = _coverCid;
+      } catch (e) {
         setFailed(true);
         setSaving(false);
         setErrorMessage("Something wrong in our side, please try again.");
+        return;
       }
-
-      coverCid = coverRes.cid;
     }
 
     const { uuid, name, description, website, twitter, discord, slug } =
@@ -319,11 +369,7 @@ export default function ProjectDetailsForm({ params }) {
       cover: coverCid,
     };
 
-    const res = await updateProjectDetails(
-      session.data.user.address,
-      params,
-      files
-    );
+    const res = await updateProjectDetails(session.data.user.address, params);
 
     if (res.success === false) {
       if (res.message === "forbidden") {

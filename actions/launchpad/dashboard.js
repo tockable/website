@@ -39,6 +39,10 @@ function initProject(_creator, _name, _chain, _chainId, _dropType) {
   // Mono Drop
   if (_dropType === DROP_TYPES[2].type)
     return Init.monoDrop(creator, _name, _chain, _chainId, _dropType);
+
+  // Mono Drop
+  if (_dropType === DROP_TYPES[3].type)
+    return Init.tempDrop(creator, _name, _chain, _chainId, _dropType);
 }
 
 /**
@@ -166,8 +170,9 @@ async function addEntryToAllProjects({
     contractAddress,
     slug,
     isPublished,
-    minted
-) VALUES (?,?,?,?,?,?,?,?,?,?,?)`;
+    minted,
+    ipfs
+) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)`;
 
   const vals = [
     uuid,
@@ -181,6 +186,7 @@ async function addEntryToAllProjects({
     "",
     0,
     0,
+    "pinata",
   ];
 
   await db.run(query, vals);

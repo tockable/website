@@ -11,6 +11,7 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import Button from "@/components/design/button";
 import Loading from "@/components/loading/loading";
 import { checkExtension } from "@/actions/ipfs/checkExtension";
+import { BaseError, ContractFunctionRevertedError } from "viem";
 
 export default function ActionConfigureMetadataRegular({ abi, _project }) {
   const [states, setStates] = useState({
@@ -43,7 +44,11 @@ export default function ActionConfigureMetadataRegular({ abi, _project }) {
         <div className="flex text-zinc-400 text-sm font-bold">
           <div className="flex-auto">
             <p>
-              Set New {_project.dropType === "regular" ? "Base" : "Image"} URI
+              Set New{" "}
+              {_project.dropType === "regular" || _project.dropType === "temp"
+                ? "Base"
+                : "Image"}{" "}
+              URI
             </p>
           </div>
           <div>{states.setBaseURI ? <IoIosArrowUp /> : <IoIosArrowDown />}</div>
@@ -119,15 +124,25 @@ function DeployNewBaseURI({ _project, abi }) {
 
   const onChangeCid = (e) => setCid(e.target.value);
 
-  const { config } = usePrepareContractWrite({
+  const options = {
     address: project.contractAddress,
     abi: abi,
-    functionName:
-      _project.dropType === "regular" ? "setBaseURI" : "setImageURI",
+    functionName: (() => {
+      if (_project.dropType === "regular") return "setBaseURI";
+      if (_project.dropType === "temp") return "setBaseURI";
+      if (_project.dropType === "mono") return "setImageURI";
+    })(),
+
     args: _project.dropType === "regular" ? [cid, hasExtension] : [cid],
+  };
+
+  const { config } = usePrepareContractWrite({
+    ...options,
     enabled: enableState,
     onSuccess(_) {
-      setReadyToDeploy(true);
+      if (cid !== project.cid) {
+        setReadyToDeploy(true);
+      }
     },
     onError(err) {
       if (err instanceof BaseError) {
@@ -206,6 +221,10 @@ function DeployNewBaseURI({ _project, abi }) {
     }
 
     if (project.dropType === "mono") {
+      setHasExtension === false;
+    }
+
+    if (project.dropType === "temp") {
       setHasExtension === false;
     }
 

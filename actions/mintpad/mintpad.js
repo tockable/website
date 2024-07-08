@@ -13,6 +13,23 @@ import { getAddress } from "viem";
 const dbp = path.resolve(".", db_path, "published_projects_db.db");
 
 let db;
+
+function getPayload(project) {
+  const chainData = getChainData(project.chainId);
+  if (project.dropType === "tockable") {
+    return mintpadData.tockableDrop(project, chainData);
+  }
+  if (project.dropType === "regular") {
+    payload = mintpadData.regularDrop(project, chainData);
+  }
+  if (project.dropType === "tockable") {
+    return mintpadData.monoDrop(project, chainData);
+  }
+  if (project.dropType === "temp") {
+    return mintpadData.tempDrop(project, chainData);
+  }
+}
+
 export async function fetchProjectMintData(slug) {
   // const allProjectsPath = getPublishedProjectPath();
   if (!db) {
@@ -38,12 +55,7 @@ export async function fetchProjectMintData(slug) {
 
     const project = creatorProjects.find((p) => slug === p.slug);
 
-    const chainData = getChainData(project.chainId);
-
-    const payload =
-      project.dropType === "tockable"
-        ? mintpadData.tockableDrop(project, chainData)
-        : mintpadData.regularDrop(project, chainData);
+    const payload = getPayload(project);
 
     return { success: true, payload };
   } catch (err) {

@@ -8,6 +8,8 @@ import {
   polygonMumbai,
   arbitrum,
   zora,
+  sepolia,
+  holesky,
 } from "wagmi/chains";
 
 const mode = defineChain({
@@ -156,4 +158,6 @@ export const TOCKABLE_CHAINS = [
   mode,
   polygon,
   polygonMumbai,
+  sepolia,
+  holesky,
 ];

@@ -57,7 +57,8 @@ export default function ProjectContractRouter({ params }) {
             </Fade>
           ) : (
             <>
-              {project.dropType === "tockable" && (
+              {(project.dropType === "tockable" ||
+                project.dropType === "temp") && (
                 <ProjectContractFormTockable _project={project} />
               )}
               {(project.dropType === "regular" ||

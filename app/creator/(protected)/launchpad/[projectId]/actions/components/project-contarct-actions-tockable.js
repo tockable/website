@@ -7,11 +7,17 @@ import ActionSetActiveSession from "./acitons-set-active-session";
 import ActionWithdraw from "./actions-withdraw";
 import ActionMintStatus from "./actions-mint-status";
 import SwitchNetworkButton from "@/components/design/button-switch-network";
+import ActionConfigureMetadataRegular from "./actions-configure-metadata-regular";
 import { getContractAbi } from "@/actions/contract/metadata";
 import Fade from "@/components/design/fade/fade";
 
-const actions = ["Set Mint Session", "Owner Mint", "Withdraw", "Start/Pause"];
-
+const actions = [
+  "Set Mint Session",
+  "Owner Mint",
+  "Withdraw",
+  "Start/Pause",
+  "Metadata",
+];
 export default function ProjectContractActionsTockable({ _project }) {
   const [activeAction, setActiveAction] = useState(actions[0]);
   const [abiError, setAbiError] = useState(false);
@@ -66,20 +72,41 @@ export default function ProjectContractActionsTockable({ _project }) {
               {chain.id === Number(project.chainId) && (
                 <div>
                   <nav className="flex flex-row gap-2 text-sm text-tock-green  mb-2">
-                    {actions.map((action) => (
-                      <button
-                        className={`bg-${
-                          activeAction === action ? "zinc-700" : "tock-black"
-                        } 
+                    {actions.map((action) => {
+                      return action !== "Metadata" ? (
+                        <button
+                          className={`bg-${
+                            activeAction === action ? "zinc-700" : "tock-black"
+                          } 
              ${
                activeAction === action ? "" : "hover:bg-tock-semiblack"
              } px-2 transition ease-in-out duration-300 rounded-2xl h-14 text-xs px-2 lg:h-10 border border-zinc-700`}
-                        key={action}
-                        onClick={() => setActiveAction(action)}
-                      >
-                        {action}
-                      </button>
-                    ))}
+                          key={action}
+                          onClick={() => setActiveAction(action)}
+                        >
+                          {action}
+                        </button>
+                      ) : (
+                        <>
+                          {project.dropType === "temp" && (
+                            <button
+                              className={`bg-${
+                                activeAction === action
+                                  ? "zinc-700"
+                                  : "tock-black"
+                              } 
+             ${
+               activeAction === action ? "" : "hover:bg-tock-semiblack"
+             } px-2 transition ease-in-out duration-300 rounded-2xl h-14 text-xs px-2 lg:h-10 border border-zinc-700`}
+                              key={action}
+                              onClick={() => setActiveAction(action)}
+                            >
+                              {action}
+                            </button>
+                          )}
+                        </>
+                      );
+                    })}
                   </nav>
                   <div className="p-4 border border-zinc-600 rounded-2xl mb-4 bg-zinc-800">
                     {activeAction == "Set Mint Session" && (
@@ -93,6 +120,12 @@ export default function ProjectContractActionsTockable({ _project }) {
                     )}
                     {activeAction == "Start/Pause" && (
                       <ActionMintStatus abi={abi} _project={project} />
+                    )}
+                    {activeAction == "Metadata" && (
+                      <ActionConfigureMetadataRegular
+                        abi={abi}
+                        _project={project}
+                      />
                     )}
                   </div>
                 </div>

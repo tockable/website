@@ -3,6 +3,7 @@ import {
   useContractWrite,
   usePrepareContractWrite,
   useWaitForTransaction,
+  useContractRead,
 } from "wagmi";
 import { updateProject } from "@/actions/launchpad/projects";
 import Loading from "@/components/loading/loading";
@@ -13,27 +14,34 @@ export default function ActionMintStatus({ abi, _project }) {
   const [success, setSuccess] = useState(false);
   const [isWriting, setWriting] = useState(false);
   const [key, setKey] = useState(1);
-  const [ready, setReady] = useState(false);
 
-  const [pauseState, setPauseState] = useState(
-    project.isPaused === true ? true : false
-  );
-
-  const { config } = usePrepareContractWrite({
+  const res = useContractRead({
+    abi,
     address: project.contractAddress,
-    abi: abi,
-    enabled: ready,
-    functionName: "setMintIsLive",
-    args: [!pauseState],
+    functionName: "isMintLive",
   });
 
+  const options = {
+    address: project.contractAddress,
+    abi: abi,
+    enabled: (() => {
+      if (res) return true;
+      else return false;
+    })(),
+    functionName: "setMintIsLive",
+    args: (() => {
+      if (!res) retrun[false];
+      else return [!res?.data];
+    })(),
+  };
+
+  const { config } = usePrepareContractWrite({
+    ...options,
+  });
+
+  console.log(res);
   const { data, isLoading, isError, write, error } = useContractWrite(config);
   const uwt = useWaitForTransaction({ hash: data?.hash });
-
-  useEffect(() => {
-    if (!project) return;
-    setReady(true);
-  }, [pauseState]);
 
   useEffect(() => {
     if (!uwt.isSuccess) return;
@@ -73,27 +81,21 @@ export default function ActionMintStatus({ abi, _project }) {
           disabled={!write || isLoading || isWriting || uwt.isLoading}
           onClick={() => write?.()}
         >
-          {(isLoading || uwt.isLoading || isWriting) && (
+          {(isLoading || uwt.isLoading || isWriting || !res) && (
             <Loading
-              isLoading={isLoading || uwt.isLoading || isWriting}
+              isLoading={isLoading || uwt.isLoading || isWriting || !res}
               size={10}
             />
           )}
 
           {!isLoading && !uwt.isLoading && !isWriting && (
-            <p>
-              {!project
-                ? "Pause mint"
-                : project.paused === true
-                ? "Start mint"
-                : "Pause mint"}
-            </p>
+            <p>{res?.data === false ? "Start mint" : "Pause mint"}</p>
           )}
         </Button>
       </div>
       {(isLoading || uwt.isLoading || isWriting) && (
         <p className="text-tock-orange mt-2 text-xs">
-          do not close this window, or change tabs...
+          please DO NOT close this window, or change tabs...
         </p>
       )}
       {isError && <p className="text-tock-red mt-2 text-xs">{error.name}</p>}

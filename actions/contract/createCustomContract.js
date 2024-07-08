@@ -9,11 +9,10 @@ function getBaseContract(_project, _chainId) {
     if (_project.dropType === "tockable") return "Tockable";
     if (_project.dropType === "regular") return "Regular";
     if (_project.dropType === "mono") return "Mono";
+    if (_project.dropType === "temp") return "Temp";
   })();
 
-  const version = _project.version;
-
-  const constructedName = `Flatten${isBlast}${dropType}DropV${version}.sol`;
+  const constructedName = `Flatten${isBlast}${dropType}DropV${_project.version}.sol`;
 
   const baseContract = fs.readFileSync(
     path.resolve(".", "contracts", constructedName),
@@ -31,7 +30,7 @@ export default async function createCostimizedContractFile(
   const chainData = getChainData(Number(_project.chainId));
   const baseContract = getBaseContract(_project, chainData.chainId);
   const base_fee =
-    _project.dropType === "tockable"
+    _project.dropType === "tockable" || _project.dropType === "temp"
       ? Number(chainData.base_fee)
       : Number(chainData.regular_base_fee);
 

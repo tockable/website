@@ -31,7 +31,7 @@ export default function ActionSetActiveSession({ abi, _project }) {
     if (sessionToActive.toString().length === 0) return;
     setArgs(Number(sessionToActive));
   }, [sessionToActive]);
-  console.log(args);
+
   const { config } = usePrepareContractWrite({
     address: project.contractAddress,
     abi: abi,
@@ -56,6 +56,7 @@ export default function ActionSetActiveSession({ abi, _project }) {
         const updatedProject = await updateProject(creator, {
           uuid,
           activeSession: Number(sessionToActive),
+          paused: false,
         });
         setProject(updatedProject);
         setUpdated(true);

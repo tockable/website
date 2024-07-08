@@ -1,14 +1,11 @@
 import MintpadContainerTockable from "./mintpad-container-tockable";
 import getHashAndSignature from "@/actions/signature/signature";
-// import storeMultipleFilesToIpfs from "@/actions/ipfs/uploadMultipleFileToIpfs";
 import getCidTuple from "@/actions/utils/cid-utils";
 import MintProviderTockable from "@/contexts/mint-context-tockable";
-// import storeFileToIpfs from "@/actions/ipfs/uploadFileToIpfs";
 
 export default function MintpadTockable({ project, abi }) {
   async function prepareMint(_address, _roleId, _sessionId, ipfs) {
     "use server";
-    // const ipfs = await storeMultipleFilesToIpfsClient(_files);
 
     if (ipfs.success === false) {
       return {
@@ -19,18 +16,30 @@ export default function MintpadTockable({ project, abi }) {
 
     const cids = [];
 
-    ipfs.cids.forEach((cid) => {
-      const _cid = getCidTuple(cid);
-      cids.push(_cid);
-    });
+    if (ipfs.cids.length > 0) {
+      ipfs.cids.forEach((cid) => {
+        const _cid = getCidTuple(cid);
+        cids.push(_cid);
+      });
+    }
 
-    const sig = await getHashAndSignature(
-      project?.creator,
-      _address,
-      _roleId,
-      _sessionId,
-      project?.signer
-    );
+    let sig = {};
+
+    if (_sessionId != 0) {
+      sig = await getHashAndSignature(
+        project?.creator,
+        _address,
+        _roleId,
+        _sessionId,
+        project?.signer
+      );
+    } else {
+      sig = {
+        success: true,
+        payload:
+          "0x1111111111111111111111111111111111111111111111111111111111111111",
+      };
+    }
 
     if (!sig.success) {
       return {

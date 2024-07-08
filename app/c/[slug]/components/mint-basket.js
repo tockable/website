@@ -20,7 +20,7 @@ export default function MintBasket() {
         </h1>
         <p className="text-zinc-400 text-xs">
           Just like add to cart, shows NFTs that you choose to mint. you can add
-          up to {maxMint} NFTs in a basket
+          up to {maxMint} NFTs in a basket and mint them.
         </p>
       </div>
       <div className="bg-tock-black rounded-2xl min-h-44 md:h-44 p-4 mx-4 my-2 mb-4 flex flex-wrap justify-center gap-2 items-center">

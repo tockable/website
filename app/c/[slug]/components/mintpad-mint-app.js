@@ -7,7 +7,7 @@ import { MintContextTockable } from "@/contexts/mint-context-tockable";
 import Loading from "@/components/loading/loading";
 import Button from "@/components/design/button";
 
-export default function MintpadDapp({ layers, fileNames, cids }) {
+export default function MintpadDapp({ project, layers, fileNames, cids }) {
   // Contexts & Hooks
   const { addToBasket } = useContext(MintContextTockable);
   // States
@@ -67,10 +67,16 @@ export default function MintpadDapp({ layers, fileNames, cids }) {
         img.onerror = (e) => {
           e.target.onerror = null;
           e.currentTarget.onerror = null;
-          e.currentTarget.src = `https://nftstorage.link/ipfs/${_cid}/${layerFileNames[j]}`;
+          const src = (project.ipfsProvider = "pinata"
+            ? `https://ipfs.io/ipfs/${_cid}/${layerFileNames[j]}`
+            : `https://nftstorage.link/ipfs/${_cid}/${layerFileNames[j]}`);
+          e.currentTarget.src = src;
         };
 
-        img.src = `https://${_cid}.${NFT_STORAGE_GATEWAY}/${layerFileNames[j]}?with-cors-no-cache`;
+        const src = (project.ipfsProvider = "pinata"
+          ? `https://ipfs.io/ipfs/${_cid}/${layerFileNames[j]}?with-cors-no-cache`
+          : `https://${_cid}.${NFT_STORAGE_GATEWAY}/${layerFileNames[j]}?with-cors-no-cache`);
+        img.src = src;
 
         images.push({ img, name: layerFileNames[j] });
       }
@@ -132,43 +138,41 @@ export default function MintpadDapp({ layers, fileNames, cids }) {
 
   function nextImg(layer) {
     const selectedLayer = assets[layer];
+    const newDrawing = { ...drawing };
     if (drawing[layer] + 1 < selectedLayer.length) {
-      const newDrawing = { ...drawing };
       newDrawing[layer] = drawing[layer] + 1;
-      setDrawing(newDrawing);
+    } else {
+      newDrawing[layer] = 0;
     }
-  }
-
-  function IsNextImgNotAvailable(layer) {
-    const selectedLayer = assets[layer];
-    if (drawing[layer] + 1 < selectedLayer.length) return false;
-    else return true;
-  }
-
-  function IsPrevImgNotAvailable(layer) {
-    if (drawing[layer] - 1 >= 0) return false;
-    else return true;
+    setDrawing(newDrawing);
   }
 
   function prevImg(layer) {
+    const newDrawing = { ...drawing };
     if (drawing[layer] - 1 >= 0) {
-      const newDrawing = { ...drawing };
       newDrawing[layer] = drawing[layer] - 1;
-      setDrawing(newDrawing);
+    } else {
+      const selectedLayer = assets[layer];
+      newDrawing[layer] = selectedLayer.length - 1;
     }
+    setDrawing(newDrawing);
   }
 
   function addTokenToBasket() {
     const traits = [];
+    const serializedTraits = [];
+
     for (let i = 0; i < layers.length; i++) {
       const selectedLayer = assets[i];
       const _name = selectedLayer[drawing[i]].name;
+      serializedTraits.push(Number(drawing[i]));
       const value = toHex32(_name.slice(0, -4));
       traits.push(value);
     }
+
     canvas.current.toBlob((blob) => {
       const url = imageUrlFromBlob(blob);
-      const res = addToBasket({ blob, url, traits });
+      const res = addToBasket({ blob, url, traits, serializedTraits });
       if (res.duplicated) {
         setDuplicated(true);
       } else {
@@ -230,14 +234,17 @@ export default function MintpadDapp({ layers, fileNames, cids }) {
                       className="mt-6 mb-4 flex flex-col sm:grid sm:grid-cols-2 items-center justify-center"
                     >
                       <div className="min-w-max md:w-64 text-sm text-zinc-400 text-start flex flex-col">
-                        <p className="text-tock-orange text-center sm:text-start">{layers[layer]}:</p>{" "}
-                        <p className="text-center sm:text-start">{assets[layer][drawing[layer]].name.slice(0, -4)}</p>
+                        <p className="text-tock-orange text-center sm:text-start">
+                          {layers[layer]}:
+                        </p>{" "}
+                        <p className="text-center sm:text-start">
+                          {assets[layer][drawing[layer]].name.slice(0, -4)}
+                        </p>
                       </div>
                       <div className="flex justify-center select-none">
                         <button
                           className="disabled:border-zinc-700 disabled:text-zinc-700 border border-zinc-500 transition ease-in-out mx-4 enabled:hover:bg-zinc-600 duration-300 bg-tock-semiblack text-zinc-400 font-bold py-2 px-4 rounded-2xl focus:outline-none focus:shadow-outline active:text-white"
                           onClick={() => prevImg(layer)}
-                          disabled={IsPrevImgNotAvailable(layer)}
                         >
                           &lt;
                         </button>
@@ -248,7 +255,6 @@ export default function MintpadDapp({ layers, fileNames, cids }) {
                         <button
                           className="disabled:border-zinc-700 disabled:text-zinc-700 border border-zinc-500 transition ease-in-out mx-4 enabled:hover:bg-zinc-600 duration-300 bg-tock-semiblack text-zinc-400 font-bold py-2 px-4 rounded-2xl focus:outline-none focus:shadow-outline active:text-white"
                           onClick={() => nextImg(layer)}
-                          disabled={IsNextImgNotAvailable(layer)}
                         >
                           &gt;
                         </button>

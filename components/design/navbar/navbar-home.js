@@ -1,5 +1,6 @@
 import Link from "next/link";
 import TockableLogo from "@/svgs/logo";
+
 export default function Navbar() {
   return (
     <nav className="fixed top-0 p-2 z-10 h-18 w-full">
@@ -28,7 +29,7 @@ export default function Navbar() {
             className="flex mx-1 text-sm items-center transition hover:bg-tock-black duration-200 text-zinc-300 font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline active:text-white"
             target="_blank"
             rel="noopener noreferrer"
-            href="/explore/base"
+            href={`/explore/${process.env.NEXT_PUBLIC_EXPLORE}`}
           >
             Explore
           </Link>
