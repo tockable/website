@@ -27,6 +27,7 @@ export const SUPPORTED_CHAINS = [
   { name: "Mode", value: "34443", cleanName: "mode" },
   { name: "Polygon", value: "137", cleanName: "polygon" },
   { name: "Sepolia", value: "11155111", cleanName: "sepolia" },
+  { name: "Linea Sepolia", value: "59141", cleanName: "lineasepolia" },
   // { name: "Linea Goerli ⬛️", value: "59140" },
   // { name: "Polygon mumbai", value: "80001" },
   // { name: "Blast Sepolia", value: "168587773" },
@@ -47,6 +48,7 @@ export const EXPLORE_CHAINS = {
   polygon: 137,
   sepolia: 11155111,
   holesky: 17000,
+  lineasepolia: 59141,
 };
 
 export const TXP = {
@@ -89,9 +91,9 @@ export const DROP_TYPES = [
     type: "temp",
     typeNo: 3,
     currentVersion: 2,
-    title: "Tock-Temp",
+    title: "Tock-Temp (Experimental)",
     description:
-      "All tokens share a similar image, Useful for Editions, erc721 OATs, Tickets, and subscriptions.",
+      "Create an NFT collection where collectors can make their own NFT during the mint, unlimited or fixed supply",
   },
 ];
 

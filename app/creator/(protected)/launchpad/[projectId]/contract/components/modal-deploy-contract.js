@@ -126,6 +126,7 @@ export default function DeployContractModal({
           uuid,
           signer,
           contractAddress,
+          totalSupply: project.totalSupply,
           isDeployed: true,
         });
 

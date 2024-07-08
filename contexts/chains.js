@@ -78,6 +78,27 @@ const blast = defineChain({
 //   },
 // });
 
+const lineasepolia = defineChain({
+  id: 59141,
+  name: "BEVM",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://rpc.sepolia.linea.build"] },
+    public: { http: ["https://rpc.sepolia.linea.build"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Sepolia.lineascan.build",
+      url: "https://sepolia.lineascan.build/",
+    },
+  },
+  contracts: {
+    // multicall3: {
+    //   address: "0xcA11bde05977b3631167028862bE2a173976CA11",
+    //   blockCreated: 756690,
+    // },
+  },
+});
 const bevm = defineChain({
   id: 11501,
   name: "BEVM",
@@ -159,5 +180,5 @@ export const TOCKABLE_CHAINS = [
   polygon,
   polygonMumbai,
   sepolia,
-  holesky,
+  lineasepolia,
 ];

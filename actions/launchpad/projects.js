@@ -85,6 +85,7 @@ export async function updateProject(_creator, params) {
     await updateAllProjects({
       uuid: params.uuid,
       contractAddress: params.contractAddress,
+      totalSupply: params.totalSupply,
     });
   }
 
@@ -140,7 +141,7 @@ export async function updateAllProjects(params) {
 
   if (params.hasOwnProperty("contractAddress")) {
     query = `UPDATE published_projects 
-             SET contractAddress = '${params.contractAddress}'
+             SET contractAddress = '${params.contractAddress}' ,totalSupply = ${params.totalSupply}
              WHERE uuid = '${params.uuid}'`;
   }
 

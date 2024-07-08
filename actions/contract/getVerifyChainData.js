@@ -61,6 +61,11 @@ const VERIFY_CHAIN_DATA = [
     endpoint: "https://api.taikoscan.io/api",
     apikey: process.env.TAIKOSCAN_API,
   },
+  {
+    chainId: 59141,
+    endpoint: "",
+    apikey: "",
+  },
 ];
 
 export default async function getVerifyChainData(_chainId) {
