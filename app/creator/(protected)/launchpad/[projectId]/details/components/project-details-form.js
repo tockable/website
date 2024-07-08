@@ -331,7 +331,7 @@ export default function ProjectDetailsForm({ params }) {
     if (coverChanged) {
       try {
         const formData = new FormData();
-        formData.append("file", image, { filename: image.name });
+        formData.append("file", cover, { filename: cover.name });
         const coverRes = await fetch(
           "https://api.pinata.cloud/pinning/pinFileToIPFS",
           {

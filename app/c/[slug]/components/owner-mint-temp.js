@@ -33,7 +33,7 @@ export default function OwnerMintTemp({ prepareMint }) {
             <div className="flex-auto">
               <p className="text-zinc-400 text-xs items-center">
                 mint as{" "}
-                <span className="text-tock-orange text-sm">ownerrr</span> | Max
+                <span className="text-tock-orange text-sm">owner</span> | Max
                 mint/wallet:{" "}
                 <span className="text-tock-orange text-xl">
                   <sub>&infin;</sub>

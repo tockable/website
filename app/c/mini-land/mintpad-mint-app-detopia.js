@@ -108,10 +108,6 @@ export default function MintpadDappDetopia({ layers, fileNames, lands }) {
         img.crossOrigin = "anonymous";
         img.onload = () => {
           imageLoaded();
-          if (canvasHeight === 0 || canvasWidth === 0) {
-            setCanvasWidth(img.naturalWidth / 4);
-            setCanvasHeight(img.naturalHeight / 4);
-          }
         };
 
         img.src = `/miniland/${layerFileNames[j]}`;
@@ -169,7 +165,7 @@ export default function MintpadDappDetopia({ layers, fileNames, lands }) {
 
     setDrawing(newDrawing);
     setBuilt(true);
-  }, [loaded, canvasHeight, canvasWidth]);
+  }, [loaded, canvasHeight, canvasWidth, assets, lands]);
 
   useEffect(() => {
     if (canvasWidth === 0 || canvasHeight === 0) return;
@@ -224,7 +220,7 @@ export default function MintpadDappDetopia({ layers, fileNames, lands }) {
       baseBos.y +
       ((pos * canvas.current.width) / 11.32) * Math.sin(Math.PI / 4) +
       (-level * canvas.current.width) / 8.11;
-    console.log("draw");
+
     ctx.current.drawImage(
       selectedLayer[drawing[g][layer]].img,
       x,
@@ -273,7 +269,7 @@ export default function MintpadDappDetopia({ layers, fileNames, lands }) {
         const selectedLayer = assets[i];
         const _name = selectedLayer[drawing[g][i]].name;
         const value = toHex32(_name.slice(0, -4) + "-" + g);
-        console.log(g, layers[i], _name);
+
         traits.push(value);
       }
     }
@@ -311,14 +307,14 @@ export default function MintpadDappDetopia({ layers, fileNames, lands }) {
           </h1>
           <div className="flex flex-col items-center lg:flex-row-reverse justify-center w-full">
             <div className="flex flex-col justify-center">
-              {canvasWidth > 0 && canvasHeight > 0 && (
-                <canvas
-                  id="app-canvas"
-                  className="rounded-xl mt-4 border border-zinc-500 mb-2 w-[350px] h-[350px] object-contain"
-                  width={canvasWidth}
-                  height={canvasHeight}
-                ></canvas>
-              )}
+              {/* {canvasWidth > 0 && canvasHeight > 0 && ( */}
+              <canvas
+                id="app-canvas"
+                className="rounded-xl mt-4 border border-zinc-500 mb-2 w-[350px] h-[350px] object-contain"
+                width={canvasWidth}
+                height={canvasHeight}
+              ></canvas>
+              {/* )} */}
               <div className="flex flex-col justify-center mt-4 ml-0 md:mr-4 lg:mr-0">
                 <div className="flex justify-center items-center">
                   <Button variant="primary" onClick={addTokenToBasket}>
@@ -368,7 +364,7 @@ export default function MintpadDappDetopia({ layers, fileNames, lands }) {
                     <div className="mt-6 mb-4 flex flex-col sm:grid sm:grid-cols-2 items-center justify-center">
                       <div className="min-w-max md:w-64 text-sm text-zinc-400 text-start flex flex-col">
                         <p className="text-tock-orange text-center sm:text-start">
-                          Background:
+                          Land:
                         </p>{" "}
                         <p className="text-center sm:text-start">
                           {`bg-${bgind + 1}`}
