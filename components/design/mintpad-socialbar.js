@@ -32,20 +32,32 @@ export default async function MintpadSocialbar({ project }) {
         >
           <FaDiscord />
         </Link>
-
-        <Link
-          disabled={true}
-          href={`https://${project.website}`}
-          className={`${
-            project?.website.length > 0
-              ? "hover:opacity-50 text-zinc-400 transition duration-200"
-              : "text-zinc-700 pointer-events-none"
-          } `}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <TbWorld />
-        </Link>
+        {project.website.length > 0 && (
+          <Link
+            disabled={true}
+            href={`https://${project.website}`}
+            className={`${
+              project?.website.length > 0
+                ? "hover:opacity-50 text-zinc-400 transition duration-200"
+                : "text-zinc-700 pointer-events-none"
+            } `}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <TbWorld />
+          </Link>
+        )}
+        {project.website.length === 0 && (
+          <p
+            className={`${
+              project?.website.length > 0
+                ? "hover:opacity-50 text-zinc-400 transition duration-200"
+                : "text-zinc-700 pointer-events-none"
+            } `}
+          >
+            <TbWorld />
+          </p>
+        )}
       </div>
     </div>
   );
