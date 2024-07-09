@@ -111,6 +111,7 @@ export function monoDrop(_creator, name, chain, chainId, dropType) {
     isPublished: false,
     isVerified: false,
     isFrozen: false,
+    isUnlimited: false,
   };
 }
 

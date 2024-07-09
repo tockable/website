@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { fetchProjectByUUID } from "@/actions/launchpad/projects";
 import ProjectContractFormRegular from "./project-contract-form-regular";
 import ProjectContractFormTockable from "./project-contract-form-tockable";
+import ProjectContractFormMono from "./project-contract-form-mono";
 import DeployedContractView from "./deployed-contract-view";
 import Fade from "@/components/design/fade/fade";
 import Loading from "@/components/loading/loading";
@@ -61,9 +62,11 @@ export default function ProjectContractRouter({ params }) {
                 project.dropType === "temp") && (
                 <ProjectContractFormTockable _project={project} />
               )}
-              {(project.dropType === "regular" ||
-                project.dropType === "mono") && (
+              {project.dropType === "regular" && (
                 <ProjectContractFormRegular _project={project} />
+              )}
+              {project.dropType === "mono" && (
+                <ProjectContractFormMono _project={project} />
               )}
             </>
           )}

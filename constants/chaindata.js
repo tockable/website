@@ -204,9 +204,9 @@ export const chainData = [
   {
     chainId: 59141,
     url: "https://sepolia.linea.build",
-    verifyurl: "https://sepolia.linea.build/verifyContract",
+    verifyurl: "https://sepolia.lineascan.build/verifyContract",
     name: "Linea Sepolia",
-    scan: "Sepolia.linea.build",
+    scan: "Sepolia.lineascan.build",
     nativeToken: "ETH",
     base_fee: BASE_FEE.ETH_TOCKABLE,
     regular_base_fee: BASE_FEE.ETH_REGULAR,

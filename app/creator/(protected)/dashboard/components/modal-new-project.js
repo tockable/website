@@ -20,7 +20,7 @@ export default function NewProjectModal({ isOpen, onClose }) {
   // States
   const [name, setName] = useState("");
   const [chainId, setChainId] = useState("1");
-  const [dropType, setDropType] = useState(DROP_TYPES[0].type);
+  const [dropType, setDropType] = useState(DROP_TYPES[1].type);
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState(false);
 
@@ -76,6 +76,7 @@ export default function NewProjectModal({ isOpen, onClose }) {
               return (
                 <div key={"drop_" + i} className="mt-4">
                   <button
+                    disabled={drop.supported === false}
                     type="button"
                     className={`rounded-xl min-h-24 w-full border-2 ${
                       drop.type === dropType
@@ -86,7 +87,12 @@ export default function NewProjectModal({ isOpen, onClose }) {
                   >
                     <div className="p-4">
                       <h1 className="text-sm text-tock-blue text-start mb-2">
-                        {drop.title}
+                        {drop.title}{" "}
+                        {drop.supported === false && (
+                          <span className="text-xs text-rose-400">
+                            (Temporarily disabled)
+                          </span>
+                        )}
                       </h1>
                       <p className="text-xs text-start text-zinc-400">
                         {drop.description}

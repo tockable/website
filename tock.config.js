@@ -11,7 +11,7 @@ export const SOCIAL = {
   discord: "https://discord.gg",
   mirror: "https://mirror.xyz",
 };
-export const TOCKABLE_VERSION = "0.3.15";
+export const TOCKABLE_VERSION = "0.3.16";
 
 export const SUPPORTED_CHAINS = [
   { name: "Ethereum ♦", value: "1", cleanName: "ethereum" },
@@ -59,15 +59,15 @@ export const TXP = {
 };
 
 export const DROP_TYPES = [
-  // {
-  //   supported: true,
-  //   type: "tockable",
-  //   typeNo: 0,
-  //   currentVersion: 2,
-  //   title: "Tockable drop",
-  //   description:
-  //     "Create an NFT collection where collectors can make their own NFT during the mint, unlimited or fixed supply.",
-  // },
+  {
+    supported: false,
+    type: "tockable",
+    typeNo: 0,
+    currentVersion: 2,
+    title: "Tockable drop",
+    description:
+      "Create an NFT collection where collectors can make their own NFT during the mint, unlimited or fixed supply.",
+  },
   {
     supported: true,
     type: "regular",
@@ -81,20 +81,20 @@ export const DROP_TYPES = [
     supported: true,
     type: "mono",
     typeNo: 2,
-    currentVersion: 2,
+    currentVersion: 1,
     title: "Edition",
     description:
       "All tokens share a similar metadata like an Image/Html/json, Useful for Editions, erc721 OATs, Tickets, and subscriptions.",
   },
-  {
-    supported: true,
-    type: "temp",
-    typeNo: 3,
-    currentVersion: 2,
-    title: "Tock-Temp (Experimental)",
-    description:
-      "Create an NFT collection where collectors can make their own NFT during the mint, unlimited or fixed supply",
-  },
+  // {
+  //   supported: true,
+  //   type: "temp",
+  //   typeNo: 3,
+  //   currentVersion: 2,
+  //   title: "Tock-Temp (Experimental)",
+  //   description:
+  //     "Create an NFT collection where collectors can make their own NFT during the mint, unlimited or fixed supply",
+  // },
 ];
 
 export const db_path = process.env.SQL_PATH;

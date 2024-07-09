@@ -6,6 +6,7 @@ export default function MintpadHeader({ project }) {
     project.hasOwnProperty("ipfsProvider") && project.ipfsProvider == "pinata"
       ? `https://ipfs.io/ipfs/${project.cover}`
       : `https://${project.cover}.${NFT_STORAGE_GATEWAY}`;
+
   return (
     <header className="mb-4">
       {!project.cover.length && <CoverPlaceholder />}

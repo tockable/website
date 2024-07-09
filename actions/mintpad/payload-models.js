@@ -77,7 +77,7 @@ export function monoDrop(project, chainData) {
     image: project.image,
     cover: project.cover,
     totalSupply: project.totalSupply,
-    // isUnlimited: project.isUnlimited,
+    isUnlimited: project.isUnlimited,
     contractAddress: project.contractAddress,
     dropType: project.dropType,
     isFrozen: project.isFrozen,

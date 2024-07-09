@@ -132,18 +132,16 @@ function DeployNewBaseURI({ _project, abi }) {
       if (_project.dropType === "temp") return "setBaseURI";
       if (_project.dropType === "mono") return "setImageURI";
     })(),
-
+    onSuccess(_) {
+      setReadyToDeploy(true);
+    },
     args: _project.dropType === "regular" ? [cid, hasExtension] : [cid],
   };
 
   const { config } = usePrepareContractWrite({
     ...options,
     enabled: enableState,
-    onSuccess(_) {
-      if (cid !== project.cid) {
-        setReadyToDeploy(true);
-      }
-    },
+
     onError(err) {
       if (err instanceof BaseError) {
         const revertError = err.walk(
@@ -166,7 +164,7 @@ function DeployNewBaseURI({ _project, abi }) {
   const uwt = useWaitForTransaction({ hash: data?.hash });
 
   useEffect(() => {
-    if (!setReadyToDeploy) return;
+    if (!readyToDeploy) return;
     (async () => write?.())();
   }, [readyToDeploy]);
 
@@ -227,8 +225,9 @@ function DeployNewBaseURI({ _project, abi }) {
     if (project.dropType === "temp") {
       setHasExtension === false;
     }
-
-    setEnabled(true);
+    if (cid !== _project.cid) {
+      setEnabled(true);
+    }
   };
 
   return (
@@ -265,7 +264,13 @@ function DeployNewBaseURI({ _project, abi }) {
       <Button
         className="mt-6 mb-2"
         variant={"secondary"}
-        disabled={isLoading || uwt.isLoading || isChecking || incorrectMetadata}
+        disabled={
+          isLoading ||
+          uwt.isLoading ||
+          isChecking ||
+          incorrectMetadata ||
+          cid == _project.cid
+        }
         onClick={() => deploy()}
       >
         {(isLoading || uwt.isLoading || isChecking || isWriting) && (

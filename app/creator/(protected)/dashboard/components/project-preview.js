@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-// import { IPFS_GATEWAY } from "@/tock.config";
 import { NFT_STORAGE_GATEWAY } from "@/tock.config";
 import getChainData from "@/utils/chain-utils";
 import ImagePlaceHolder from "@/svgs/image_placeholder";
@@ -19,19 +18,15 @@ export default function ProjectPreview({ project }) {
     const _chainData = getChainData(Number(project.chainId));
     setChainName(_chainData.name);
   }, []);
-
+  const src =
+    project.ipfsProvider === "pinata"
+      ? `https://ipfs.io/ipfs/${project.image}`
+      : `https://${project.image}.${NFT_STORAGE_GATEWAY}`;
   return (
     <div className="flex flex-col items-center px-8 pt-6 pb-8 bg-tock-semiblack rounded-2xl">
       {project.image && (
         <div className="h-[206px] object-cover">
-          <img
-            className="rounded-xl"
-            // src={`${IPFS_GATEWAY}/${project.image}`}
-            // src={`https://${project.image}.${NFT_STORAGE_GATEWAY}`}
-            src={`https://ipfs.io/ipfs/${project.image}`}
-            width="206"
-            height="206"
-          ></img>
+          <img className="rounded-xl" src={src} width="206" height="206"></img>
         </div>
       )}
       {!project.image && (

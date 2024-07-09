@@ -24,7 +24,7 @@ export default function CountDown({ exts, variant }) {
   });
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center items-center">
       <TimeBox time={days} variant={variant} />
       <Dellimeter variant={variant} />
       <TimeBox time={hours} variant={variant} />
@@ -39,7 +39,7 @@ export default function CountDown({ exts, variant }) {
 function TimeBox({ time, variant }) {
   return (
     <p
-      className={`p-2 mx-2 ${time >= 100 ? "w-16" : "w-12"} text-center ${
+      className={`py-[6px] mx-1 ${time >= 100 ? "w-12" : "w-10"} text-center ${
         variants[variant]
       }`}
     >

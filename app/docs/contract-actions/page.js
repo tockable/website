@@ -71,12 +71,12 @@ export default function Page() {
           After deploying sessions, you can set/change your active minting
           session here.
         </p>
-        <div className="mt-2 bg-orange-500/10 p-2 rounded-lg">
+        {/* <div className="mt-2 bg-orange-500/10 p-2 rounded-lg">
           <p className="text-tock-orange text-xs my-1">
             If you want to set the active session for the first time, you must
             also start the mint at the <b>Pause/Unpause</b> section.
           </p>
-        </div>
+        </div> */}
         <div className="mt-6 mb-2 bg-green-500/10 p-2 rounded-lg">
           <p className="text-tock-green text-xs my-1">
             You can always update your sessions on the <b>Session</b> page.
@@ -156,7 +156,8 @@ export default function Page() {
 
         <div className="mt-2 mb-10 bg-orange-500/10 p-2 rounded-lg">
           <p className="text-tock-orange text-xs my-1">
-            The minting is paused by default, you must start the mint from here.
+            The minting is paused by default, ذut as soon as a session is set,
+            minting becomes possible.
           </p>
         </div>
       </div>

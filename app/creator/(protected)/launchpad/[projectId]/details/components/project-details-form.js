@@ -211,13 +211,6 @@ export default function ProjectDetailsForm({ params }) {
       setProject({ ...project, slug: e.target.value });
   };
 
-  // async function prepareBuffer(_file) {
-  //   const bytes = await _file.arrayBuffer();
-  //   const buffer = Buffer.from(bytes);
-
-  //   return { buffer, type: _file.type };
-  // }
-
   async function callUpdateProjectDetail() {
     setNameEditError(false);
     setSlugError(false);
@@ -230,24 +223,26 @@ export default function ProjectDetailsForm({ params }) {
       return;
     }
 
-    if (
-      (!project.image ||
-        project.image.length == 0 ||
-        project.image == "null") &&
-      !image
-    ) {
-      setMustImage(true);
-      return;
-    }
+    if (process.env.NODE_ENV !== "development") {
+      if (
+        (!project.image ||
+          project.image.length == 0 ||
+          project.image == "null") &&
+        !image
+      ) {
+        setMustImage(true);
+        return;
+      }
 
-    if (
-      (!project.cover ||
-        project.cover.length == 0 ||
-        project.cover == "null") &&
-      !cover
-    ) {
-      setMustCover(true);
-      return;
+      if (
+        (!project.cover ||
+          project.cover.length == 0 ||
+          project.cover == "null") &&
+        !cover
+      ) {
+        setMustCover(true);
+        return;
+      }
     }
 
     setSaving(true);
@@ -270,87 +265,75 @@ export default function ProjectDetailsForm({ params }) {
       }
     }
 
-    // if (imageChanged || coverChanged) {
-    //   files = new FormData();
-    //   if (imageChanged) files.append("image", image);
-    //   if (coverChanged) files.append("cover", cover);
-    // } else {
-    //   files = null;
-    // }
-
     let imageCid = project.image;
     let coverCid = project.cover;
-
-    let maxUses = 0;
-    if (imageChanged) maxUses++;
-    if (coverChanged) maxUses++;
-    let JWT;
-    if (maxUses > 0) {
-      let res = await getJWT(maxUses);
-      if (res.success === true) {
-        JWT = res.JWT;
-      } else {
-        setFailed(true);
-        setSaving(false);
-        setErrorMessage("Something wrong in our side, please try again.");
-        return;
+    if (!process.env.NODE_ENV === "development") {
+      let maxUses = 0;
+      if (imageChanged) maxUses++;
+      if (coverChanged) maxUses++;
+      let JWT;
+      if (maxUses > 0) {
+        let res = await getJWT(maxUses);
+        if (res.success === true) {
+          JWT = res.JWT;
+        } else {
+          setFailed(true);
+          setSaving(false);
+          setErrorMessage("Something wrong in our side, please try again.");
+          return;
+        }
       }
-    }
 
-    if (imageChanged) {
-      try {
-        // const profileBuffer = await prepareBuffer(image);
-        // const profileRes = await storeFileToIpfs(
-        //   profileBuffer.buffer,
-        //   profileBuffer.type
-        // );
-        const formData = new FormData();
-        formData.append("file", image, { filename: image.name });
-        const profileRes = await fetch(
-          "https://api.pinata.cloud/pinning/pinFileToIPFS",
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${JWT}`,
-            },
-            body: formData,
-          }
-        );
+      if (imageChanged) {
+        try {
+          const formData = new FormData();
+          formData.append("file", image, { filename: image.name });
+          const profileRes = await fetch(
+            "https://api.pinata.cloud/pinning/pinFileToIPFS",
+            {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${JWT}`,
+              },
+              body: formData,
+            }
+          );
 
-        const json = await profileRes.json();
-        const { IpfsHash: _imageCid } = json;
-        imageCid = _imageCid;
-      } catch (e) {
-        setFailed(true);
-        setSaving(false);
-        setErrorMessage("Something wrong in our side, please try again.");
-        return;
+          const json = await profileRes.json();
+          const { IpfsHash: _imageCid } = json;
+          imageCid = _imageCid;
+        } catch (e) {
+          setFailed(true);
+          setSaving(false);
+          setErrorMessage("Something wrong in our side, please try again.");
+          return;
+        }
       }
-    }
 
-    if (coverChanged) {
-      try {
-        const formData = new FormData();
-        formData.append("file", cover, { filename: cover.name });
-        const coverRes = await fetch(
-          "https://api.pinata.cloud/pinning/pinFileToIPFS",
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${JWT}`,
-            },
-            body: formData,
-          }
-        );
+      if (coverChanged) {
+        try {
+          const formData = new FormData();
+          formData.append("file", cover, { filename: cover.name });
+          const coverRes = await fetch(
+            "https://api.pinata.cloud/pinning/pinFileToIPFS",
+            {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${JWT}`,
+              },
+              body: formData,
+            }
+          );
 
-        const json = await coverRes.json();
-        const { IpfsHash: _coverCid } = json;
-        coverCid = _coverCid;
-      } catch (e) {
-        setFailed(true);
-        setSaving(false);
-        setErrorMessage("Something wrong in our side, please try again.");
-        return;
+          const json = await coverRes.json();
+          const { IpfsHash: _coverCid } = json;
+          coverCid = _coverCid;
+        } catch (e) {
+          setFailed(true);
+          setSaving(false);
+          setErrorMessage("Something wrong in our side, please try again.");
+          return;
+        }
       }
     }
 

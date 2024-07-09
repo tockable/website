@@ -332,12 +332,6 @@ function MintHandler({ role, prepareMint, session }) {
                           {accPrice(role, project, quantity)}
                         </p>
                       )}
-                      {project.slug.toLowerCase() === "tock" && (
-                        <p className="text-sm">
-                          mint {quantity} {quantity === 1 ? "NFT" : "NFTs"} for
-                          Free
-                        </p>
-                      )}
                     </div>
                   </div>
                 )}
@@ -352,8 +346,7 @@ function MintHandler({ role, prepareMint, session }) {
               </Button>
             )}
             <p className="text-[12px] text-zinc-500 mt-4">
-              + {quantity * getBaseFee(project)} {project.chainData.nativeToken}{" "}
-              platform fee{" "}
+              + {accPrice(role, project, quantity, true)} platform fee{" "}
               <a
                 className="text-[10px] text-blue-400 hover:text-blue-300"
                 href="/docs/tockable-fees"
@@ -433,22 +426,13 @@ function getBaseFee(project) {
 function accPrice(role, project, quantity, baseFee = false) {
   const BASE_FEE = baseFee ? getBaseFee(project) : 0;
 
-  const price =
-    parseFloat((Number(role.price) + BASE_FEE) * quantity)
-      .toPrecision(2)
-      .toString()
-      .charAt(
-        parseFloat((Number(role.price) + BASE_FEE) * quantity)
-          .toPrecision(2)
-          .toString().length - 1
-      ) === "0"
-      ? parseFloat((Number(role.price) + BASE_FEE) * quantity)
-          .toPrecision(2)
-          .toString()
-          .slice(0, -1)
-      : parseFloat((Number(role.price) + BASE_FEE) * quantity)
-          .toPrecision(2)
-          .toString();
+  const float = parseFloat((Number(role.price) + BASE_FEE) * quantity)
+    .toPrecision(3)
+    .toString();
+
+  let price =
+    float.charAt(float.length - 1) === "0" ? float.slice(0, -1) : float;
+
   return Number(price) > 0
     ? price + " " + project.chainData.nativeToken
     : "Free";

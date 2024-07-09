@@ -44,7 +44,10 @@ export default function ActionAdminMintRegular({ abi, _project }) {
     address: project.contractAddress,
     abi: abi,
     functionName: "ownerMint",
-    args: [debouncedAddress, debouncedQuantity],
+    args:
+      project.dropType === "regular"
+        ? [debouncedAddress, debouncedQuantity]
+        : [debouncedQuantity],
     // gas: 3_000_000n,
   });
 
@@ -66,6 +69,7 @@ export default function ActionAdminMintRegular({ abi, _project }) {
         <h1 className="font-bold text-sm text-tock-blue mb-4 ">Admin Mint</h1>
       </div>
       <LabeledInput
+        disabled={project.dropType === "mono"}
         className="mb-8"
         value={destAddress}
         type="text"

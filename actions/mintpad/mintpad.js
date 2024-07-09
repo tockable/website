@@ -20,9 +20,9 @@ function getPayload(project) {
     return mintpadData.tockableDrop(project, chainData);
   }
   if (project.dropType === "regular") {
-    payload = mintpadData.regularDrop(project, chainData);
+    return mintpadData.regularDrop(project, chainData);
   }
-  if (project.dropType === "tockable") {
+  if (project.dropType === "mono") {
     return mintpadData.monoDrop(project, chainData);
   }
   if (project.dropType === "temp") {

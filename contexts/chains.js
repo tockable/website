@@ -9,7 +9,6 @@ import {
   arbitrum,
   zora,
   sepolia,
-  holesky,
 } from "wagmi/chains";
 
 const mode = defineChain({
@@ -143,6 +142,11 @@ const bob = defineChain({
   },
 });
 
+const lineaMainnet = defineChain({
+  ...linea,
+  iconUrl:
+    "https://camo.githubusercontent.com/277b146c3be551531afca6f304866ebd1cb3b4d7c5c6fc49c704e2975d6d8f14/68747470733a2f2f696d616765732e7a656e68756275736572636f6e74656e742e636f6d2f3630333665343238363463393433643333333163316632372f32373639383237332d613166652d343662632d396336382d343334333439653663323132",
+});
 const taiko = defineChain({
   id: 167000,
   name: "Taiko",
@@ -170,15 +174,15 @@ export const TOCKABLE_CHAINS = [
   optimism,
   base,
   zora,
-  taiko,
-  bob,
   arbitrum,
-  blast,
-  linea,
-  bevm,
-  mode,
   polygon,
   polygonMumbai,
+  taiko,
+  bob,
+  blast,
+  lineaMainnet,
+  bevm,
+  mode,
   sepolia,
   lineasepolia,
 ];

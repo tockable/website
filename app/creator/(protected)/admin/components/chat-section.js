@@ -9,7 +9,9 @@ export default function ChatSection({ users, chats }) {
 
   useEffect(() => {
     if (selectedUser.length === 0) return;
-    const _chats = chats.filter((chat) => (chat.opener = selectedUser));
+    const _chats = chats.filter(
+      (chat) => chat.opener.toLowerCase() == selectedUser.toLocaleLowerCase()
+    );
     setChats(_chats);
   }, [selectedUser]);
 
@@ -22,7 +24,6 @@ export default function ChatSection({ users, chats }) {
         }
       }
     });
-    console.log(_unread)
     setUnread(_unread);
   }, []);
 

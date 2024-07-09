@@ -26,9 +26,9 @@ const DATABASE = process.env.DATABASE;
  */
 
 function initProject(_creator, _name, _chain, _chainId, _dropType) {
-  // Tockable drop
   const creator = getAddress(_creator);
 
+  // Tockable drop
   if (_dropType === DROP_TYPES[0].type)
     return Init.tockableDrop(creator, _name, _chain, _chainId, _dropType);
 
@@ -62,7 +62,10 @@ export async function getAllProjects(_creator) {
 
     const payload = projects.map((project) => {
       const { uuid, name, image, chainId, isDeployed, isPublished } = project;
-
+      let ipfsProvider = "";
+      if (project.hasOwnProperty("ipfsProvider")) {
+        ipfsProvider = project.ipfsProvider;
+      }
       return {
         uuid,
         name,
@@ -70,6 +73,7 @@ export async function getAllProjects(_creator) {
         chainId,
         isDeployed,
         isPublished,
+        ipfsProvider,
       };
     });
 

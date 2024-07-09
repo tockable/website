@@ -19,7 +19,7 @@ const actions = [
   "Pause/Unpause",
 ];
 
-export default function ProjectContractActionsTockable({ _project }) {
+export default function ProjectContractActionsRegular({ _project }) {
   const [activeAction, setActiveAction] = useState(actions[0]);
   const [abiError, setAbiError] = useState(false);
   const [project] = useState(_project);

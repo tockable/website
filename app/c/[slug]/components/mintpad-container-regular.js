@@ -65,6 +65,11 @@ export default function MintpadContainerRegular({ prepareMint }) {
         functionName: "tokensLeftInSession",
         args: [Number(project.activeSession)],
       },
+      {
+        address: project.contractAddress,
+        abi,
+        functionName: "totalSupply",
+      },
     ],
   });
 
@@ -186,10 +191,10 @@ export default function MintpadContainerRegular({ prepareMint }) {
                 </p>
               )}
               {errorGettingElligibility === false && (
-                <>
+                <div className="flex flex-col-reverse sm:flex-row gap-2">
                   {notStarted && (
-                    <div className="my-8">
-                      <h1 className="text-center text-tock-green p-2 mt-2">
+                    <div className="my-2 flex flex-col sm:flex-row items-center flex-auto">
+                      <h1 className="text-center sm:text-start text-tock-green p-2">
                         Until mint starts
                       </h1>
                       <CountDown variant="start" exts={untilStart} />
@@ -197,24 +202,33 @@ export default function MintpadContainerRegular({ prepareMint }) {
                   )}
 
                   {untilEnd > 0 && (
-                    <div className="my-8">
-                      <h1 className="text-center text-blue-400 p-2 mt-2">
-                        Live until:
+                    <div className="my-2 flex flex-col sm:flex-row items-center flex-auto">
+                      <h1 className="text-center sm:text-start text-blue-400 p-2">
+                        Live until
                       </h1>
                       <CountDown variant="end" exts={untilEnd} />
                     </div>
                   )}
 
                   {mintEnded && (
-                    <div className="my-4 flex flex-col justify-center items-center my-8">
-                      <p className="text-tock-blue text-xl font-bold my-2">
-                        <span className="font-normal text-zinc-400">
+                    <div className="my-2 flex flex-col flex-row gap-2 justify-center items-center">
+                      <p className="text-tock-blue font-bold">
+                        {/* <span className="font-normal text-zinc-400">
                           Status:
-                        </span>{" "}
+                        </span>{" "} */}
                         <span className="text-tock-green">Finished</span>
                       </p>
-                      {project.slug !== "tock" && (
-                        <p className="text-tock-blue text-xl font-bold my-2">
+                      {project.hasOwnProperty("isUnlimited") &&
+                        project.isUnlimited === true && (
+                          <p className="text-tock-blue font-bold">
+                            <span className="font-normal text-zinc-400">
+                              Minted:
+                            </span>{" "}
+                            {parseInt(data[3].result)} / Unlimited
+                          </p>
+                        )}
+                      {!project.hasOwnProperty("isUnlimited") && (
+                        <p className="text-tock-blue font-bold">
                           <span className="font-normal text-zinc-400">
                             Minted:
                           </span>{" "}
@@ -229,19 +243,28 @@ export default function MintpadContainerRegular({ prepareMint }) {
                     !notStarted &&
                     chain.id === Number(project.chainData.chainId) &&
                     !isNaN(parseInt(data[1].result)) && (
-                      <div className="my-4 flex flex-col justify-center items-center my-8">
-                        <p className="text-tock-blue text-xl font-bold my-2">
-                          <span className="font-normal text-zinc-400">
+                      <div className="my-2 flex flex-col sm:flex-row gap-2 justify-center items-center">
+                        <p className="text-tock-blue font-bold">
+                          {/* <span className="font-normal text-zinc-400">
                             Status:
-                          </span>{" "}
+                          </span>{" "} */}
                           {data[0]?.result === true ? (
-                            <span className="text-tock-green">live</span>
+                            <span className="text-tock-green">Live</span>
                           ) : (
-                            <span className="text-tock-orange">paused</span>
+                            <span className="text-tock-orange">Paused</span>
                           )}
                         </p>
-                        {project.slug !== "tock" && (
-                          <p className="text-tock-blue text-xl font-bold my-2">
+                        {project.hasOwnProperty("isUnlimited") &&
+                          project.isUnlimited === true && (
+                            <p className="text-tock-blue font-bold">
+                              <span className="font-normal text-zinc-400">
+                                Minted:
+                              </span>{" "}
+                              {parseInt(data[3].result)} / Unlimited
+                            </p>
+                          )}
+                        {!project.hasOwnProperty("isUnlimited") && (
+                          <p className="text-tock-blue font-bold">
                             <span className="font-normal text-zinc-400">
                               Minted:
                             </span>{" "}
@@ -252,7 +275,7 @@ export default function MintpadContainerRegular({ prepareMint }) {
                         )}
                       </div>
                     )}
-                </>
+                </div>
               )}
             </>
           )}
