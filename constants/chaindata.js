@@ -331,7 +331,7 @@ export const chainData = [
     regular_base_fee: BASE_FEE.TIA_REGULAR,
   },
   {
-    chainId: 11124,
+    chainId: 1301,
     url: "https://sepolia.uniscan.xyz",
     verifyurl: "https://sepolia.uniscan.xyz/verifycontract",
     name: "Unichain Sepolia",
