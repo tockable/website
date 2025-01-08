@@ -9,10 +9,6 @@ const dbp = path.resolve(".", db_path, "published_projects_db.db");
 export async function createSupportDb() {
   const p = path.resolve(".", db_path);
 
-  if (!fs.existsSync(p)) {
-    fs.mkdirSync(p);
-  }
-
   const db = new sqlite3.Database(
     dbp,
     sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE,
