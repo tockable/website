@@ -7,9 +7,19 @@ import { TOCKABLE_CHAINS } from "@/contexts/chains";
 export default async function Page({ params }) {
   const tockable_type = process.env.NEXT_PUBLIC_TOCKABLE_TYPE;
 
-  const found = TOCKABLE_CHAINS[tockable_type].find(
-    (chain) => chain.network === params.chain.toLowerCase()
-  );
+  const found = TOCKABLE_CHAINS[tockable_type]
+    .filter(
+      (chain) =>
+        process.env.NEXT_PUBLIC_TOCKABLE_TYPE === "testnet" &&
+        chain.value !== "1"
+    )
+    .find((c) => c.network === params.chain.toLowerCase());
+
+  // {SUPPORTED_CHAINS.filter(
+  //   (chain) =>
+  //     process.env.NEXT_PUBLIC_TOCKABLE_TYPE === "testnet" &&
+  //     chain.value !== "1"
+  // ).map((c, i)
 
   if (!found) {
     redirect(`/explore/${process.env.NEXT_PUBLIC_EXPLORE}`);

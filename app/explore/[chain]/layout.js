@@ -39,7 +39,11 @@ export default function ExploreLayout({ params, children }) {
             required
             value={selectedChain}
           >
-            {SUPPORTED_CHAINS.map((c, i) => (
+            {SUPPORTED_CHAINS.filter(
+              (chain) =>
+                process.env.NEXT_PUBLIC_TOCKABLE_TYPE === "testnet" &&
+                chain.value !== "1"
+            ).map((c, i) => (
               <option key={"chain_" + i} value={c.network}>
                 {c.name}
               </option>
