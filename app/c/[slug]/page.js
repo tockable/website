@@ -23,9 +23,9 @@ export async function generateMetadata({ params }) {
   ];
 
   return {
-    title: `${project.name} @Tockable`,
+    title: `${project.name} @Tockable.org`,
     description: project.description,
-    applicationName: "Tockable.xyz",
+    applicationName: "Tockable.org",
     keywords,
     authors: [{ name: project.twitter }],
     colorScheme: "dark",
@@ -37,13 +37,13 @@ export async function generateMetadata({ params }) {
       description: project.description,
       creator: project.twitter,
       images: [`https://${project.image}.ipfs.nftstorage.link`],
-      url: `https://tockable.xyz/c/${project.slug}`,
+      url: `https://tockable.org/c/${project.slug}`,
     },
     openGraph: {
       title: `${project.name} @Tockable`,
       description: project.description,
-      url: `https://tockable.xyz/c/${project.slug}`,
-      siteName: "Tockable.xyz",
+      url: `https://tockable.org/c/${project.slug}`,
+      siteName: "Tockable.org",
       images: [
         {
           url: `https://${project.image}.ipfs.nftstorage.link`,

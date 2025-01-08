@@ -19,8 +19,10 @@ export default function MintProviderRegular({ project, abi, children }) {
   // };
   const searchParams = useSearchParams();
   const ref = searchParams.get("ref");
+
   const [mintData, setMintData] = useState({ quantity: 0, address: "0x0" });
   const [successfullyMinted, setSuccessfullyMinted] = useState(false);
+  
   // const [isFollow, setFollow] = useState(setFollowState());
 
   // useEffect(() => {
@@ -83,13 +85,13 @@ export default function MintProviderRegular({ project, abi, children }) {
 //             }}
 //           >
 //             <a
-//               href="https://twitter.com/Tockablexyz?ref_src=twsrc%5Etfw"
+//               href="https://twitter.com/Tockable_org?ref_src=twsrc%5Etfw"
 //               data-show-count="false"
 //               target="_blank"
 //               rel="noopener noreferrer"
 //               className="border px-2 py-2 rounded-2xl hover:bg-tock-semiblack transition duration-200"
 //             >
-//               Follow @Tockablexyz
+//               Follow @tockable_org
 //             </a>
 //           </button>
 //           <script

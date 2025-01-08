@@ -500,7 +500,7 @@ export default function ProjectContractFormTockable({ _project }) {
           </label>
         </div>
         <p className="text-tock-orange text-xs mb-2">
-          IMPORTANT: please note that contract data connot be changed after
+          IMPORTANT: please note that contract data cannot be changed after
           deployment.
         </p>
         <Button

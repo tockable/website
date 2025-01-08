@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAccount } from "wagmi";
-import { DROP_TYPES, SUPPORTED_CHAINS } from "@/tock.config";
+import { DROP_TYPES } from "@/tock.config";
+import { SUPPORTED_CHAINS } from "@/contexts/wagmi-provider";
 import getChainData from "@/utils/chain-utils";
 import Link from "next/link";
 import Loading from "@/components/loading/loading";
@@ -13,19 +14,14 @@ import Input from "@/components/design/input";
 import { createNewProject } from "@/actions/launchpad/dashboard";
 
 export default function NewProjectModal({ isOpen, onClose }) {
-  // Contexts & Hooks
   const router = useRouter();
   const { address } = useAccount();
 
-  // States
   const [name, setName] = useState("");
   const [chainId, setChainId] = useState("1");
   const [dropType, setDropType] = useState(DROP_TYPES[1].type);
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState(false);
-
-  const onChangeName = (e) => setName(e.target.value);
-  const onChangeChain = (e) => setChainId(e.target.value);
 
   async function handleCreateNewProject() {
     if (name.length == 0) return;
@@ -56,13 +52,13 @@ export default function NewProjectModal({ isOpen, onClose }) {
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="flex basis-3/4 px-4">
         <div className="flex flex-col w-full">
-          <h1 className="text-tock-green font-bold text-xl mt-4 mb-6">
-            create project
+          <h1 className="text-tock-green font-bold text-xl mt-4 mb-2">
+            Create project
           </h1>
 
           <div className="mb-10 rounded-2xl bg-zinc-800 p-4">
             <h2 className="text-sm font-bold text-tock-blue mb-2">
-              choose your drop{" "}
+              Choose your drop{" "}
               <Link
                 href="/docs/drop-types"
                 target="_blank"
@@ -103,6 +99,34 @@ export default function NewProjectModal({ isOpen, onClose }) {
               );
             })}
           </div>
+          <div className="bg-blue-400/20 rounded-2xl border border-blue-400 text-zinc-200 text-xs p-4 my-4">
+            {process.env.NEXT_PUBLIC_TOCKABLE_TYPE === "mainnet" && (
+              <p>
+                Are you looking for Testnets? Try{" "}
+                <a
+                  className="underline text-blue-400 hover:text-blue-300"
+                  href="https://testnet.tockable.org/creator/dashboard"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Tockable Testnet Launchpad
+                </a>
+              </p>
+            )}
+            {process.env.NEXT_PUBLIC_TOCKABLE_TYPE === "testnet" && (
+              <p>
+                This is only Testnet launchpad. For Mainnets Try{" "}
+                <a
+                  className="underline text-blue-400 hover:text-blue-300"
+                  href="https://tockable.org/creator/dashboard"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Tockable Mainnet Launchpad
+                </a>
+              </p>
+            )}
+          </div>
           <div>
             <div className="bg-zinc-800 rounded-2xl p-4">
               <label className="block text-tock-blue text-sm font-bold mb-2">
@@ -115,7 +139,7 @@ export default function NewProjectModal({ isOpen, onClose }) {
                 id="project-name"
                 type="text"
                 placeholder="Cool Collection"
-                onChange={onChangeName}
+                onChange={(e) => setName(e.target.value)}
                 required
               />
               <label className="mt-6 block text-tock-blue text-sm font-bold mb-2">
@@ -125,7 +149,7 @@ export default function NewProjectModal({ isOpen, onClose }) {
                 className="text-sm bg-zinc-700 rounded-xl w-full py-3 px-3 text-gray-200 leading-tight focus:outline-none focus:ring focus:ring-2 focus:ring-zinc-500"
                 id="chain"
                 name="chain"
-                onChange={onChangeChain}
+                onChange={(e) => setChainId(e.target.value)}
                 required
               >
                 {SUPPORTED_CHAINS.map((c, i) => (

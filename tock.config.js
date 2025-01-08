@@ -1,55 +1,21 @@
-export const BASEURL = "https://tockable.xyz";
-export const IPFS_GATEWAY = "https://ipfs.io/ipfs";
-export const NFT_STORAGE_GATEWAY = "ipfs.nftstorage.link";
-export const MAX_LAYERS = 40;
-export const MAX_FILES_PER_LAYER = 20;
-export const TOCKABLE_ADDRESS = "0x38A4118936Dd9F7d5d2b7eD9B04333e129a95d97";
-export const MAX_MINT_PER_TX = 5;
-
+// TOCKABLE
+export const BASEURL = "https://tockable.org";
+export const TOCKABLE_VERSION = "0.4.0";
 export const SOCIAL = {
-  twitter: "https://twitter.com/tockablexyz",
+  twitter: "https://twitter.com/tockable_org",
   discord: "https://discord.gg",
   mirror: "https://mirror.xyz",
 };
-export const TOCKABLE_VERSION = "0.3.16";
 
-export const SUPPORTED_CHAINS = [
-  { name: "Ethereum ♦", value: "1", cleanName: "ethereum" },
-  { name: "Linea🔥", value: "59144", cleanName: "linea" },
-  { name: "BEVM🔥", value: "11501", cleanName: "bevm" },
-  { name: "BOB🔥", value: "60808", cleanName: "bob" },
-  { name: "Taiko🔥", value: "167000", cleanName: "taiko" },
-  { name: "Base", value: "8453", cleanName: "base" },
-  { name: "Zora", value: "7777777", cleanName: "zora" },
-  { name: "Arbitrum One", value: "42161", cleanName: "arbitrum" },
-  { name: "Optimism", value: "10", cleanName: "optimism" },
-  { name: "Blast", value: "81457", cleanName: "blast" },
-  { name: "Mode", value: "34443", cleanName: "mode" },
-  { name: "Polygon", value: "137", cleanName: "polygon" },
-  { name: "Sepolia", value: "11155111", cleanName: "sepolia" },
-  { name: "Linea Sepolia", value: "59141", cleanName: "lineasepolia" },
-  // { name: "Linea Goerli ⬛️", value: "59140" },
-  // { name: "Polygon mumbai", value: "80001" },
-  // { name: "Blast Sepolia", value: "168587773" },
-];
+// IPFS
+export const IPFS_GATEWAY = "https://ipfs.io/ipfs";
+export const NFT_STORAGE_GATEWAY = "ipfs.nftstorage.link";
 
-export const EXPLORE_CHAINS = {
-  ethereum: 1,
-  bevm: 11501,
-  bob: 60808,
-  taiko: 167000,
-  base: 8453,
-  zora: 7777777,
-  arbitrum: 42161,
-  optimism: 10,
-  linea: 59144,
-  blast: 81457,
-  mode: 34443,
-  polygon: 137,
-  sepolia: 11155111,
-  holesky: 17000,
-  lineasepolia: 59141,
-};
+// TOCK ENGINE
+export const MAX_LAYERS = 40;
+export const MAX_FILES_PER_LAYER = 20;
+export const TOCKABLE_ADDRESS = process.env.NEXT_PUBLIC_TOCKABLE_ADDRESS;
+export const MAX_MINT_PER_TX = 5;
 
 export const TXP = {
   tockable: 100,
@@ -59,15 +25,24 @@ export const TXP = {
 };
 
 export const DROP_TYPES = [
-  {
-    supported: false,
-    type: "tockable",
-    typeNo: 0,
-    currentVersion: 2,
-    title: "Tockable drop",
-    description:
-      "Create an NFT collection where collectors can make their own NFT during the mint, unlimited or fixed supply.",
-  },
+  // {
+  //   supported: false,
+  //   type: "tockable",
+  //   typeNo: 0,
+  //   currentVersion: 2,
+  //   title: "Tockable drop",
+  //   description:
+  //     "Create an NFT collection where collectors can make their own NFT during the mint, unlimited or fixed supply.",
+  // },
+  // {
+  //   supported: true,
+  //   type: "temp",
+  //   typeNo: 3,
+  //   currentVersion: 2,
+  //   title: "Tock-Temp (Experimental)",
+  //   description:
+  //     "Create an NFT collection where collectors can make their own NFT during the mint, unlimited or fixed supply",
+  // },
   {
     supported: true,
     type: "regular",
@@ -86,15 +61,34 @@ export const DROP_TYPES = [
     description:
       "All tokens share a similar metadata like an Image/Html/json, Useful for Editions, erc721 OATs, Tickets, and subscriptions.",
   },
-  // {
-  //   supported: true,
-  //   type: "temp",
-  //   typeNo: 3,
-  //   currentVersion: 2,
-  //   title: "Tock-Temp (Experimental)",
-  //   description:
-  //     "Create an NFT collection where collectors can make their own NFT during the mint, unlimited or fixed supply",
-  // },
 ];
 
+// DB
 export const db_path = process.env.SQL_PATH;
+
+// Tockable Factory contracts
+export const FACTORY_CONTRACTS = {
+  regular: {
+    84532: "0x4c2d27E0b7794a1ACd3cBc7040D84BE050a4D2d1", // Base Sepolia
+    10: "0xC53a9C966AE638259b33B742b44FcC915a695324", // OP
+    8453: "0xdD508782388F98C34f0c967eb751D8cF2E89b3d5", // Base
+    7777777: "0xA656574cfEA8Ba5B8c774ffFc5DE2365e2445dd6", // Zora
+    34443: "0xa3bf4C0f12ADa79143F1Ff572D2751678453197B", // Mode
+    480: "0xCef0786944c5FbcEBEd639E5a86D746b458ED865", // Worldchain
+    252: "0xCef0786944c5FbcEBEd639E5a86D746b458ED865", // Fraxtal
+    1135: "0xCef0786944c5FbcEBEd639E5a86D746b458ED865", // Lisk
+    60808: "0xCef0786944c5FbcEBEd639E5a86D746b458ED865", // BOB
+    57073: "0xCef0786944c5FbcEBEd639E5a86D746b458ED865", // Ink
+  },
+  mono: {
+    10: "0x4EF0641d662AF6576a876Ca83D5338d24c748206", // OP
+    8453: "0x8319822bdE93AAA12E76F5708BC9636ED39Feb03", // Base
+    7777777: "0x4Aba2f5f1aE0332188D7E393e75908AcD97D318D", // Zora
+    34443: "0xD679ab6dD9faB0b0C9710FB4B3EcF40b6ee71949", // Mode
+    480: "0x2dD978216513868004b83044A64621c097DF9D33", // Worldchain
+    252: "0x5F1469fC8c859650B4E0CB45633622fb10F52465", // Fraxtal
+    1135: "0x5F1469fC8c859650B4E0CB45633622fb10F52465", // Lisk
+    60808: "0x5F1469fC8c859650B4E0CB45633622fb10F52465", // BOB
+    57073: "0x5F1469fC8c859650B4E0CB45633622fb10F52465", // Ink
+  },
+};

@@ -10,6 +10,8 @@ import Button from "@/components/design/button";
 import Loading from "@/components/loading/loading";
 
 export default function DeployedContractView({ _project }) {
+  const tockable_type = process.env.NEXT_PUBLIC_TOCKABLE_TYPE;
+
   const [project, setProject] = useState(_project);
   const [chainData, setChainData] = useState();
   const [verifying, setVerifying] = useState(false);
@@ -21,6 +23,7 @@ export default function DeployedContractView({ _project }) {
     setVerificationError(false);
 
     const res = await verify(project);
+
     if (res.success === true) setProject(res.payload);
     else setVerificationError(true);
 
@@ -30,7 +33,9 @@ export default function DeployedContractView({ _project }) {
   useEffect(() => {
     if (!project) return;
     if (!project.isDeployed) return;
+
     const _chainData = getChainData(project.chainId);
+
     setChainData(_chainData);
   }, [project]);
 
@@ -132,65 +137,68 @@ export default function DeployedContractView({ _project }) {
               {chainData.scan}
             </a>
           </section>
-          <section className="mt-2 mb-8">
-            <p className="text-tock-blue font-bold text-sm">
-              Verification status:
-            </p>
-            {project.isVerified && (
-              <>
-                <p className="text-tock-green text-sm mt-2">Verified</p>
-                <p className="text-zinc400 text-xs mt-1">
-                  It usually takes about 5min for a chain explorer to process
-                  the contract verification request, If the contract has not
-                  been verificated after the mentioned period, please try manual
-                  verification.
-                </p>
-              </>
-            )}
-            {!project.isVerified && (
-              <div>
-                <Button
-                  variant="secondary"
-                  className="mt-2"
-                  onClick={() => callVerify()}
-                  disabled={
-                    verifying ||
-                    isUnsupportedChainForVerification(Number(project.chainId))
-                  }
-                >
-                  {verifying ? (
-                    <Loading isLoading={verifying} size={10} />
-                  ) : (
-                    "Verify contract"
+          {tockable_type === "mainnet" && (
+            <section className="mt-2 mb-8">
+              <p className="text-tock-blue font-bold text-sm">
+                Verification status:
+              </p>
+              {project.isVerified && (
+                <>
+                  <p className="text-tock-green text-sm mt-2">Verified</p>
+                  <p className="text-zinc-400 text-xs mt-1">
+                    Usually it takes ~5min to process the contract verification
+                    request, If the contract has not been verificated after the
+                    mentioned period, please try manual verification.
+                  </p>
+                </>
+              )}
+              {!project.isVerified && (
+                <div>
+                  <Button
+                    variant="secondary"
+                    className="mt-2"
+                    onClick={() => callVerify()}
+                    disabled={
+                      verifying ||
+                      isUnsupportedChainForVerification(Number(project.chainId))
+                    }
+                  >
+                    {verifying ? (
+                      <Loading isLoading={verifying} size={10} />
+                    ) : (
+                      "Verify contract"
+                    )}
+                  </Button>
+                  {verificationError && (
+                    <div>
+                      <p className="text-tock-red text-sm mt-2">
+                        an error occured during verification, please try again
+                        or use manuall verify.
+                      </p>
+                    </div>
                   )}
-                </Button>
-                {verificationError && (
-                  <div>
-                    <p className="text-tock-red text-sm mt-2">
-                      an error occured during verification, please try again or
-                      use manuall verify.
-                    </p>
-                  </div>
-                )}
-                {isUnsupportedChainForVerification(Number(project.chainId)) && (
-                  <div>
-                    <p className="text-tock-red text-xs mt-2">
-                      currently automatic verification is not supported for this
-                      network.
-                    </p>
-                  </div>
-                )}
-              </div>
-            )}
+                  {isUnsupportedChainForVerification(
+                    Number(project.chainId)
+                  ) && (
+                    <div>
+                      <p className="text-zinc-400 text-xs mt-6">
+                        currently automatic verification is not supported for
+                        this network.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
 
-            <button
-              onClick={() => setShowManualVerify(true)}
-              className="text-tock-orange hover:text-orange-100 text-sm mt-2"
-            >
-              I want to verify manually {">"}
-            </button>
-            {showManualVerify && <ManualVerify project={project} />}
-          </section>
+              <button
+                onClick={() => setShowManualVerify(true)}
+                className="text-tock-orange hover:text-orange-100 text-sm mt-2"
+              >
+                I want to verify manually {">"}
+              </button>
+              {showManualVerify && <ManualVerify project={project} />}
+            </section>
+          )}
         </div>
       )}
     </>
@@ -234,6 +242,7 @@ function ManualVerify({ project }) {
         setError(true);
       }
     })();
+
     setLoading(false);
   }, []);
 
@@ -266,13 +275,13 @@ function ManualVerify({ project }) {
                 </p>
               </div>
               <p className="text-zinc-400 my-2">
-                - <b>Contract name:</b>{" "}
+                <b>Contract name:</b>{" "}
                 <span className="text-tock-orange">
                   {verificationData.contractName}
                 </span>
               </p>
               <div className="flex gap-2 text-zinc-400 my-2">
-                - <b>Contract address:</b>{" "}
+                <b>Contract address:</b>{" "}
                 <CopyToClipboard
                   text={project.contractAddress}
                   onCopy={handleCopy}
@@ -286,7 +295,7 @@ function ManualVerify({ project }) {
                 </CopyToClipboard>
               </div>
               <p className="text-zinc-400 mt-2 mb-4">
-                - <b>Compiler Type/Verification method:</b>{" "}
+                <b>Compiler Type/Verification method:</b>{" "}
                 <span className="text-tock-orange">
                   Solidity (Flattened source code) or Solidity (Single file){" "}
                 </span>
@@ -295,29 +304,29 @@ function ManualVerify({ project }) {
                 </span>
               </p>
               <p className="text-zinc-400 my-2">
-                - <b>Compiler version:</b>{" "}
+                <b>Compiler version:</b>{" "}
                 <span className="text-tock-orange">
                   v0.8.21+commit.d9974bed
                 </span>
               </p>
               <p className="text-zinc-400 my-2">
-                - <b>EVM version:</b>{" "}
+                <b>EVM version:</b>{" "}
                 <span className="text-tock-orange">paris</span>
               </p>
               <p className="text-zinc-400 my-2">
-                - <b>Optimization enabled:</b>{" "}
+                <b>Optimization enabled:</b>{" "}
                 <span className="text-tock-orange">yes</span>
               </p>
               <p className="text-zinc-400 my-2">
-                - <b>Optimization runs:</b>{" "}
+                <b>Optimization runs:</b>{" "}
                 <span className="text-tock-orange">200</span>
               </p>
               <p className="text-zinc-400 my-2">
-                - <b>License Type:</b>{" "}
+                <b>License Type:</b>{" "}
                 <span className="text-tock-orange">3 (MIT License)</span>
               </p>
               <div className="flex gap-2 text-zinc-400 my-2">
-                - <b>Copy/paste the constructor arguments:</b>
+                <b>Copy/paste the constructor arguments:</b>
                 <CopyToClipboard
                   text={verificationData.args}
                   onCopy={handleCopy1}
@@ -331,7 +340,7 @@ function ManualVerify({ project }) {
                 </CopyToClipboard>
               </div>
               <div className="flex gap-2 text-zinc-400 my-2">
-                - <b>Copy/paste the source code:</b>
+                <b>Copy/paste the source code:</b>
                 <CopyToClipboard
                   text={verificationData.source}
                   onCopy={handleCopy2}
@@ -352,17 +361,8 @@ function ManualVerify({ project }) {
   );
 }
 
+const autoverifiables = [1, 10, 137, 8453, 59144, 81457, 42161, 167000];
+
 function isUnsupportedChainForVerification(_chainId) {
-  _chainId === 59140 ||
-    _chainId == 80001 ||
-    _chainId == 420 ||
-    _chainId === 84532 ||
-    _chainId === 34443 ||
-    _chainId === 11155420 ||
-    _chainId === 168587773 ||
-    _chainId === 7777777 ||
-    _chainId === 11501 ||
-    _chainId === 60808 ||
-    _chainId === 11155111 ||
-    _chainId === 59141;
+  return !autoverifiables.includes(Number(_chainId));
 }

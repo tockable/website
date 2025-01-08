@@ -12,11 +12,11 @@ import { getContractAbi } from "@/actions/contract/metadata";
 import Fade from "@/components/design/fade/fade";
 
 const actions = [
+  "Pause/Unpause",
   "Set Mint Session",
   "Owner Mint",
   "Metadata",
   "Withdraw",
-  "Pause/Unpause",
 ];
 
 export default function ProjectContractActionsRegular({ _project }) {

@@ -346,15 +346,15 @@ function MintHandler({ role, prepareMint, session }) {
               </Button>
             )}
             <p className="text-[12px] text-zinc-500 mt-4">
-              + {accPrice(role, project, quantity, true)} platform fee{" "}
-              <a
+              + {getBaseFee(project) * quantity} mint fee{" "}
+              {/* <a
                 className="text-[10px] text-blue-400 hover:text-blue-300"
                 href="/docs/tockable-fees"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 Learn more &gt;
-              </a>
+              </a> */}
             </p>
             {maxMintable(data) != 0 && (
               <p className="text-sm text-zinc-400 mt-2">

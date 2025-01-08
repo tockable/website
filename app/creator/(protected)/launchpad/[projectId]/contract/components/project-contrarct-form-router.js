@@ -13,6 +13,7 @@ import Loading from "@/components/loading/loading";
 export default function ProjectContractRouter({ params }) {
   const [project, setProject] = useState(null);
   const [loadingFailed, setLoadingFailed] = useState(false);
+  
   const session = useSession();
 
   useEffect(() => {

@@ -1,16 +1,12 @@
 import fs from "fs";
 import path from "path";
 import getChainData from "@/utils/chain-utils";
+import { capitalize } from "@/utils/string-utils";
 
 function getBaseContract(_project, _chainId) {
   // const isBlast = _chainId == 168587773 || _chainId == 81457 ? "Blast" : "";
   const isBlast = "";
-  const dropType = (() => {
-    if (_project.dropType === "tockable") return "Tockable";
-    if (_project.dropType === "regular") return "Regular";
-    if (_project.dropType === "mono") return "Mono";
-    if (_project.dropType === "temp") return "Temp";
-  })();
+  const dropType = capitalize(_project.dropType);
 
   const constructedName = `Flatten${isBlast}${dropType}DropV${_project.version}.sol`;
 

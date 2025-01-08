@@ -9,11 +9,34 @@ import {
   arbitrum,
   zora,
   sepolia,
-} from "wagmi/chains";
+  holesky,
+  arbitrumNova,
+  canto,
+  optimismSepolia,
+  cronos,
+} from "viem/chains";
+
+const mevm = defineChain({
+  id: 30732,
+  name: "MEVM Testnet",
+  network: "mevmtestnet",
+  nativeCurrency: { name: "Move", symbol: "MOVE", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://mevm.devnet.imola.movementlabs.xyz"] },
+    public: { http: ["https://mevm.devnet.imola.movementlabs.xyz"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Explorer.devnet.imola.movementlabs.xyz",
+      url: "https://explorer.devnet.imola.movementlabs.xyz/#/?network=testnet",
+    },
+  },
+});
 
 const mode = defineChain({
   id: 34443,
   name: "Mode",
+  network: "mode",
   nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
   rpcUrls: {
     default: { http: ["https://1rpc.io/mode"] },
@@ -36,6 +59,7 @@ const mode = defineChain({
 const blast = defineChain({
   id: 81457,
   name: "Blast",
+  network: "balst",
   nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
   rpcUrls: {
     default: { http: ["https://rpc.blast.io"] },
@@ -55,30 +79,32 @@ const blast = defineChain({
   },
 });
 
-// const blastSepolia = defineChain({
-//   id: 168587773,
-//   name: "Blast Sepolia",
-//   nativeCurrency: { name: "Sepolia Ether", symbol: "ETH", decimals: 18 },
-//   rpcUrls: {
-//     default: { http: ["https://sepolia.blast.io"] },
-//     public: { http: ["https://sepolia.blast.io"] },
-//   },
-//   blockExplorers: {
-//     default: {
-//       name: "Testnet.blastscan.io",
-//       url: "https://testnet.blastscan.io",
-//     },
-//   },
-//   contracts: {
-//     multicall3: {
-//       address: "0xcA11bde05977b3631167028862bE2a173976CA11",
-//       blockCreated: 756690,
-//     },
-//   },
-// });
+const blastSepolia = defineChain({
+  id: 168587773,
+  name: "Blast Sepolia",
+  network: "balstsepolia",
+  nativeCurrency: { name: "Sepolia Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://sepolia.blast.io"] },
+    public: { http: ["https://sepolia.blast.io"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Testnet.blastscan.io",
+      url: "https://testnet.blastscan.io",
+    },
+  },
+  contracts: {
+    multicall3: {
+      address: "0xcA11bde05977b3631167028862bE2a173976CA11",
+      blockCreated: 756690,
+    },
+  },
+});
 
-const lineasepolia = defineChain({
+const lineaSepolia = defineChain({
   id: 59141,
+  network: "lineasepolia",
   name: "Linea Sepolia",
   nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
   rpcUrls: {
@@ -91,16 +117,89 @@ const lineasepolia = defineChain({
       url: "https://sepolia.lineascan.build/",
     },
   },
-  contracts: {
-    // multicall3: {
-    //   address: "0xcA11bde05977b3631167028862bE2a173976CA11",
-    //   blockCreated: 756690,
-    // },
-  },
+  contracts: {},
 });
+
+const fraxtal = defineChain({
+  id: 252,
+  iconUrl:
+    "https://raw.githubusercontent.com/lifinance/types/main/src/assets/icons/chains/fraxtal.svg",
+  name: "Fraxtal",
+  network: "fraxtal",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://rpc.frax.com"] },
+    public: { http: ["https://rpc.frax.com"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Fraxscan.com",
+      url: "https://fraxscan.com",
+    },
+  },
+  contracts: {},
+});
+
+const apechain = defineChain({
+  id: 33139,
+  iconUrl: "https://s2.coinmarketcap.com/static/img/coins/64x64/18876.png",
+  name: "Apechain",
+  network: "apechain",
+  nativeCurrency: { name: "ApeCoin", symbol: "APE", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://apechain.calderachain.xyz/http"] },
+    public: { http: ["https://apechain.calderachain.xyz/http"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Apescan.io",
+      url: "https://apescan.io",
+    },
+  },
+  contracts: {},
+});
+
+const apechainCurtis = defineChain({
+  id: 33111,
+  iconUrl: "https://s2.coinmarketcap.com/static/img/coins/64x64/18876.png",
+  name: "Apechain Curtis",
+  network: "apechaincurtis",
+  nativeCurrency: { name: "Ape", symbol: "APE", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://curtis.rpc.caldera.xyz/http"] },
+    public: { http: ["https://curtis.rpc.caldera.xyz/http"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Curtis.explorer.caldera.xyz.io",
+      url: "https://curtis.explorer.caldera.xyz",
+    },
+  },
+  contracts: {},
+});
+
+const berachainBartio = defineChain({
+  id: 80084,
+  name: "Berachain bArtio",
+  network: "berachainbartio",
+  nativeCurrency: { name: "Bera", symbol: "BERA", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://bartio.rpc.berachain.com/"] },
+    public: { http: ["https://bartio.rpc.berachain.com/"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Bartio.beratrail.io",
+      url: "https://bartio.beratrail.io",
+    },
+  },
+  contracts: {},
+});
+
 const bevm = defineChain({
   id: 11501,
   name: "BEVM",
+  network: "bevm",
   nativeCurrency: { name: "Bitcoin", symbol: "BTC", decimals: 18 },
   rpcUrls: {
     default: { http: ["https://rpc-mainnet-1.bevm.io"] },
@@ -112,17 +211,13 @@ const bevm = defineChain({
       url: "https://scan-mainnet.bevm.io",
     },
   },
-  contracts: {
-    // multicall3: {
-    //   address: "0xcA11bde05977b3631167028862bE2a173976CA11",
-    //   blockCreated: 756690,
-    // },
-  },
+  contracts: {},
 });
 
 const bob = defineChain({
   id: 60808,
   name: "BOB",
+  network: "bob",
   nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
   rpcUrls: {
     default: { http: ["https://rpc.gobob.xyz"] },
@@ -134,22 +229,19 @@ const bob = defineChain({
       url: "https://explorer.gobob.xyz",
     },
   },
-  contracts: {
-    // multicall3: {
-    //   address: "0xcA11bde05977b3631167028862bE2a173976CA11",
-    //   blockCreated: 756690,
-    // },
-  },
+  contracts: {},
 });
 
 const lineaMainnet = defineChain({
   ...linea,
-  iconUrl:
-    "https://camo.githubusercontent.com/277b146c3be551531afca6f304866ebd1cb3b4d7c5c6fc49c704e2975d6d8f14/68747470733a2f2f696d616765732e7a656e68756275736572636f6e74656e742e636f6d2f3630333665343238363463393433643333333163316632372f32373639383237332d613166652d343662632d396336382d343334333439653663323132",
+  iconUrl: "https://s2.coinmarketcap.com/static/img/coins/64x64/27657.png",
 });
+
 const taiko = defineChain({
   id: 167000,
+  iconUrl: "https://s2.coinmarketcap.com/static/img/coins/64x64/31525.png",
   name: "Taiko",
+  network: "taiko",
   nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
   rpcUrls: {
     default: { http: ["https://rpc.mainnet.taiko.xyz"] },
@@ -169,20 +261,286 @@ const taiko = defineChain({
   },
 });
 
-export const TOCKABLE_CHAINS = [
-  mainnet,
-  optimism,
-  base,
-  zora,
-  arbitrum,
-  polygon,
-  polygonMumbai,
-  taiko,
-  bob,
-  blast,
-  lineaMainnet,
-  bevm,
-  mode,
-  sepolia,
-  lineasepolia,
-];
+const forma = defineChain({
+  id: 984122,
+  name: "Forma",
+  network: "forma",
+  nativeCurrency: { name: "Tia", symbol: "TIA", decimals: 6 },
+  rpcUrls: {
+    default: { http: ["https://rpc.forma.art"] },
+    public: { http: ["https://rpc.forma.art"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Explorer.forma.art",
+      url: "https://explorer.forma.art",
+    },
+  },
+  contracts: {},
+});
+
+const formaTestnet = defineChain({
+  id: 984123,
+  name: "Forma Sketchpad",
+  network: "formasketchpad",
+  nativeCurrency: { name: "Tia", symbol: "TIA", decimals: 6 },
+  rpcUrls: {
+    default: { http: ["https://rpc.sketchpad-1.forma.art"] },
+    public: { http: ["https://rpc.sketchpad-1.forma.art"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Explorer.sketchpad-1.forma.art",
+      url: "https://explorer.sketchpad-1.forma.art",
+    },
+  },
+  contracts: {},
+});
+
+//https://api-explorer-verify.testnet.abs.xyz/contract_verification
+// const abstractTestnet = defineChain({
+//   id: 11124,
+//   name: "Abstract Testnet",
+//   nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+//   rpcUrls: {
+//     default: { http: ["https://api.testnet.abs.xyz"] },
+//     public: { http: ["https://api.testnet.abs.xyz"] },
+//   },
+//   blockExplorers: {
+//     default: {
+//       name: "Explorer.testnet.abs.xyz",
+//       url: "https://explorer.testnet.abs.xyz",
+//     },
+//   },
+//   contracts: {},
+// });
+
+const unichainTestnet = defineChain({
+  id: 11124,
+  iconUrl: "https://www.gas.zip/chains-64x64/logoUnichain.png",
+  name: "Unichain Sepolia",
+  network: "unichainsepolia",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://sepolia.unichain.org"] },
+    public: { http: ["https://sepolia.unichain.org"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Sepolia.uniscan.xyz",
+      url: "https://sepolia.uniscan.xyz",
+    },
+  },
+  contracts: {},
+});
+
+const kaia = defineChain({
+  id: 8217,
+  name: "Kaia",
+  iconUrl: "https://s2.coinmarketcap.com/static/img/coins/64x64/32880.png",
+  network: "kaia",
+  nativeCurrency: { name: "Kaia", symbol: "KAIA", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://public-en.node.kaia.io"] },
+    public: { http: ["https://public-en.node.kaia.io"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Kaiascan.io",
+      url: "https://kaiascan.io",
+    },
+  },
+  contracts: {},
+});
+
+const morphl2 = defineChain({
+  id: 2818,
+  name: "Morph L2",
+  network: "morphl2",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://rpc-quicknode.morphl2.io"] },
+    public: { http: ["https://rpc-quicknode.morphl2.io"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Explorer.morphl2.io",
+      url: "https://explorer.morphl2.io",
+    },
+  },
+  contracts: {},
+});
+
+const worldchain = defineChain({
+  id: 480,
+  iconUrl: "https://s2.coinmarketcap.com/static/img/coins/64x64/13502.png",
+  name: "Worldchain",
+  network: "worldchain",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["worldchain-mainnet.g.alchemy.com/public"] },
+    public: { http: ["worldchain-mainnet.g.alchemy.com/public"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Worldscan.org",
+      url: "https://worldscan.org",
+    },
+  },
+  contracts: {},
+});
+
+// const chainbaseTestnet = defineChain({
+//   id: 2233,
+//   name: "Chainbase Sepolia",
+//   nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+//   rpcUrls: {
+//     default: { http: ["https://rpc-quicknode-holesky.morphl2.io"] },
+//     public: { http: ["https://rpc-quicknode-holesky.morphl2.io"] },
+//   },
+//   blockExplorers: {
+//     default: {
+//       name: "Testnet.explorer.chainbase.com",
+//       url: "https://testnet.explorer.chainbase.com",
+//     },
+//   },
+//   contracts: {},
+// });
+
+const ink = defineChain({
+  id: 57073,
+  iconUrl: "https://avatars.githubusercontent.com/u/168584369?s=200&v=4",
+  name: "Ink",
+  network: "ink",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://rpc-gel.inkonchain.com"] },
+    public: { http: ["https://rpc-gel.inkonchain.com"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Explorer.inkonchain.com",
+      url: "https://explorer.inkonchain.com",
+    },
+  },
+  contracts: {},
+});
+
+const lisk = defineChain({
+  id: 1135,
+  iconUrl: "https://s2.coinmarketcap.com/static/img/coins/64x64/1214.png",
+  name: "Lisk",
+  network: "lisk",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://rpc.api.lisk.com"] },
+    public: { http: ["https://rpc.api.lisk.com"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Blockscout.lisk.com",
+      url: "https://blockscout.lisk.com",
+    },
+  },
+  contracts: {},
+});
+
+const morphHolesky = defineChain({
+  id: 2810,
+  name: "Morph Holesky",
+  network: "morphholesky",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://rpc-quicknode-holesky.morphl2.io"] },
+    public: { http: ["https://rpc-quicknode-holesky.morphl2.io"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Explorer-holesky.morphl2.io",
+      url: "https://explorer-holesky.morphl2.io",
+    },
+  },
+  contracts: {},
+});
+
+const baseSepolia = defineChain({
+  id: 84532,
+  name: "Base Sepolia",
+  network: "basesepolia",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://sepolia.base.org"] },
+    public: { http: ["https://sepolia.base.org"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Sepolia.basescan.org",
+      url: "https://sepolia.basescan.org",
+    },
+  },
+  contracts: {},
+});
+
+const rootstock = defineChain({
+  id: 30,
+  iconUrl:
+    "https://raw.githubusercontent.com/lifinance/types/main/src/assets/icons/chains/rootstock.svg",
+  name: "Rootstock",
+  network: "rootstock",
+  nativeCurrency: { name: "Rootstock Bitcoin", symbol: "RBTC", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://rootstock-mainnet.public.blastapi.io"] },
+    public: { http: ["https://rootstock-mainnet.public.blastapi.io"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Explorer.rootstock.io",
+      url: "https://explorer.rootstock.io",
+    },
+  },
+  contracts: {},
+});
+
+export const TOCKABLE_CHAINS = {
+  testnet: [
+    mevm,
+    unichainTestnet,
+    berachainBartio,
+    apechainCurtis,
+    baseSepolia,
+    formaTestnet,
+    polygonMumbai,
+    blastSepolia,
+    lineaSepolia,
+    optimismSepolia,
+    morphHolesky,
+    sepolia,
+    holesky,
+  ],
+  mainnet: [
+    mainnet,
+    optimism,
+    base,
+    zora,
+    ink,
+    arbitrum,
+    rootstock,
+    worldchain,
+    cronos,
+    polygon,
+    kaia,
+    canto,
+    lisk,
+    arbitrumNova,
+    taiko,
+    bob,
+    morphl2,
+    lineaMainnet,
+    bevm,
+    mode,
+    apechain,
+    fraxtal,
+    forma,
+    blast,
+  ],
+};

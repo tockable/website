@@ -21,7 +21,7 @@ export default function AdminProtected({ children }) {
       router.push("/creator/auth");
     }
 
-    let adminRole = false;
+    // let adminRole = false;
 
     checkRole(address).then((res) => {
       if (isConnected && session.data) {

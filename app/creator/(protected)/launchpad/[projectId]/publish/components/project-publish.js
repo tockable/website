@@ -70,7 +70,6 @@ export default function ProjectPublish({ params }) {
         isPublished: false,
       });
 
-
       setSuccessUnpublish(true);
       setProject(updatedProject);
     } catch (err) {
@@ -151,7 +150,7 @@ export default function ProjectPublish({ params }) {
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          {`https://tockable.xyz/c/${project.slug}`}
+                          {`https://tockable.org/c/${project.slug}`}
                         </Link>
                       </p>
                       <p className="text-sm text-zinc-400 mb-10 mt-4">

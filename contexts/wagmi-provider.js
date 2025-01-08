@@ -13,11 +13,23 @@ import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { TOCKABLE_CHAINS } from "./chains";
+// import { mainnet } from "wagmi";
+const tockable_type = process.env.NEXT_PUBLIC_TOCKABLE_TYPE;
 
-const { chains, publicClient } = configureChains(TOCKABLE_CHAINS, [
-  alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY }),
-  publicProvider(),
-]);
+export const SUPPORTED_CHAINS = TOCKABLE_CHAINS[tockable_type].map((chain) => ({
+  name: chain.name,
+  value: chain.id.toString(),
+  network: chain.network,
+}));
+
+const { chains, publicClient } = configureChains(
+  TOCKABLE_CHAINS[tockable_type],
+
+  [
+    alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY }),
+    publicProvider(),
+  ]
+);
 
 const appName = process.env.NEXT_PUBLIC_CONNECT_WALLET_APP_NAME;
 const projectId = process.env.NEXT_PUBLIC_CONNECT_WALLET_PROJECT_ID;
@@ -27,7 +39,6 @@ const { wallets } = getDefaultWallets({
   projectId,
   chains,
 });
-
 
 const connectors = connectorsForWallets([
   ...wallets,
@@ -62,6 +73,7 @@ const wagmiConfig = createConfig({
 export default function WagmiProvider({ children }) {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
+
   return (
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider
@@ -74,7 +86,7 @@ export default function WagmiProvider({ children }) {
         })}
         appInfo={{
           appName: "Tockable",
-          learnMoreUrl: "https://tockable.xyz",
+          learnMoreUrl: "https://tockable.org",
         }}
         chains={chains}
       >

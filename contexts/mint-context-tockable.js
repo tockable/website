@@ -21,6 +21,7 @@ export default function MintProviderTockable({ project, abi, children }) {
   // };
   const searchParams = useSearchParams();
   const ref = searchParams.get("ref");
+
   const [blobs, setBlobs] = useState([]);
   const [duplicatedIndexes, setDuplicatedIndexes] = useState([]);
   const [successfullyMinted, setSuccessfullyMinted] = useState(false);
@@ -137,13 +138,13 @@ export default function MintProviderTockable({ project, abi, children }) {
 //             }}
 //           >
 //             <a
-//               href="https://twitter.com/Tockablexyz?ref_src=twsrc%5Etfw"
+//               href="https://twitter.com/tockable_org?ref_src=twsrc%5Etfw"
 //               data-show-count="false"
 //               target="_blank"
 //               rel="noopener noreferrer"
 //               className="border px-2 py-2 rounded-2xl hover:bg-tock-semiblack transition duration-200"
 //             >
-//               Follow @Tockablexyz
+//               Follow @tockable_org
 //             </a>
 //             <script
 //               async

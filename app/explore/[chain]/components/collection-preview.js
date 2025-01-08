@@ -8,6 +8,7 @@ export default function CollectionPreview({ collection }) {
   const src = !collection.ipfs
     ? `https://${collection.image}.${NFT_STORAGE_GATEWAY}`
     : `https://ipfs.io/ipfs/${collection.image}`;
+    
   return (
     <div className="flex flex-col items-center w-[300px] bg-tock-semiblack rounded-2xl">
       {collection.image && (

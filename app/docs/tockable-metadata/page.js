@@ -2,10 +2,10 @@ import Image from "next/image";
 
 export async function generateMetadata() {
   return {
-    title: "Tockable.xyz",
+    title: "Tockable.org",
     description:
       "Learn how to add dynamic NFT metadata to your contract and create your minting dapp.",
-    applicationName: "tockable.xyz",
+    applicationName: "tockable.org",
     keywords: [
       "nft",
       "dynamic nft",
@@ -21,27 +21,27 @@ export async function generateMetadata() {
       "Tockable",
       "erc 721a",
     ],
-    authors: [{ name: "tockable.xyz" }],
+    authors: [{ name: "tockable.org" }],
     colorScheme: "dark",
     creator: "tockableteam",
     themeColor: "#231f20",
     twitter: {
       card: "summary_large_image",
-      title: "Tockable.xyz",
+      title: "Tockable.org",
       description:
         "Learn how to add dynamic NFT metadata to your contract and create your minting dapp.",
-      creator: "@tockablexyz",
+      creator: "@tockable_org",
       images: [
         "https://pbs.twimg.com/profile_banners/1629609068623978499/1696075598/1500x500",
       ],
-      url: "https://tockable.xyz",
+      url: "https://tockable.org",
     },
     openGraph: {
-      title: "Tockable.xyz",
+      title: "Tockable.org",
       description:
         "Learn how to add dynamic NFT metadata to your contract and create your minting dapp.",
-      url: "https://tockable.xyz",
-      siteName: "Tockable.xyz",
+      url: "https://tockable.org",
+      siteName: "Tockable.org",
       images: [
         {
           url: "https://pbs.twimg.com/profile_banners/1629609068623978499/1696075598/1500x500",

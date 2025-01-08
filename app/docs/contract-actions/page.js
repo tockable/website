@@ -1,15 +1,15 @@
 export async function generateMetadata() {
   return {
-    title: "Tockable.xyz",
+    title: "Tockable.org",
     description:
       "Learn how to interact with your contract on Tockable NFT platform",
-    applicationName: "tockable.xyz",
+    applicationName: "tockable.org",
     keywords: [
       "nft",
       "launchpad",
-      "optimism",
-      "blast",
-      "mode",
+      "base",
+      "tia",
+      "airdrop",
       "blockchain",
       "ethereum",
       "Tockable",
@@ -18,27 +18,27 @@ export async function generateMetadata() {
       "interact with contract",
       "withdraw",
     ],
-    authors: [{ name: "tockable.xyz" }],
+    authors: [{ name: "tockable.org" }],
     colorScheme: "dark",
     creator: "tockableteam",
     themeColor: "#231f20",
     twitter: {
       card: "summary_large_image",
-      title: "Tockable.xyz",
+      title: "Tockable.org",
       description:
         "Learn how to interact with your contract on Tockable NFT platform",
-      creator: "@tockablexyz",
+      creator: "@tockable_org",
       images: [
         "https://pbs.twimg.com/profile_banners/1629609068623978499/1696075598/1500x500",
       ],
-      url: "https://tockable.xyz",
+      url: "https://tockable.org",
     },
     openGraph: {
-      title: "Tockable.xyz",
+      title: "Tockable.org",
       description:
         "Learn how to interact with your contract on Tockable NFT platform",
-      url: "https://tockable.xyz",
-      siteName: "Tockable.xyz",
+      url: "https://tockable.org",
+      siteName: "Tockable.org",
       images: [
         {
           url: "https://pbs.twimg.com/profile_banners/1629609068623978499/1696075598/1500x500",

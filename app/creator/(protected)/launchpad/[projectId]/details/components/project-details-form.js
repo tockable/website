@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { FileUploader } from "react-drag-drop-files";
 import { fetchProjectByUUID } from "@/actions/launchpad/projects";
@@ -198,13 +199,13 @@ export default function ProjectDetailsForm({ params }) {
       setProject({ ...project, discord: slug });
   };
 
-  function onChangeWebsite(e) {
+  const onChangeWebsite = (e) => {
     let slug = e.target.value;
     if (slug.match(regex.website) || slug === "")
       slug = slug.replace(/^https?:\/\/(?:www\.|(?!www))|^www\./, "");
 
     setProject({ ...project, website: slug });
-  }
+  };
 
   const onChangeSlug = (e) => {
     if (e.target.value.match(regex.slug) || e.target.value === "")
@@ -267,13 +268,17 @@ export default function ProjectDetailsForm({ params }) {
 
     let imageCid = project.image;
     let coverCid = project.cover;
+
     if (!process.env.NODE_ENV === "development") {
       let maxUses = 0;
+
       if (imageChanged) maxUses++;
       if (coverChanged) maxUses++;
+
       let JWT;
+
       if (maxUses > 0) {
-        let res = await getJWT(maxUses);
+        const res = await getJWT(maxUses);
         if (res.success === true) {
           JWT = res.JWT;
         } else {
@@ -287,7 +292,9 @@ export default function ProjectDetailsForm({ params }) {
       if (imageChanged) {
         try {
           const formData = new FormData();
+
           formData.append("file", image, { filename: image.name });
+
           const profileRes = await fetch(
             "https://api.pinata.cloud/pinning/pinFileToIPFS",
             {
@@ -313,7 +320,9 @@ export default function ProjectDetailsForm({ params }) {
       if (coverChanged) {
         try {
           const formData = new FormData();
+
           formData.append("file", cover, { filename: cover.name });
+
           const coverRes = await fetch(
             "https://api.pinata.cloud/pinning/pinFileToIPFS",
             {
@@ -532,7 +541,7 @@ export default function ProjectDetailsForm({ params }) {
                     <input
                       tabIndex="-1"
                       className="select-none flex-none text-sm appearance-none rounded-l-xl pointer-events-none bg-tock-semiblack border border-zinc-700 text-gray-400 py-3 px-3 w-36 leading-tight"
-                      value="tockable.xyz/c/"
+                      value="tockable.org/c/"
                       readOnly
                     />
                     <input
@@ -685,21 +694,30 @@ export default function ProjectDetailsForm({ params }) {
                   </div>
                 </div>
               </div>
-              <Button
-                variant="primary"
-                type="button"
-                disabled={saving || !updateNeeded()}
-                onClick={() => {
-                  callUpdateProjectDetail();
-                }}
-              >
-                {saving ? (
-                  <Loading isLoading={saving} size={10} />
-                ) : (
-                  <p>Save</p>
-                )}
-              </Button>
-
+              <div className="flex gap-2">
+                <Button
+                  variant="primary"
+                  type="button"
+                  disabled={saving || !updateNeeded()}
+                  onClick={() => callUpdateProjectDetail()}
+                >
+                  {saving ? (
+                    <Loading isLoading={saving} size={10} />
+                  ) : (
+                    <p>Save</p>
+                  )}
+                </Button>
+                <Link
+                  className={`${
+                    !success
+                      ? "pointer-events-none bg-zinc-400"
+                      : "transition hover:bg-sky-400 duration-300 bg-sky-600 text-tock-blue"
+                  } h-10 flex items-center text-xs font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline`}
+                  href={`/creator/launchpad/${project.uuid}/contract`}
+                >
+                  Next
+                </Link>
+              </div>
               {nameEditError && (
                 <div className="mt-2 text-xs text-tock-red">
                   Project name cannot be edited after deployment

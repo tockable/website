@@ -2,6 +2,7 @@ import Link from "next/link";
 import { FaDiscord } from "react-icons/fa";
 import { FaSquareXTwitter } from "react-icons/fa6";
 import { TbWorld } from "react-icons/tb";
+
 export default async function MintpadSocialbar({ project }) {
   return (
     <div className="mb-4 flex flex-row items-center border border-zinc-600 rounded-xl px-4 py-2">

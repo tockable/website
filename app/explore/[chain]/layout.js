@@ -2,24 +2,25 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { SUPPORTED_CHAINS } from "@/tock.config";
+import { SUPPORTED_CHAINS } from "@/contexts/wagmi-provider";
 import WagmiProvider from "@/contexts/wagmi-provider";
 import NavbarMintpad from "@/components/design/navbar/navbar-mintpad";
 import Footer from "@/components/design/footer";
-// import Scroller from "@/components/scroller";
 import Support from "@/app/support";
 import CollectionSkletton from "./components/collection-skletton";
 
+// import Scroller from "@/components/scroller";
+
 export default function ExploreLayout({ params, children }) {
   const router = useRouter();
+
   const [selectedChain, setSelectedChain] = useState(params.chain);
   const [changePage, setChangePage] = useState(false);
-  const onChangeChain = (e) => setSelectedChain(e.target.value);
-  const sklettonNumber = [0, 1, 2, 3, 4, 5];
 
   useEffect(() => {
     if (selectedChain === params.chain) return;
-    setChangePage;
+
+    setChangePage(true);
     router.push(`${selectedChain}`);
   }, [selectedChain]);
 
@@ -34,12 +35,12 @@ export default function ExploreLayout({ params, children }) {
             className="text-sm bg-zinc-700 w-full sm:w-44 rounded-xl py-3 px-3 text-gray-200 leading-tight focus:outline-none focus:ring focus:ring-2 focus:ring-zinc-500"
             id="chain"
             name="chain"
-            onChange={onChangeChain}
+            onChange={(e) => setSelectedChain(e.target.value)}
             required
             value={selectedChain}
           >
             {SUPPORTED_CHAINS.map((c, i) => (
-              <option key={"chain_" + i} value={c.cleanName}>
+              <option key={"chain_" + i} value={c.network}>
                 {c.name}
               </option>
             ))}
@@ -51,14 +52,18 @@ export default function ExploreLayout({ params, children }) {
           </div> */}
 
         <h1 className="mx-4 mt-8 text-2xl text-tock-green border-b border-tock-green">
-          Explore on {selectedChain}
+          Explore on{" "}
+          {
+            SUPPORTED_CHAINS.find((chain) => chain.network === selectedChain)
+              ?.name
+          }
         </h1>
         {/* </div> */}
         <div className="p-4">
           {changePage === true ? (
             <div className="flex justify-center">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 mt-6">
-                {sklettonNumber.map((s, i) => (
+                {Array.from({ length: 5 }).map((_, i) => (
                   <div className="shrink-0" key={"skletton_" + i}>
                     <CollectionSkletton />
                   </div>

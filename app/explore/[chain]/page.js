@@ -1,16 +1,20 @@
-import { EXPLORE_CHAINS } from "@/tock.config";
 import { getCollectionlistByChainId } from "@/actions/explore/explore-api";
 import CollectionPreview from "./components/collection-preview";
-// import CollectionSkletton from "./components/collection-skletton";
 import { redirect } from "next/navigation";
 import NoCollectionFound from "./components/no-collection-found";
+import { TOCKABLE_CHAINS } from "@/contexts/chains";
 
 export default async function Page({ params }) {
-  if (!EXPLORE_CHAINS[params.chain]) {
+  const tockable_type = process.env.NEXT_PUBLIC_TOCKABLE_TYPE;
+
+  const found = TOCKABLE_CHAINS[tockable_type].find(
+    (chain) => chain.network === params.chain.toLowerCase()
+  );
+
+  if (!found) {
     redirect(`/explore/${process.env.NEXT_PUBLIC_EXPLORE}`);
   } else {
-    const chainId = EXPLORE_CHAINS[params.chain.toLowerCase()];
-    const collectionList = await getCollectionlistByChainId(chainId);
+    const collectionList = await getCollectionlistByChainId(found.id);
 
     return (
       <div className="flex justify-center">
@@ -23,7 +27,7 @@ export default async function Page({ params }) {
             ))}
           </div>
         ) : (
-          <NoCollectionFound params={params} />
+          <NoCollectionFound chainName={found.name} />
         )}
       </div>
     );

@@ -38,6 +38,7 @@ export function capitalize(_str) {
   const fl = _str.charAt(0);
   const flc = fl.toUpperCase();
   const rl = _str.slice(1);
+
   return flc + rl;
 }
 
@@ -51,5 +52,6 @@ export function getDate(_timestamp) {
 
   const formattedTime =
     year + "/" + month + "/" + day + " " + hours + ":" + minutes.slice(-2);
+    
   return formattedTime;
 }

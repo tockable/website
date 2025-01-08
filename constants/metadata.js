@@ -1,39 +1,40 @@
 export const TOCKABLE_METADATA = {
-  title: "Tockable.xyz",
+  title: "Tockable.org",
   description:
     "Unlocking new possibilites of web3 and NFT eco system; a new generation dynamic nft launchpad for creators, builders and minters. ",
-  applicationName: "tockable.xyz",
+  applicationName: "tockable.org",
   keywords: [
     "nft",
     "launchpad",
     "optimism",
-    "blast",
-    "mode",
+    "mint",
+    "base",
+    "mint nft",
     "blockchain",
     "ethereum",
   ],
-  authors: [{ name: "tockable.xyz" }],
+  authors: [{ name: "tockable.org" }],
   colorScheme: "dark",
   creator: "tockableteam",
   themeColor: "#231f20",
   twitter: {
     card: "summary_large_image",
-    title: "Tockable.xyz",
+    title: "Tockable.org",
     description:
       "Unlocking new possibilites of web3 and NFT eco system; a new generation dynamic nft launchpad for creators, builders and minters. ",
 
-    creator: "@tockablexyz",
+    creator: "@tockable_org",
     images: [
       "https://pbs.twimg.com/profile_banners/1629609068623978499/1696075598/1500x500",
     ],
-    url: "https://tockable.xyz",
+    url: "https://tockable.org",
   },
   openGraph: {
-    title: "Tockable.xyz",
+    title: "Tockable.org",
     description:
       "Unlocking new possibilites of web3 and NFT eco system; a new generation dynamic nft launchpad for creators, builders and minters. ",
-    url: "https://tockable.xyz",
-    siteName: "Tockable.xyz",
+    url: "https://tockable.org",
+    siteName: "Tockable.org",
     images: [
       {
         url: "https://pbs.twimg.com/profile_banners/1629609068623978499/1696075598/1500x500",

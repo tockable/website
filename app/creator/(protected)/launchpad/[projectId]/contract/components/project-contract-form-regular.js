@@ -13,6 +13,8 @@ import Fade from "@/components/design/fade/fade";
 import LabeledInput from "@/components/design/labeled-input";
 import Loading from "@/components/loading/loading";
 import Button from "@/components/design/button";
+import DeployContractFactoryRegularModal from "./modal-deploy-contract-factory-regular";
+import { FACTORY_CONTRACTS } from "@/tock.config";
 
 export default function ProjectContractFormRegular({ _project }) {
   // Contexts
@@ -137,6 +139,19 @@ export default function ProjectContractFormRegular({ _project }) {
   }
 
   async function saveAndDeploy() {
+    // if project is updated and chain id supports contract factory
+    if (
+      !updateNeeded() &&
+      FACTORY_CONTRACTS[project.dropType].hasOwnProperty(project.chainId)
+    ) {
+      setAbiReady(true);
+      setDeploying(true);
+      setSaving(true);
+      return;
+    }
+
+    // if project is updated and chain id not supports contract factory
+    // but contract created before and abi fetched
     if (!updateNeeded() && contractCreated) {
       setAbiReady(true);
       setTakeMoment(true);
@@ -145,6 +160,7 @@ export default function ProjectContractFormRegular({ _project }) {
       return;
     }
 
+    // if not support factory and contract and abi not created before
     setSuccess(false);
     setFailed(false);
     setPleaseFillRequied(false);
@@ -170,6 +186,7 @@ export default function ProjectContractFormRegular({ _project }) {
 
     let isUpdated = true;
 
+    // if inputs changed
     if (updateNeeded()) {
       isUpdated = false;
 
@@ -206,7 +223,9 @@ export default function ProjectContractFormRegular({ _project }) {
       }
     }
 
+    // if project already updated
     if (isUpdated) {
+      // create contract
       const res = await createAndCompile(
         session.data.user.address,
         project.uuid
@@ -225,12 +244,17 @@ export default function ProjectContractFormRegular({ _project }) {
   }
 
   useEffect(() => {
-    if (!contractCreated) return;
-
     if (!abiReady) {
       setReadyToDeploy(false);
       return;
     }
+
+    if (FACTORY_CONTRACTS[project.dropType].hasOwnProperty(project.chainId)) {
+      setReadyToDeploy(true);
+      return;
+    }
+
+    if (!contractCreated) return;
 
     (async () => {
       try {
@@ -261,8 +285,15 @@ export default function ProjectContractFormRegular({ _project }) {
   }, [abiReady]);
 
   useEffect(() => {
-    if (!bytecode.length) return;
     if (!readyToDeploy) return;
+
+    if (FACTORY_CONTRACTS[project.dropType].hasOwnProperty(project.chainId)) {
+      handleShowDeployModalContract();
+      return;
+    }
+
+    if (!bytecode.length) return;
+
     handleShowDeployModalContract();
   }, [readyToDeploy, bytecode]);
 
@@ -272,12 +303,23 @@ export default function ProjectContractFormRegular({ _project }) {
         <div>
           <div id="modals">
             {showDeployContractModal && (
-              <DeployContractModal
-                project={project}
-                onClose={handleCloseDeployModalContract}
-                bytecode={bytecode}
-                abi={abi}
-              />
+              <>
+                {FACTORY_CONTRACTS[project.dropType].hasOwnProperty(
+                  project.chainId
+                ) ? (
+                  <DeployContractFactoryRegularModal
+                    project={project}
+                    onClose={handleCloseDeployModalContract}
+                  />
+                ) : (
+                  <DeployContractModal
+                    project={project}
+                    onClose={handleCloseDeployModalContract}
+                    bytecode={bytecode}
+                    abi={abi}
+                  />
+                )}
+              </>
             )}
           </div>
           <h1 className="text-tock-green font-bold text-xl mb-6 ">
@@ -336,7 +378,7 @@ export default function ProjectContractFormRegular({ _project }) {
               <label className="block text-tock-blue text-sm font-bold mb-2">
                 First token Id (0 or 1){" "}
                 <span className="text-zinc-400 text-xs">
-                  you should choose based on your metadata
+                  you should choose based on your generated metadata
                 </span>
               </label>
               <div className="flex items-center mb-4">
@@ -370,7 +412,7 @@ export default function ProjectContractFormRegular({ _project }) {
             </div>
           </div>
           <p className="text-tock-orange text-xs mb-2">
-            IMPORTANT: please note that contract data connat be changed after
+            IMPORTANT: please note that contract data cannot be changed after
             deployment.
           </p>
           <Button

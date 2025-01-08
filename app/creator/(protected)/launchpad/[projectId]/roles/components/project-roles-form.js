@@ -214,7 +214,7 @@ export default function ProjectRolesForm({ params }) {
                           >
                             price for{" "}
                             <span className="text-tock-orange">public</span>{" "}
-                            mint {`(${token})`}
+                            mint {`(${token})`}{" "}
                             <span className="text-xs font-normal text-zinc-400">
                               (required)
                             </span>

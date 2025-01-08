@@ -2,19 +2,18 @@
 
 import Modal from "@/components/design/modal";
 import { BsTwitterX } from "react-icons/bs";
-// import { FaTelegramPlane } from "react-icons/fa";
-// import LensSvg from "@/svgs/social-svgs/LensSvg";
-// import FarcasterSvg from "@/svgs/social-svgs/FarcasterSvg";
 import Link from "next/link";
 
 const createTweat = (project, mintData) => {
   if (Math.random() >= 0.5) {
-    return `https://twitter.com/intent/tweet?text=I've+Just+minted+${mintData.quantity}+${project.tokenName}&via=Tockable.+Mint+yours+here%3A&url=https%3A%2F%2Ftockable.xyz%2Fc%2F${project.slug}%3Fref%3D${mintData.address}`;
+    return `https://twitter.com/intent/tweet?text=I've+Just+minted+${mintData.quantity}+${project.tokenName}&via=Tockable.+Mint+yours+here%3A&url=https%3A%2F%2Ftockable.org%2Fc%2F${project.slug}%3Fref%3D${mintData.address}`;
   }
-  return `https://twitter.com/intent/tweet?text=Just+minted+${mintData.quantity}+${project.tokenName}.+Go+get+yours+before+it's+over%3A&url=https%3A%2F%2Ftockable.xyz%2Fc%2F${project.slug}%3Fref%3D${mintData.address}`;
+  return `https://twitter.com/intent/tweet?text=Just+minted+${mintData.quantity}+${project.tokenName}.+Go+get+yours+before+it's+over%3A&url=https%3A%2F%2Ftockable.org%2Fc%2F${project.slug}%3Fref%3D${mintData.address}`;
 };
+
 export default function ShareModal({ onClose, project, mintData }) {
   const tweet = createTweat(project, mintData);
+
   return (
     <Modal isOpen={true} onClose={onClose}>
       <div className="flex basis-3/4 px-4">
@@ -49,7 +48,7 @@ export default function ShareModal({ onClose, project, mintData }) {
   );
 }
 
-//I Just minted 0 donkey  via @Tockable Mint here: url=https://tockable.xyz/mmmtest
+//I Just minted 0 donkey  via @Tockable Mint here: url=https://tockable.org/mmmtest
 const ShareButton = ({ className, children, ...props }) => {
   return (
     <Link

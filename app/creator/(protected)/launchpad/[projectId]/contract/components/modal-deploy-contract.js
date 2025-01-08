@@ -18,6 +18,8 @@ export default function DeployContractModal({
   bytecode,
   abi,
 }) {
+  const tockable_type = process.env.NEXT_PUBLIC_TOCKABLE_TYPE;
+
   const { address } = useAccount();
 
   const [takeMoment, setTakeMoment] = useState(true);
@@ -70,7 +72,7 @@ export default function DeployContractModal({
       // const client = await getWalletClient({
       //   chainId: Number(project.chainId),
       // });
-      const chain = TOCKABLE_CHAINS.find(
+      const chain = TOCKABLE_CHAINS[tockable_type].find(
         (c) => c.id === Number(project.chainId)
       );
       const client = createWalletClient({

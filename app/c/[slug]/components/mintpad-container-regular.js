@@ -227,18 +227,26 @@ export default function MintpadContainerRegular({ prepareMint }) {
                             {parseInt(data[3].result)} / Unlimited
                           </p>
                         )}
+                      {project.hasOwnProperty("isUnlimited") &&
+                        project.isUnlimited === false && (
+                          <p className="text-tock-blue font-bold">
+                            <span className="font-normal text-zinc-400">
+                              Minted:
+                            </span>
+                            {parseInt(data[3].result)} / {project.totalSupply}
+                          </p>
+                        )}
                       {!project.hasOwnProperty("isUnlimited") && (
                         <p className="text-tock-blue font-bold">
                           <span className="font-normal text-zinc-400">
                             Minted:
                           </span>{" "}
-                          {Number(project.totalSupply) -
-                            parseInt(data[1].result)}{" "}
-                          / {project.totalSupply}
+                          {parseInt(data[3].result)} / {project.totalSupply}
                         </p>
                       )}
                     </div>
                   )}
+
                   {!mintEnded &&
                     !notStarted &&
                     chain.id === Number(project.chainData.chainId) &&
@@ -263,14 +271,21 @@ export default function MintpadContainerRegular({ prepareMint }) {
                               {parseInt(data[3].result)} / Unlimited
                             </p>
                           )}
+                        {project.hasOwnProperty("isUnlimited") &&
+                          project.isUnlimited === false && (
+                            <p className="text-tock-blue font-bold">
+                              <span className="font-normal text-zinc-400">
+                                Minted:
+                              </span>{" "}
+                              {parseInt(data[3].result)} / {project.totalSupply}
+                            </p>
+                          )}
                         {!project.hasOwnProperty("isUnlimited") && (
                           <p className="text-tock-blue font-bold">
                             <span className="font-normal text-zinc-400">
                               Minted:
                             </span>{" "}
-                            {Number(project.totalSupply) -
-                              parseInt(data[1].result)}{" "}
-                            / {project.totalSupply}
+                            {parseInt(data[3].result)} / {project.totalSupply}
                           </p>
                         )}
                       </div>
@@ -391,7 +406,7 @@ export default function MintpadContainerRegular({ prepareMint }) {
                                               {parseInt(data[2].result) ==
                                                 0 && (
                                                 <p className="mt-8 text-tock-orange text-center p-2 border rounded-xl border-zinc-400">
-                                                  Current session reaches its
+                                                  Current session reached its
                                                   total supply, please wait
                                                   until next session.
                                                 </p>
@@ -433,13 +448,13 @@ function FollowX({ setFollow, verifyFollow }) {
           }}
         >
           <a
-            href="https://twitter.com/Tockablexyz?ref_src=twsrc%5Etfw"
+            href="https://twitter.com/tockable_org?ref_src=twsrc%5Etfw"
             data-show-count="false"
             target="_blank"
             rel="noopener noreferrer"
             className="border px-4 py-2 rounded-2xl text-tock-green hover:bg-zinc-600 transition duration-200"
           >
-            Follow @Tockablexyz
+            Follow @Tockable_org
           </a>
           <script
             async

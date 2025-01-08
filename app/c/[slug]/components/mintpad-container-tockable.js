@@ -461,13 +461,13 @@ function FollowX({ setFollow, verifyFollow }) {
           }}
         >
           <a
-            href="https://twitter.com/Tockablexyz?ref_src=twsrc%5Etfw"
+            href="https://twitter.com/Tockable_org?ref_src=twsrc%5Etfw"
             data-show-count="false"
             target="_blank"
             rel="noopener noreferrer"
             className="border px-4 py-2 rounded-2xl text-tock-green hover:bg-zinc-600 transition duration-200"
           >
-            Follow @Tockablexyz
+            Follow @Tockable_org
           </a>
           <script
             async

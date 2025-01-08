@@ -107,7 +107,7 @@ export default function SignInWithEthereum() {
         </h1>
         <div className="flex h-64 flex-auto flex-col items-center justify-center mt-4">
           <h3 className="text-center text-md font-normal text-gray-300 mb-4">
-            Welcome to <b>Tockable.xyz</b>'s creator hub!
+            Welcome to <b>Tockable.org</b>'s creator hub!
           </h3>
 
           <div>
@@ -162,7 +162,7 @@ export default function SignInWithEthereum() {
                 </div>
 
                 <p className="text-center text-sm font-normal text-zinc-400 my-8">
-                  You can securely sign in to Tockable.xyz with Ethereum
+                  You can securely sign in to Tockable.org with Ethereum
                 </p>
                 <div className="flex justify-center">
                   <Button onClick={handleSign} variant="secondary">

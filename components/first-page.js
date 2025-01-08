@@ -127,7 +127,7 @@ export default function FirstPage() {
         <h1
           className={`${dela.className} p-2 text-tock-green font-bold text-6xl lg:text-6xl text-center`}
         >
-          Tockable.xyz
+          Tockable.org
         </h1>
         <h1
           className={`${dela.className} p-2 text-zinc-300 mt-4 font-bold text-4xl lg:text-6xl text-center`}

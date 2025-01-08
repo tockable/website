@@ -36,7 +36,6 @@ export default function ProjectContext({ params, children }) {
 
         if (res.success === true) {
           setProject(res.payload);
-          console.log(res);
         }
 
         if (res.success === false) router.push("/creator/dashboard");

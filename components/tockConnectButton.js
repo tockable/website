@@ -1,6 +1,7 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Button from "./design/button";
 import { useWindowSize } from "@uidotdev/usehooks";
+
 export default function TockConnectButton() {
   const size = useWindowSize();
   return (
@@ -41,7 +42,7 @@ export default function TockConnectButton() {
               if (chain.unsupported) {
                 return (
                   <Button
-                    variant={"warninng"}
+                    variant={"warning"}
                     type="button"
                     onClick={openChainModal}
                   >
@@ -54,7 +55,7 @@ export default function TockConnectButton() {
                   {size.width > 500 && (
                     <button
                       className="bg-black/50 text-xs flex items-center p-3 rounded-xl hover:bg-black/20 hover:ring text-tock-blue transition duration-200"
-                      onClick={openChainModal}
+                      // onClick={openChainModal}
                       type="button"
                     >
                       {chain.hasIcon && (

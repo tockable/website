@@ -9,14 +9,12 @@ import Loading from "@/components/loading/loading";
 export default function Protected({ children }) {
   const session = useSession();
   const router = useRouter();
-
   const { address, isConnected } = useAccount();
+  
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!isConnected) {
-      router.push("/creator/auth");
-    }
+    if (!isConnected) router.push("/creator/auth");
 
     if (isConnected && session.data) {
       if (session.data?.user.address.toLowerCase() !== address.toLowerCase()) {

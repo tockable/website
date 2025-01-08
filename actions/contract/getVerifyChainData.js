@@ -17,11 +17,6 @@ const VERIFY_CHAIN_DATA = [
     apikey: process.env.POLYGONSCAN_API,
   },
   {
-    chainId: 80001,
-    endpoint: "https://api-testnet.polygonscan.com/api",
-    apikey: process.env.POLYGON_MUMBAISCAN_API,
-  },
-  {
     chainId: 8453,
     endpoint: "https://api.basescan.org/api",
     apikey: process.env.BASESCAN_API,
@@ -42,30 +37,41 @@ const VERIFY_CHAIN_DATA = [
     apikey: process.env.ARBITSCAN_API,
   },
   {
-    chainId: 11501,
-    endpoint: "",
-    apikey: "",
-  },
-  {
-    chainId: 60808,
-    endpoint: "",
-    apikey: "",
-  },
-  {
-    chainId: 11155111,
-    endpoint: "",
-    apikey: "",
-  },
-  {
     chainId: 167000,
     endpoint: "https://api.taikoscan.io/api",
     apikey: process.env.TAIKOSCAN_API,
   },
-  {
-    chainId: 59141,
-    endpoint: "",
-    apikey: "",
-  },
+
+  // {
+  //   chainId: 80001,
+  //   endpoint: "https://api-testnet.polygonscan.com/api",
+  //   apikey: process.env.POLYGON_MUMBAISCAN_API,
+  // },
+  // {
+  //   chainId: 11501,
+  //   endpoint: "",
+  //   apikey: "",
+  // },
+  // {
+  //   chainId: 60808,
+  //   endpoint: "",
+  //   apikey: "",
+  // },
+  // {
+  //   chainId: 11155111,
+  //   endpoint: "",
+  //   apikey: "",
+  // },
+  // {
+  //   chainId: 59141,
+  //   endpoint: "",
+  //   apikey: "",
+  // },
+  // {
+  //   chainId: 30732,
+  //   endpoint: "",
+  //   apikey: "",
+  // },
 ];
 
 export default async function getVerifyChainData(_chainId) {

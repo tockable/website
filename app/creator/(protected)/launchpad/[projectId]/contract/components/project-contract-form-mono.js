@@ -13,10 +13,11 @@ import Fade from "@/components/design/fade/fade";
 import LabeledInput from "@/components/design/labeled-input";
 import Loading from "@/components/loading/loading";
 import Button from "@/components/design/button";
+import DeployContractFactoryMonoModal from "./modal-deploy-contract-factory-mono";
+import { FACTORY_CONTRACTS } from "@/tock.config";
 
 export default function ProjectContractFormMono({ _project }) {
   // Contexts
-
   const session = useSession();
   const { chain } = useNetwork();
   const { error, isLoading, pendingChainId, switchNetwork } =
@@ -40,6 +41,8 @@ export default function ProjectContractFormMono({ _project }) {
   const [bytecode, setBytecode] = useState("");
   const [abi, setAbi] = useState([]);
   const [readyToDeploy, setReadyToDeploy] = useState(false);
+  const [contractCreated, setContarctCreated] = useState(false);
+  const [showDeployContractModal, setShowDeployContractModal] = useState(false);
 
   const onChangeTokenName = (e) =>
     setProject({ ...project, tokenName: e.target.value });
@@ -66,8 +69,6 @@ export default function ProjectContractFormMono({ _project }) {
   };
 
   // Deploy
-  const [contractCreated, setContarctCreated] = useState(false);
-  const [showDeployContractModal, setShowDeployContractModal] = useState(false);
   const handleShowDeployModalContract = () => setShowDeployContractModal(true);
 
   const handleCloseDeployModalContract = () => {
@@ -151,6 +152,19 @@ export default function ProjectContractFormMono({ _project }) {
   }
 
   async function saveAndDeploy() {
+    // if project is updated and chain id supports contract factory
+    if (
+      !updateNeeded() &&
+      FACTORY_CONTRACTS[project.dropType].hasOwnProperty(project.chainId)
+    ) {
+      setAbiReady(true);
+      setDeploying(true);
+      setSaving(true);
+      return;
+    }
+
+    // if project is updated and chain id not supports contract factory
+    // but contract created before and abi fetched
     if (!updateNeeded() && contractCreated) {
       setAbiReady(true);
       setTakeMoment(true);
@@ -159,6 +173,7 @@ export default function ProjectContractFormMono({ _project }) {
       return;
     }
 
+    // if not support factory and contract and abi not created before
     setSuccess(false);
     setFailed(false);
     setPleaseFillRequied(false);
@@ -217,8 +232,9 @@ export default function ProjectContractFormMono({ _project }) {
         }
       }
     }
-
+    // if project already updated
     if (isUpdated) {
+      // create contract
       const res = await createAndCompile(
         session.data.user.address,
         project.uuid
@@ -237,12 +253,17 @@ export default function ProjectContractFormMono({ _project }) {
   }
 
   useEffect(() => {
-    if (!contractCreated) return;
-
     if (!abiReady) {
       setReadyToDeploy(false);
       return;
     }
+
+    if (FACTORY_CONTRACTS[project.dropType].hasOwnProperty(project.chainId)) {
+      setReadyToDeploy(true);
+      return;
+    }
+
+    if (!contractCreated) return;
 
     (async () => {
       try {
@@ -273,8 +294,15 @@ export default function ProjectContractFormMono({ _project }) {
   }, [abiReady]);
 
   useEffect(() => {
-    if (!bytecode.length) return;
     if (!readyToDeploy) return;
+
+    if (FACTORY_CONTRACTS[project.dropType].hasOwnProperty(project.chainId)) {
+      handleShowDeployModalContract();
+      return;
+    }
+
+    if (!bytecode.length) return;
+
     handleShowDeployModalContract();
   }, [readyToDeploy, bytecode]);
 
@@ -284,12 +312,23 @@ export default function ProjectContractFormMono({ _project }) {
         <div>
           <div id="modals">
             {showDeployContractModal && (
-              <DeployContractModal
-                project={project}
-                onClose={handleCloseDeployModalContract}
-                bytecode={bytecode}
-                abi={abi}
-              />
+              <>
+                {FACTORY_CONTRACTS[project.dropType].hasOwnProperty(
+                  project.chainId
+                ) ? (
+                  <DeployContractFactoryMonoModal
+                    project={project}
+                    onClose={handleCloseDeployModalContract}
+                  />
+                ) : (
+                  <DeployContractModal
+                    project={project}
+                    onClose={handleCloseDeployModalContract}
+                    bytecode={bytecode}
+                    abi={abi}
+                  />
+                )}
+              </>
             )}
           </div>
           <h1 className="text-tock-green font-bold text-xl mb-6 ">

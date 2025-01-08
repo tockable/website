@@ -30,7 +30,7 @@ export default function ActionMintStatus({ abi, _project }) {
     })(),
     functionName: "setMintIsLive",
     args: (() => {
-      if (!res) retrun[false];
+      if (!res) return [false];
       else return [!res?.data];
     })(),
   };
@@ -39,7 +39,6 @@ export default function ActionMintStatus({ abi, _project }) {
     ...options,
   });
 
-  console.log(res);
   const { data, isLoading, isError, write, error } = useContractWrite(config);
   const uwt = useWaitForTransaction({ hash: data?.hash });
 
@@ -60,7 +59,7 @@ export default function ActionMintStatus({ abi, _project }) {
         setKey(key + 1);
         setWriting(false);
       } catch (err) {
-        console.log(err.message);
+        console.error(err.message);
       }
     })();
 

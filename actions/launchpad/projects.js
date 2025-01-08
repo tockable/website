@@ -100,9 +100,11 @@ export async function updateProject(_creator, params) {
     const session = project.sessions.find(
       (s) => Number(s.id) === Number(params.activeSession)
     );
+
     const roleId = session.roles[0];
     const role = project.roles.find((role) => role.id === roleId);
     const price = role.price.toString();
+    
     await updateAllProjects({
       uuid: params.uuid,
       price,
