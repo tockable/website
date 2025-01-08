@@ -10,6 +10,10 @@ import Support from "@/app/support";
 import CollectionSkletton from "./components/collection-skletton";
 
 // import Scroller from "@/components/scroller";
+const FILTERED_CHAIN =
+  process.env.NEXT_PUBLIC_TOCKABLE_TYPE === "testnet"
+    ? SUPPORTED_CHAINS.filter((chain) => chain.value !== "1")
+    : SUPPORTED_CHAINS;
 
 export default function ExploreLayout({ params, children }) {
   const router = useRouter();
@@ -18,10 +22,11 @@ export default function ExploreLayout({ params, children }) {
   const [changePage, setChangePage] = useState(false);
 
   useEffect(() => {
-    if (selectedChain === params.chain) return;
+    if (selectedChain.toLowerCase() === params.chain.toLowerCase()) return;
 
     setChangePage(true);
-    router.push(`${selectedChain}`);
+
+    router.push(`${selectedChain.toLowerCase()}`);
   }, [selectedChain]);
 
   return (
@@ -39,12 +44,8 @@ export default function ExploreLayout({ params, children }) {
             required
             value={selectedChain}
           >
-            {SUPPORTED_CHAINS.filter(
-              (chain) =>
-                process.env.NEXT_PUBLIC_TOCKABLE_TYPE === "testnet" &&
-                chain.value !== "1"
-            ).map((c, i) => (
-              <option key={"chain_" + i} value={c.network}>
+            {FILTERED_CHAIN.map((c) => (
+              <option key={"chain_" + c.value} value={c.network}>
                 {c.name}
               </option>
             ))}
@@ -58,8 +59,10 @@ export default function ExploreLayout({ params, children }) {
         <h1 className="mx-4 mt-8 text-2xl text-tock-green border-b border-tock-green">
           Explore on{" "}
           {
-            SUPPORTED_CHAINS.find((chain) => chain.network === selectedChain)
-              ?.name
+            FILTERED_CHAIN.find(
+              (chain) =>
+                chain.network.toLowerCase() === selectedChain.toLowerCase()
+            )?.name
           }
         </h1>
         {/* </div> */}

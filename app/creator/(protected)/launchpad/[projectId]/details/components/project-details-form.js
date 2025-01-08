@@ -51,6 +51,7 @@ export default function ProjectDetailsForm({ params }) {
   const [lastState, setLastState] = useState(null);
   const [project, setProject] = useState(null);
 
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     if (session.status !== "authenticated") return;
 
@@ -707,16 +708,22 @@ export default function ProjectDetailsForm({ params }) {
                     <p>Save</p>
                   )}
                 </Button>
-                <Link
-                  className={`${
-                    !success
-                      ? "pointer-events-none bg-zinc-400"
-                      : "transition hover:bg-sky-400 duration-300 bg-sky-600 text-tock-blue"
-                  } h-10 flex items-center text-xs font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline`}
-                  href={`/creator/launchpad/${project.uuid}/contract`}
-                >
-                  Next
-                </Link>
+                <button onClick={() => setLoading(true)}>
+                  <Link
+                    className={`${
+                      !success || loading
+                        ? "pointer-events-none bg-zinc-400"
+                        : "transition hover:bg-sky-400 duration-300 bg-sky-600 text-tock-blue"
+                    } h-10 flex items-center text-xs font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline`}
+                    href={`/creator/launchpad/${project.uuid}/contract`}
+                  >
+                    {loading ? (
+                      <Loading isLoading={loading} size={10} />
+                    ) : (
+                      "Next"
+                    )}
+                  </Link>
+                </button>
               </div>
               {nameEditError && (
                 <div className="mt-2 text-xs text-tock-red">
