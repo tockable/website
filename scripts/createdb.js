@@ -119,4 +119,5 @@ export async function createDb() {
       }
     );
   });
+  return "success";
 }

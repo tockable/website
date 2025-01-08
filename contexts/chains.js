@@ -503,7 +503,10 @@ const rootstock = defineChain({
 
 export const TOCKABLE_CHAINS = {
   testnet: [
-    mevm,
+    mainnet,
+    sepolia,
+    holesky,
+    // mevm,
     unichainTestnet,
     berachainBartio,
     apechainCurtis,
@@ -514,8 +517,6 @@ export const TOCKABLE_CHAINS = {
     lineaSepolia,
     optimismSepolia,
     morphHolesky,
-    sepolia,
-    holesky,
   ],
   mainnet: [
     mainnet,
