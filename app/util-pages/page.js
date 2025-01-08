@@ -1,7 +1,7 @@
 "use client";
 
-import { createDb } from "../scripts/createdb";
-import { createSupportDb } from "../scripts/createSupportDb";
+import { createDb } from "@/scripts/createdb";
+import { createSupportDb } from "@/scripts/createSupportDb";
 
 export default function Page() {
   async function db() {
