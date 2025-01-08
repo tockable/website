@@ -269,7 +269,7 @@ export default function ProjectDetailsForm({ params }) {
     let imageCid = project.image;
     let coverCid = project.cover;
 
-    if (!process.env.NODE_ENV === "development") {
+    if (process.env.NODE_ENV !== "development") {
       let maxUses = 0;
 
       if (imageChanged) maxUses++;
