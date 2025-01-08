@@ -11,7 +11,6 @@ import Button from "@/components/design/button";
 export default function ActionSetActiveSession({ abi, _project }) {
   const [project, setProject] = useState(_project);
   const [key, setKey] = useState(1);
-
   const [sessionToActive, setSessionToActive] = useState("");
   const [args, setArgs] = useState(null);
   const [isWriting, setWriting] = useState(false);

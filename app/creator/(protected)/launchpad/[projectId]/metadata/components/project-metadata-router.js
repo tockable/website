@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { fetchProjectByUUID } from "@/actions/launchpad/projects";
 import ProjectMetadataFormRegular from "./project-metadata-form-regular";
-import ProjectMetadataFormTockable from "./project-metadata-form-tockable";
+// import ProjectMetadataFormTockable from "./project-metadata-form-tockable";
 import DeployedMetadataView from "./deployed-metadata-view";
 import Fade from "@/components/design/fade/fade";
 import Loading from "@/components/loading/loading";
@@ -63,10 +63,10 @@ export default function ProjectMetadataRouter({ params }) {
             ((project.hasOwnProperty("cids") && project.cids.length === 0) ||
               (project.hasOwnProperty("cid") && project.cid.length === 0)) && (
               <>
-                {(project.dropType === "tockable" ||
+                {/* {(project.dropType === "tockable" ||
                   project.dropType === "temp") && (
                   <ProjectMetadataFormTockable _project={project} />
-                )}
+                )} */}
                 {(project.dropType === "regular" ||
                   project.dropType === "mono") && (
                   <ProjectMetadataFormRegular _project={project} />

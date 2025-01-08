@@ -18,8 +18,10 @@ export default function NewProjectModal({ isOpen, onClose }) {
   const { address } = useAccount();
 
   const [name, setName] = useState("");
-  const [chainId, setChainId] = useState("1");
-  const [dropType, setDropType] = useState(DROP_TYPES[1].type);
+  const [chainId, setChainId] = useState(
+    process.env.NEXT_PUBLIC_TOCKABLE_TYPE === "testnet" ? "11155111" : "1"
+  );
+  const [dropType, setDropType] = useState(DROP_TYPES[0].type);
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState(false);
 

@@ -4,16 +4,21 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { fetchProjectByUUID } from "@/actions/launchpad/projects";
 import ProjectContractFormRegular from "./project-contract-form-regular";
-import ProjectContractFormTockable from "./project-contract-form-tockable";
+// import ProjectContractFormTockable from "./project-contract-form-tockable";
 import ProjectContractFormMono from "./project-contract-form-mono";
 import DeployedContractView from "./deployed-contract-view";
 import Fade from "@/components/design/fade/fade";
 import Loading from "@/components/loading/loading";
+// import dynamic from "next/dynamic";
+
+// const ProjectContractFormTockable = dynamic(() =>
+//   import("./project-contract-form-tockable")
+// );
 
 export default function ProjectContractRouter({ params }) {
   const [project, setProject] = useState(null);
   const [loadingFailed, setLoadingFailed] = useState(false);
-  
+
   const session = useSession();
 
   useEffect(() => {
@@ -59,10 +64,10 @@ export default function ProjectContractRouter({ params }) {
             </Fade>
           ) : (
             <>
-              {(project.dropType === "tockable" ||
+              {/* {(project.dropType === "tockable" ||
                 project.dropType === "temp") && (
                 <ProjectContractFormTockable _project={project} />
-              )}
+              )} */}
               {project.dropType === "regular" && (
                 <ProjectContractFormRegular _project={project} />
               )}

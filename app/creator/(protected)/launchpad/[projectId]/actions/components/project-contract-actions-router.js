@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import ProjectContractActionsTockable from "./project-contarct-actions-tockable";
+// import ProjectContractActionsTockable from "./project-contarct-actions-tockable";
 import ProjectContractActionsRegular from "./project-contarct-actions-regular";
 import Loading from "@/components/loading/loading";
 import { fetchProjectByUUID } from "@/actions/launchpad/projects";
@@ -58,9 +58,9 @@ export default function ProjectContractActionRouter({ params }) {
             </Fade>
           ) : (
             <>
-              {(project.dropType === "tockable" ||  project.dropType === "temp") && (
+              {/* {(project.dropType === "tockable" ||  project.dropType === "temp") && (
                 <ProjectContractActionsTockable _project={project} />
-              )}
+              )} */}
               {(project.dropType === "regular" ||
                 project.dropType === "mono") && (
                 <ProjectContractActionsRegular _project={project} />

@@ -1,5 +1,8 @@
-import MintpadTockable from "./mintpad-tockable";
+// import MintpadTockable from "./mintpad-tockable";
 import MintpadRegular from "./mintpad-regular";
+import dynamic from "next/dynamic";
+
+const MintpadTockable = dynamic(() => import("./mintpad-tockable"));
 
 export default function MintpadMainRouter({ project, abi }) {
   if (project.dropType === "tockable" || project.dropType === "temp") {

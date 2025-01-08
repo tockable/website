@@ -77,7 +77,8 @@ export default function MintpadContainerRegular({ prepareMint }) {
 
   useEffect(() => {
     refetch?.();
-    setTimeout(() => updateFetch(fetch + 1), 10000);
+    const timer = setTimeout(() => updateFetch(fetch + 1), 10000);
+    return timer && clearTimeout(timer);
   }, [fetch]);
 
   // Effects
