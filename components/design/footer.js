@@ -15,14 +15,14 @@ export default function Footer() {
         >
           <FaSquareXTwitter />
         </Link>
-        <Link
+        {/* <Link
           href={SOCIAL.discord}
           className="hover:opacity-50 transition duration-200 text-2xl text-zinc-700"
           target="_blank"
           rel="noopener noreferrer"
         >
           <FaDiscord />
-        </Link>
+        </Link> */}
         <Link
           href="https://github.com/tockable"
           className="hover:opacity-50 transition duration-200 text-2xl text-zinc-700"
