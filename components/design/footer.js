@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { SOCIAL, TOCKABLE_VERSION } from "@/tock.config";
-import { FaGithub, FaDiscord } from "react-icons/fa";
+import { FaGithub } from "react-icons/fa";
 import { FaSquareXTwitter } from "react-icons/fa6";
 
 export default function Footer() {
@@ -26,6 +26,8 @@ export default function Footer() {
         <Link
           href="https://github.com/tockable"
           className="hover:opacity-50 transition duration-200 text-2xl text-zinc-700"
+          target="_blank"
+          rel="noopener noreferrer"
         >
           <FaGithub />
         </Link>
