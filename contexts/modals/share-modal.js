@@ -6,9 +6,17 @@ import Link from "next/link";
 
 const createTweat = (project, mintData) => {
   if (Math.random() >= 0.5) {
-    return `https://twitter.com/intent/tweet?text=I've+Just+minted+${mintData.quantity}+${project.tokenName}&via=Tockable.+Mint+yours+here%3A&url=https%3A%2F%2Ftockable.org%2Fc%2F${project.slug}%3Fref%3D${mintData.address}`;
+    return `https://twitter.com/intent/tweet?text=I've+Just+minted+${
+      mintData.quantity
+    }+${project.tokenName}&via=Tockable.+Mint+yours+here%3A&url=https%3A%2F%2F${
+      process.env.NEXT_PUBLIC_TOCKABLE_TYPE === "testnet" && "testnet."
+    }tockable.org%2Fc%2F${project.slug}%3Fref%3D${mintData.address}`;
   }
-  return `https://twitter.com/intent/tweet?text=Just+minted+${mintData.quantity}+${project.tokenName}.+Go+get+yours+before+it's+over%3A&url=https%3A%2F%2Ftockable.org%2Fc%2F${project.slug}%3Fref%3D${mintData.address}`;
+  return `https://twitter.com/intent/tweet?text=Just+minted+${
+    mintData.quantity
+  }+${project.tokenName}.+Go+get+yours+before+it's+over%3A&url=https%3A%2F%2F${
+    process.env.NEXT_PUBLIC_TOCKABLE_TYPE === "testnet" && "testnet."
+  }tockable.org%2Fc%2F${project.slug}%3Fref%3D${mintData.address}`;
 };
 
 export default function ShareModal({ onClose, project, mintData }) {

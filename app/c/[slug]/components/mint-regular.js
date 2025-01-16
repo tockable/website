@@ -346,7 +346,8 @@ function MintHandler({ role, prepareMint, session }) {
               </Button>
             )}
             <p className="text-[12px] text-zinc-500 mt-4">
-              + {getBaseFee(project) * quantity} mint fee{" "}
+              + {getBaseFee(project) * quantity} {project.chainData.nativeToken}{" "}
+              mint fee{" "}
               {/* <a
                 className="text-[10px] text-blue-400 hover:text-blue-300"
                 href="/docs/tockable-fees"
@@ -368,7 +369,7 @@ function MintHandler({ role, prepareMint, session }) {
           </div>
           {maxMintable(data) === 0 && (
             <p className="text-tock-red text-xs mt-4 border rounded-2xl border-tock-red p-4">
-              currnent wallet does not have any tokens to mint on this role
+              current wallet cannot mint on this role
             </p>
           )}
           {quantity > maxMintable(data) && maxMintable(data) !== 0 && (

@@ -384,7 +384,7 @@ function MintHandler({ role, prepareMint, session }) {
             <p className="text-[12px] text-zinc-500 mt-4">
               +{" "}
               {Math.ceil(blobs.length * getBaseFee(project) * 100000) / 100000}{" "}
-              {project.chainData.nativeToken} platform fee{" "}
+              {project.chainData.nativeToken} mint fee{" "}
               <a
                 className="text-[10px] text-blue-400 hover:text-blue-300"
                 href="/docs/tockable-fees"
@@ -428,7 +428,7 @@ function MintHandler({ role, prepareMint, session }) {
           )}
           {preparing && (
             <p className="text-center text-xs mt-22 text-tock-orange">
-              Uploading {numberOfFiles}/{blobs.length} to ipfs. It may take a
+              Uploading {numberOfFiles}/{blobs.length} to ipfs. It may takes a
               while...
             </p>
           )}

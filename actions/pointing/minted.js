@@ -59,32 +59,36 @@ export async function getTXPOf(address) {
 
   const tockableMinted = (
     await db.get(
-      `SELECT SUM(amount) FROM minted WHERE address = '${adl}' AND dropType = 'tockable'`
+      `SELECT SUM(amount) FROM minted
+       WHERE address = '${adl}' AND dropType = 'tockable'`
     )
   )["SUM(amount)"];
 
   const regularMinted = (
     await db.get(
-      `SELECT SUM(amount) FROM minted WHERE address = '${adl}' AND dropType = 'regular'`
+      `SELECT SUM(amount) FROM minted
+       WHERE address = '${adl}' AND (dropType = 'regular' OR dropType = 'mono')`
     )
   )["SUM(amount)"];
 
   const elligibleTockableContracts = (
     await db.get(
-      `SELECT COUNT(*) FROM published_projects WHERE creator = '${adl}' AND minted >= 5 AND dropType ='tockable'`
+      `SELECT COUNT(*) FROM published_projects
+       WHERE creator = '${adl}' AND minted >= 5 AND dropType ='tockable'`
     )
   )["COUNT(*)"];
 
   const elligibleRegularContracts = (
-    await db.all(
-      `SELECT COUNT(*) FROM published_projects WHERE creator = '${adl}' AND minted >= 5 AND dropType ='regular'`
+    await db.get(
+      `SELECT COUNT(*) FROM published_projects
+       WHERE creator = '${adl}' AND minted >= 5 AND (dropType ='regular' OR dropType ='mono')`
     )
   )["COUNT(*)"];
 
   return {
-    tockableMinted,
-    regularMinted,
-    elligibleRegularContracts,
-    elligibleTockableContracts,
+    tockableMinted: tockableMinted || 0,
+    regularMinted: regularMinted || 0,
+    elligibleRegularContracts: elligibleRegularContracts || 0,
+    elligibleTockableContracts: elligibleTockableContracts || 0,
   };
 }

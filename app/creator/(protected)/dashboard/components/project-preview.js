@@ -13,15 +13,21 @@ export default function ProjectPreview({ project }) {
   const [loading, setLoading] = useState(false);
 
   const handleLoading = () => setLoading(true);
-
+  console.log(project);
   useEffect(() => {
     const _chainData = getChainData(Number(project.chainId));
-    setChainName(_chainData.name);
+    if (_chainData) {
+      setChainName(_chainData.name);
+    } else {
+      setChainName("Not supported");
+    }
   }, []);
+
   const src =
     project.ipfsProvider === "pinata"
       ? `https://ipfs.io/ipfs/${project.image}`
       : `https://${project.image}.${NFT_STORAGE_GATEWAY}`;
+
   return (
     <div className="flex flex-col items-center px-8 pt-6 pb-8 bg-tock-semiblack rounded-2xl">
       {project.image && (
@@ -54,7 +60,11 @@ export default function ProjectPreview({ project }) {
         </p>
       </div>
       <Link href={`/creator/launchpad/${project.uuid}/details`}>
-        <Button variant="secondary" onClick={handleLoading} disabled={loading}>
+        <Button
+          variant="secondary"
+          onClick={handleLoading}
+          disabled={loading || chainName === "Not supported"}
+        >
           {loading ? (
             <Loading isLoading={loading} size={10} />
           ) : (

@@ -45,12 +45,15 @@ export default function TXPTables() {
             <>
               <div>
                 <h1 className="text-tock-green pb-2 border-b border-zinc-600">
-                  TXP from collecting
+                  Collector TXP
                 </h1>
                 <div className="my-4 text-sm">
                   <div className="flex flex-col items-center md:flex-row">
-                    <p className="my-4 text-zinc-300 flex-auto">
-                      NFTs minted form Tockable contracts:
+                    <p className="my-4 text-zinc-300 flex-auto flex gap-2">
+                      Total minted NFTs from Tockable contracts:
+                      <span className="text-tock-orange">
+                        {points.tockableMinted} Minted
+                      </span>
                     </p>
                     <p
                       className={`w-24 text-center text-tock-black p-2 ${
@@ -59,12 +62,15 @@ export default function TXPTables() {
                           : "bg-zinc-400"
                       } rounded-xl`}
                     >
-                      {points.tockableMinted * TXP.tockable}TXP
+                      {points.tockableMinted * TXP.tockable} TXP
                     </p>
                   </div>
                   <div className="flex flex-col items-center md:flex-row">
-                    <p className="my-4 text-zinc-300 flex-auto">
-                      NFTs minted form Regular contracts:
+                    <p className="my-4 text-zinc-300 flex-auto flex gap-2">
+                      Totla minted NFTs from Regular/Edition contracts:
+                      <span className="text-tock-orange">
+                        {points.regularMinted} Minted
+                      </span>
                     </p>
                     <p
                       className={`w-24 text-center text-tock-black p-2 ${
@@ -80,38 +86,42 @@ export default function TXPTables() {
               </div>
               <div className="mt-8">
                 <h1 className="text-tock-green pb-2 border-b border-zinc-600">
-                  TXP from creating
+                  Creator TXP
                 </h1>
                 <div className="my-4 text-sm">
                   <div className="flex flex-col items-center md:flex-row">
-                    <p className="my-4 text-zinc-300 flex-auto">
-                      Deploying Tockable contracts with at least 5 mints
+                    <p className="my-4 text-zinc-300 flex-auto flex gap-2">
+                      Deployed Tockable contracts with {">"} 5 mints
+                      <span className="text-tock-orange">
+                        {points.elligibleTockableContracts} Deployed
+                      </span>
                     </p>
                     <p
                       className={`w-24 text-center text-tock-black p-2 ${
-                        points.elligibleTockableContracts.length > 0
+                        points.elligibleTockableContracts > 0
                           ? "bg-tock-green"
                           : "bg-zinc-400"
                       } rounded-xl`}
                     >
-                      {points.elligibleTockableContracts.length *
-                        TXP.contractTockable}
+                      {points.elligibleTockableContracts * TXP.contractTockable}{" "}
                       TXP
                     </p>
                   </div>
                   <div className="flex flex-col items-center md:flex-row">
-                    <p className="my-4 text-zinc-300 flex-auto">
-                      Deploying Regular contracts with at least 5 mints
+                    <p className="my-4 text-zinc-300 flex-auto flex gap-2">
+                      Deployed Regular/Edition contracts with {">"} 5 mints
+                      <span className="text-tock-orange">
+                        {points.elligibleRegularContracts} Deployed
+                      </span>
                     </p>
                     <p
                       className={`w-24 text-center text-tock-black p-2 ${
-                        points.elligibleRegularContracts.length > 0
+                        points.elligibleRegularContracts > 0
                           ? "bg-tock-green"
                           : "bg-zinc-400"
                       } rounded-xl`}
                     >
-                      {points.elligibleRegularContracts.length *
-                        TXP.contractRegular}
+                      {points.elligibleRegularContracts * TXP.contractRegular}{" "}
                       TXP
                     </p>
                   </div>
@@ -125,12 +135,11 @@ export default function TXPTables() {
                   <div className="flex flex-col items-center md:flex-row">
                     <p className="my-4 text-zinc-300 flex-auto">Total TXP</p>
                     <p className="w-24 text-center text-tock-black p-2 bg-tock-green rounded-xl">
-                      {points.elligibleRegularContracts.length *
-                        TXP.contractRegular +
-                        points.elligibleTockableContracts.length *
+                      {points.elligibleRegularContracts * TXP.contractRegular +
+                        points.elligibleTockableContracts *
                           TXP.contractTockable +
                         points.tockableMinted * TXP.tockable +
-                        points.regularMinted * TXP.regular}
+                        points.regularMinted * TXP.regular}{" "}
                       TXP
                     </p>
                   </div>

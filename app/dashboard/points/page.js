@@ -2,6 +2,7 @@ import TXPTables from "./components/points-table";
 import WagmiProvider from "@/contexts/wagmi-provider";
 import NavbarMintpad from "@/components/design/navbar/navbar-mintpad";
 import Footer from "@/components/design/footer";
+import Support from "@/app/support";
 
 export default function Page() {
   return (

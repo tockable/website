@@ -501,6 +501,204 @@ const rootstock = defineChain({
   contracts: {},
 });
 
+const soneium = defineChain({
+  id: 1868,
+  name: "Soneium",
+  network: "soneium",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://rpc.soneium.org"] },
+    public: { http: ["https://rpc.soneium.org"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Soneium.blockscout.com",
+      url: "https://soneium.blockscout.com",
+    },
+  },
+  contracts: {},
+});
+
+const superposition = defineChain({
+  id: 55244,
+  name: "Superposition",
+  network: "superposition",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://rpc.superposition.so"] },
+    public: { http: ["https://rpc.superposition.so"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Explorer.superposition.so",
+      url: "https://explorer.superposition.so",
+    },
+  },
+  contracts: {},
+});
+
+const rari = defineChain({
+  id: 1380012617,
+  name: "Rari",
+  network: "rari",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://mainnet.rpc.rarichain.org/http"] },
+    public: { http: ["https://mainnet.rpc.rarichain.org/http"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Mainnet.explorer.rarichain.org",
+      url: "https://mainnet.explorer.rarichain.org",
+    },
+  },
+  contracts: {},
+});
+
+const mint = defineChain({
+  id: 185,
+  name: "Mint",
+  network: "mint",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://rpc.mintchain.io"] },
+    public: { http: ["https://rpc.mintchain.io"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Explorer.mintchain.io",
+      url: "https://explorer.mintchain.io",
+    },
+  },
+  contracts: {},
+});
+
+const degen = defineChain({
+  id: 666666666,
+  name: "Degen Chain",
+  network: "degen",
+  nativeCurrency: { name: "Degen", symbol: "DEGEN", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://rpc.degen.tips"] },
+    public: { http: ["https://rpc.degen.tips"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Explorer.degen.tips",
+      url: "https://explorer.degen.tips",
+    },
+  },
+  contracts: {},
+});
+
+const redstone = defineChain({
+  id: 690,
+  name: "Redstone",
+  network: "redstone",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://rpc.redstonechain.com"] },
+    public: { http: ["https://rpc.redstonechain.com"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Explorer.redstone.xyz",
+      url: "https://explorer.redstone.xyz",
+    },
+  },
+  contracts: {},
+});
+
+const funkichain = defineChain({
+  id: 33979,
+  name: "Funki Mainnet",
+  network: "funkichain",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://rpc-mainnet.funkichain.com"] },
+    public: { http: ["https://rpc-mainnet.funkichain.com"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Funkiscan.io",
+      url: "https://funkiscan.io",
+    },
+  },
+  contracts: {},
+});
+
+const b3 = defineChain({
+  id: 8333,
+  name: "B3 Mainnet",
+  network: "b3",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://mainnet-rpc.b3.fun/http"] },
+    public: { http: ["https://mainnet-rpc.b3.fun/http"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Explorer.b3.fun",
+      url: "https://explorer.b3.fun",
+    },
+  },
+  contracts: {},
+});
+
+const hychain = defineChain({
+  id: 2911,
+  name: "HYCHAIN Mainnet",
+  network: "hychain",
+  nativeCurrency: { name: "Hytopia", symbol: "TOPIA", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://rpc.hychain.com/http"] },
+    public: { http: ["https://rpc.hychain.com/http"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Explorer.hychain.com",
+      url: "https://explorer.hychain.com",
+    },
+  },
+  contracts: {},
+});
+
+const cyber = defineChain({
+  id: 7560,
+  name: "Cyber Mainnet",
+  network: "cyber",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://rpc.cyber.co"] },
+    public: { http: ["https://rpc.cyber.co"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Cyberscan.co",
+      url: "https://cyberscan.co",
+    },
+  },
+  contracts: {},
+});
+
+const sei = defineChain({
+  id: 1329,
+  name: "Sei",
+  network: "sei",
+  nativeCurrency: { name: "Sei", symbol: "SEI", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://evm-rpc.sei-apis.com"] },
+    public: { http: ["https://evm-rpc.sei-apis.com"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Seiscan.app",
+      url: "https://www.seiscan.app",
+    },
+  },
+  contracts: {},
+});
+
 export const TOCKABLE_CHAINS = {
   testnet: [
     mainnet,
@@ -525,23 +723,34 @@ export const TOCKABLE_CHAINS = {
     zora,
     ink,
     arbitrum,
-    rootstock,
+    soneium,
     worldchain,
+    rootstock,
+    bob,
+    apechain,
+    forma,
+    superposition,
+    rari,
+    redstone,
+    mint,
+    b3,
+    sei,
+    funkichain,
     cronos,
+    degen,
+    hychain,
+    cyber,
     polygon,
     kaia,
     canto,
     lisk,
     arbitrumNova,
     taiko,
-    bob,
     morphl2,
     lineaMainnet,
     bevm,
     mode,
-    apechain,
     fraxtal,
-    forma,
     blast,
   ],
 };
