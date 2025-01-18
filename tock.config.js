@@ -52,15 +52,15 @@ export const DROP_TYPES = [
     description:
       "Create a traditional NFT collection with fixed total supply and pre-uploaded IPFS metadata",
   },
-  {
-    supported: true,
-    type: "mono",
-    typeNo: 2,
-    currentVersion: 1,
-    title: "Edition",
-    description:
-      "All tokens share a similar metadata like an Image/Html/json, Useful for Editions, erc721 OATs, Tickets, and subscriptions.",
-  },
+  // {
+  //   supported: true,
+  //   type: "mono",
+  //   typeNo: 2,
+  //   currentVersion: 1,
+  //   title: "Edition",
+  //   description:
+  //     "All tokens share a similar metadata like an Image/Html/json, Useful for Editions, erc721 OATs, Tickets, and subscriptions.",
+  // },
 ];
 
 // DB
