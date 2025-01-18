@@ -36,11 +36,6 @@ export const TockableRegularDropFromFactoryV1Abi = [
         name: "_totalSupply",
         type: "uint256",
       },
-      {
-        internalType: "uint256",
-        name: "_firstTokenId",
-        type: "uint256",
-      },
     ],
     stateMutability: "nonpayable",
     type: "constructor",
@@ -541,6 +536,19 @@ export const TockableRegularDropFromFactoryV1Abi = [
         internalType: "address",
         name: "",
         type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getBaseURI",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
       },
     ],
     stateMutability: "view",

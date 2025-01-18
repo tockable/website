@@ -27,7 +27,7 @@ export async function getContractVerificationArgs(_project) {
   let cargs;
   let contractName;
   let source;
-
+  console.log(_project);
   // IF FACTORY
   if (FACTORY_CONTRACTS[_project.dropType].hasOwnProperty(_project.chainId)) {
     let constructorAbi;
@@ -173,16 +173,15 @@ export async function getContractVerificationArgs(_project) {
         _project.firstTokenId,
         _project.isUnlimited,
       ]);
+      const sourcepath = path.resolve(
+        ".",
+        "contracts",
+        "TockableMonoDropFromFactoryV1.sol"
+      );
+
+      source = fs.readFileSync(sourcepath, { encoding: "utf8" });
+      contractName = "TockableMonoDropFromFactoryV1";
     }
-
-    const sourcepath = path.resolve(
-      ".",
-      "contracts",
-      "TockableMonoDropFromFactoryV1.sol"
-    );
-
-    source = fs.readFileSync(sourcepath, { encoding: "utf8" });
-    contractName = "TockableMonoDropFromFactoryV1";
   }
   // IF NON FACTORY
   else {
@@ -226,16 +225,13 @@ export default async function verify(_project) {
       _project
     );
 
-    const compilerversion = FACTORY_CONTRACTS[_project.dropType].hasOwnProperty(
+    let compilerversion = FACTORY_CONTRACTS[_project.dropType].hasOwnProperty(
       _project.chainId
     )
       ? COMPILER_VERSIONS["v826"]
       : COMPILER_VERSIONS["v821"];
 
-    const optimizationUsed =
-      _project.dropType === "regular" && _project.chainData == 8453 ? 0 : 1;
-
-    const evmVersion = FACTORY_CONTRACTS[_project.dropType].hasOwnProperty(
+    let evmVersion = FACTORY_CONTRACTS[_project.dropType].hasOwnProperty(
       _project.chainId
     )
       ? "cancun"
@@ -250,7 +246,7 @@ export default async function verify(_project) {
       codeformat: "solidity-single-file",
       contractname: contractName,
       compilerversion,
-      optimizationUsed,
+      optimizationUsed: 1,
       runs: 200,
       evmVersion: evmVersion,
       constructorArguements: args,

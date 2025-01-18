@@ -67,7 +67,6 @@ export default function DeployContractFactoryMonoModal({ onClose, project }) {
       project.tokenSymbol,
       parseEther(chain.regular_base_fee.toString(), "wei"),
       project.totalSupply,
-      project.firstTokenId,
       project.isUnlimited,
     ],
     gas: 5_000_000n,

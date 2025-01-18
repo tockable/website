@@ -63,7 +63,7 @@ export async function getContractAbi(_project) {
     if (FACTORY_CONTRACTS.mono.hasOwnProperty(_project.chainId)) {
       return TockableMonoDropFromFactoryV1Abi;
     }
-    
+
     return FlattenMonoDropV1Abi;
   }
 

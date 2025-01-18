@@ -48,8 +48,8 @@ export default function ProjectContractFormRegular({ _project }) {
   const onChangeTokenSymbol = (e) =>
     setProject({ ...project, tokenSymbol: e.target.value });
 
-  const onChangeFirstTokenId = (e) =>
-    setProject({ ...project, firstTokenId: e.target.value });
+  // const onChangeFirstTokenId = (e) =>
+  //   setProject({ ...project, firstTokenId: e.target.value });
 
   const onChangeTotalSupply = (e) => {
     if (e.target.value.match(regex.number) || e.target.value === "")
@@ -105,14 +105,14 @@ export default function ProjectContractFormRegular({ _project }) {
 
     setSaving(true);
 
-    const { uuid, tokenName, tokenSymbol, totalSupply, firstTokenId } = project;
+    const { uuid, tokenName, tokenSymbol, totalSupply } = project;
 
     const projectContract = {
       uuid,
       tokenName,
       totalSupply,
       tokenSymbol,
-      firstTokenId,
+      firstTokenId: 1,
     };
 
     try {
@@ -190,15 +190,14 @@ export default function ProjectContractFormRegular({ _project }) {
     if (updateNeeded()) {
       isUpdated = false;
 
-      const { uuid, tokenName, totalSupply, tokenSymbol, firstTokenId } =
-        project;
+      const { uuid, tokenName, totalSupply, tokenSymbol } = project;
 
       const projectContract = {
         uuid,
         tokenName,
         totalSupply,
         tokenSymbol,
-        firstTokenId,
+        firstTokenId: 1,
       };
 
       try {
@@ -375,6 +374,13 @@ export default function ProjectContractFormRegular({ _project }) {
             </LabeledInput>
 
             <div className="mb-10">
+              <label>
+                <p className="text-blue-400 text-xs font-normal t-1">
+                  All drops starts with tokenId = 1
+                </p>
+              </label>
+            </div>
+            {/* <div className="mb-10">
               <label className="block text-tock-blue text-sm font-bold mb-2">
                 First token Id (0 or 1){" "}
                 <span className="text-zinc-400 text-xs">
@@ -409,7 +415,7 @@ export default function ProjectContractFormRegular({ _project }) {
                   1
                 </label>
               </div>
-            </div>
+            </div> */}
           </div>
           <p className="text-tock-orange text-xs mb-2">
             IMPORTANT: please note that contract data cannot be changed after

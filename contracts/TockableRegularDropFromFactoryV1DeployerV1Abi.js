@@ -1,24 +1,5 @@
 export const TockableRegularDropFromFactoryV1DeployerV1Abi = [
   {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "address",
-        name: "deployer",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "contractAddress",
-        type: "address",
-      },
-    ],
-    name: "ContractDeployed",
-    type: "event",
-  },
-  {
     inputs: [
       {
         internalType: "address",
@@ -53,11 +34,6 @@ export const TockableRegularDropFromFactoryV1DeployerV1Abi = [
       {
         internalType: "uint256",
         name: "_totalSupply",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_firstTokenId",
         type: "uint256",
       },
     ],

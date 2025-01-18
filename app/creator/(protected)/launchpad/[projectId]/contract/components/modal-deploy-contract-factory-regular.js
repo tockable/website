@@ -70,7 +70,6 @@ export default function DeployContractFactoryRegularModal({
       project.tokenSymbol,
       parseEther(chain.regular_base_fee.toString(), "wei"),
       project.totalSupply,
-      project.firstTokenId,
     ],
     gas: 5_000_000n,
   });
