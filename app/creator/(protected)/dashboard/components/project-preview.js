@@ -13,7 +13,7 @@ export default function ProjectPreview({ project }) {
   const [loading, setLoading] = useState(false);
 
   const handleLoading = () => setLoading(true);
-  console.log(project);
+
   useEffect(() => {
     const _chainData = getChainData(Number(project.chainId));
     if (_chainData) {
