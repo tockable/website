@@ -27,12 +27,16 @@ export async function getContractVerificationArgs(_project) {
   let cargs;
   let contractName;
   let source;
-  console.log(_project);
+  let compiler;
+  let version;
   // IF FACTORY
   if (FACTORY_CONTRACTS[_project.dropType].hasOwnProperty(_project.chainId)) {
     let constructorAbi;
 
     if (_project.dropType === "regular") {
+      compiler = "default";
+      version = "v0.8.26+commit.8a97fa7a";
+
       constructorAbi = {
         inputs: [
           {
@@ -106,6 +110,8 @@ export async function getContractVerificationArgs(_project) {
     }
 
     if (_project.dropType === "mono") {
+      compiler = "default";
+      version = "v0.8.26+commit.8a97fa7a";
       constructorAbi = {
         inputs: [
           {
@@ -185,6 +191,8 @@ export async function getContractVerificationArgs(_project) {
   }
   // IF NON FACTORY
   else {
+    compiler = "paris";
+    version = "v0.8.21+commit.d9974bed";
     const constructorAbi = {
       inputs: [
         { internalType: "address", name: "_tockableAddress", type: "address" },
@@ -215,7 +223,7 @@ export async function getContractVerificationArgs(_project) {
 
   const args = cargs.slice(2);
 
-  return { contractName, source, args };
+  return { contractName, source, args, version, compiler };
 }
 
 export default async function verify(_project) {

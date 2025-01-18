@@ -306,12 +306,14 @@ function ManualVerify({ project }) {
               <p className="text-zinc-400 my-2">
                 <b>Compiler version:</b>{" "}
                 <span className="text-tock-orange">
-                  v0.8.21+commit.d9974bed
+                  {verificationData.version}
                 </span>
               </p>
               <p className="text-zinc-400 my-2">
                 <b>EVM version:</b>{" "}
-                <span className="text-tock-orange">paris</span>
+                <span className="text-tock-orange">
+                  {verificationData.compiler}
+                </span>
               </p>
               <p className="text-zinc-400 my-2">
                 <b>Optimization enabled:</b>{" "}
