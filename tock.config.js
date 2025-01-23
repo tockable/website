@@ -1,6 +1,6 @@
 // TOCKABLE
 export const BASEURL = "https://tockable.org";
-export const TOCKABLE_VERSION = "0.4.6";
+export const TOCKABLE_VERSION = "0.4.7";
 export const SOCIAL = {
   twitter: "https://twitter.com/tockable_org",
   discord: "https://discord.gg",

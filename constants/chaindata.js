@@ -507,4 +507,14 @@ export const chainData = [
     base_fee: BASE_FEE.SEI_TOCKABLE,
     regular_base_fee: BASE_FEE.SEI_REGULAR,
   },
+  {
+    chainId: 169,
+    url: "https://pacific-explorer.manta.network",
+    verifyurl: "https://pacific-explorer.manta.network/contract-verification",
+    name: "manta",
+    scan: "Pacific-explorer.manta.network",
+    nativeToken: "ETH",
+    base_fee: BASE_FEE.ETH_TOCKABLE,
+    regular_base_fee: BASE_FEE.ETH_REGULAR,
+  },
 ];

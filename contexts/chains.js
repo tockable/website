@@ -699,6 +699,24 @@ const sei = defineChain({
   contracts: {},
 });
 
+const manta = defineChain({
+  id: 169,
+  name: "Manta",
+  network: "manta",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://pacific-rpc.manta.network/http"] },
+    public: { http: ["https://pacific-rpc.manta.network/http"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Pacific-explorer.manta.network",
+      url: "https://pacific-explorer.manta.network",
+    },
+  },
+  contracts: {},
+});
+
 export const TOCKABLE_CHAINS = {
   testnet: [
     mainnet,
@@ -729,6 +747,7 @@ export const TOCKABLE_CHAINS = {
     bob,
     apechain,
     forma,
+    manta,
     superposition,
     rari,
     redstone,
