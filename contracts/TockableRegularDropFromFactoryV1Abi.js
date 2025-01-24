@@ -1,4 +1,4 @@
-[
+export const TockableRegularDropFromFactoryV1Abi = [
   {
     inputs: [
       {
