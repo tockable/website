@@ -74,11 +74,6 @@ export async function getContractVerificationArgs(_project) {
             name: "_totalSupply",
             type: "uint256",
           },
-          {
-            internalType: "uint256",
-            name: "_firstTokenId",
-            type: "uint256",
-          },
         ],
         stateMutability: "nonpayable",
         type: "constructor",

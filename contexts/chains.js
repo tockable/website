@@ -717,6 +717,96 @@ const manta = defineChain({
   contracts: {},
 });
 
+const ham = defineChain({
+  id: 5112,
+  name: "Ham",
+  network: "ham",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://rpc.ham.fun"] },
+    public: { http: ["https://rpc.ham.fun"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Explorer.ham.fun",
+      url: "https://explorer.ham.fun",
+    },
+  },
+  contracts: {},
+});
+
+const sanko = defineChain({
+  id: 1996,
+  name: "Sanko",
+  network: "sanko",
+  nativeCurrency: { name: "Dream Machine Token", symbol: "DMT", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://mainnet.sanko.xyz"] },
+    public: { http: ["https://mainnet.sanko.xyz"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Explorer.sanko.xyz/",
+      url: "https://explorer.sanko.xyz/",
+    },
+  },
+  contracts: {},
+});
+
+// const treasure = defineChain({
+//   id: 61166,
+//   name: "Treasure",
+//   network: "treasure",
+//   nativeCurrency: { name: "Magic", symbol: "MAGIC", decimals: 18 },
+//   rpcUrls: {
+//     default: { http: ["https://rpc.treasure.lol"] },
+//     public: { http: ["https://rpc.treasure.lol"] },
+//   },
+//   blockExplorers: {
+//     default: {
+//       name: "Treasurescan.io",
+//       url: "https://treasurescan.io",
+//     },
+//   },
+//   contracts: {},
+// });
+
+// const shape = defineChain({
+//   id: 360,
+//   name: "Shape",
+//   network: "shape",
+//   nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+//   rpcUrls: {
+//     default: { http: ["https://mainnet.shape.network"] },
+//     public: { http: ["https://mainnet.shape.network"] },
+//   },
+//   blockExplorers: {
+//     default: {
+//       name: "Shapescan.xyz",
+//       url: "https://shapescan.xyz",
+//     },
+//   },
+//   contracts: {},
+// });
+
+// const arenaz = defineChain({
+//   id: 7897,
+//   name: "Arena-z",
+//   network: "arena-z",
+//   nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+//   rpcUrls: {
+//     default: { http: ["https://rpc.arena-z.gg"] },
+//     public: { http: ["https://rpc.arena-z.gg"] },
+//   },
+//   blockExplorers: {
+//     default: {
+//       name: "Explorer.arena-z.gg",
+//       url: "https://explorer.arena-z.gg",
+//     },
+//   },
+//   contracts: {},
+// });
+
 export const TOCKABLE_CHAINS = {
   testnet: [
     mainnet,
@@ -752,9 +842,14 @@ export const TOCKABLE_CHAINS = {
     rari,
     redstone,
     mint,
+    sanko,
+    // shape,
+    // arenaz,
+    ham,
     b3,
     sei,
     funkichain,
+    // treasure,
     cronos,
     degen,
     hychain,

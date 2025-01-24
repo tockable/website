@@ -31,10 +31,13 @@ export default function ShareModal({ onClose, project, mintData }) {
           </h1>
 
           <div className="mb-10 rounded-2xl bg-zinc-800 p-4">
-            <h2 className="text-center text-sm font-bold text-tock-blue mb-8">
+            <h2 className="text-center text-sm font-bold text-tock-blue mb-4">
               Share your experience with Tockable
             </h2>
-
+            <p className="text-xs text-tock-blue pt-2 pb-8">
+              Share this page with your referral link. You earn TXP for every
+              NFT minted with your link..
+            </p>
             <div className="flex justify-center gap-2">
               <ShareButton className="text-white" href={tweet}>
                 <BsTwitterX />
